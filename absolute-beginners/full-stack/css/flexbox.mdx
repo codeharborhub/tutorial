@@ -1,0 +1,120 @@
+---
+title: "CSS Flexbox Layout"
+sidebar_label: "5. Flexbox"
+sidebar_position: 5
+description: "Learn how to align and distribute space among items in a container with Flexbox."
+---
+
+**Flexbox** (Flexible Box) is a layout system that makes it easy to align items horizontally or vertically. Before Flexbox, developers had to use hacky tricks to center elements; now, it only takes a few lines of code.
+
+## 1. The Parent and the Children
+
+Flexbox works on a **Parent-Child** relationship. 
+1. The **Flex Container** (Parent) is the box that holds everything.
+2. The **Flex Items** (Children) are the boxes inside.
+
+To start using Flexbox, you simply tell the parent: `display: flex;`.
+
+```css
+.container {
+    display: flex; /* The magic starts here! */
+}
+```
+
+## 2. The Two Axes
+
+Understanding Flexbox is all about understanding direction.
+
+  * **Main Axis:** Usually horizontal (left to right).
+  * **Cross Axis:** Usually vertical (top to bottom).
+
+## 3. Main Container Properties
+
+These are the commands you give to the **Parent** to control the children.
+
+### A. Justify Content (Main Axis)
+
+This controls how items are spaced out horizontally.
+
+| Value | Result |
+| :--- | :--- |
+| `flex-start` | Items bunch up at the **left**. |
+| `flex-end` | Items bunch up at the **right**. |
+| `center` | Items bunch up in the **middle**. |
+| `space-between` | First item at start, last item at end, even space between. |
+| `space-around` | Even space around every item. |
+
+### B. Align Items (Cross Axis)
+
+This controls how items are aligned vertically.
+
+| Value | Result |
+| :--- | :--- |
+| `stretch` | Items stretch to fill the container (Default). |
+| `center` | Items are perfectly centered vertically. |
+| `flex-start` | Items align to the **top**. |
+| `flex-end` | Items align to the **bottom**. |
+
+## 4. Changing Direction
+
+By default, Flexbox puts items in a row. But you can turn your row into a column with one line:
+
+```css
+.container {
+    display: flex;
+    flex-direction: column; /* Items now stack vertically! */
+}
+```
+
+:::warning Note on Axes
+When you switch to `flex-direction: column`, the **Main Axis** and **Cross Axis** swap places! Now `justify-content` controls vertical spacing and `align-items` controls horizontal.
+:::
+
+## 5. The "Perfect Center"
+
+The most famous use for Flexbox is perfectly centering something in the middle of a page.
+
+```css
+.parent {
+    display: flex;
+    justify-content: center; /* Horizontal center */
+    align-items: center;     /* Vertical center */
+    height: 100vh;           /* Full screen height */
+}
+```
+
+## Interactive Practice: The Navbar
+
+Let's build a standard navigation bar for **CodeHarborHub**:
+
+```html
+<nav class="navbar">
+  <div class="logo">CodeHarborHub</div>
+  <ul class="nav-links">
+    <li>Home</li>
+    <li>Tutorials</li>
+    <li>About</li>
+  </ul>
+</nav>
+```
+
+```css
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Logo on left, links on right */
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+}
+
+.nav-links {
+    display: flex; /* Make the list items go in a row too! */
+    list-style: none;
+    gap: 20px;     /* Modern way to add space between flex items */
+}
+```
+
+:::info The `gap` Property
+In the past, we used margins to separate flex items. Today, you can just use `gap: 20px;` on the parent container. It is much cleaner and easier to manage\!
+:::

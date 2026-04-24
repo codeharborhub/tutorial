@@ -1,0 +1,77 @@
+---
+title: "CSS Mini-Projects"
+sidebar_label: "9. Mini-Projects"
+sidebar_position: 9
+description: "Apply your CSS skills to transform plain HTML into beautiful, responsive components."
+---
+
+It's time to put your styling skills to work! We aren't just making things "look pretty"—we are building layouts that work on every screen size and provide a great user experience.
+
+## Project 1: The Modern Profile Card
+
+Take the information from your "HTML Resume" and turn it into a sleek, modern UI card. This project tests your knowledge of **Border-radius**, **Box-shadow**, and **Centering**.
+
+### Requirements:
+* **The Container:** A card with a soft shadow and rounded corners.
+* **Typography:** Use a Google Font (like 'Inter' or 'Poppins') for a clean look.
+* **Layout:** Center the profile picture at the top using `margin: auto`.
+* **Interactivity:** Add a `transition` so the card lifts up or grows slightly when you hover over it.
+
+## Project 2: The Responsive Navigation Bar
+
+Every website needs a navigation menu. Your challenge is to build one that adapts to the screen.
+
+### Requirements:
+* **Desktop View:** Use **Flexbox** to put the logo on the left and links on the right (`justify-content: space-between`).
+* **Mobile View:** Use a **Media Query** to stack the links vertically when the screen is smaller than 600px.
+* **Styling:** Remove the default bullet points from the list and add a nice `hover` effect to the links.
+
+```css
+/* Hint for the hover effect */
+.nav-link::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #007bff;
+    transition: width 0.3s;
+}
+.nav-link:hover::after {
+    width: 100%;
+}
+```
+
+## Project 3: The Dashboard Grid
+
+This is the ultimate test of your **CSS Grid** skills. You will build a 2D layout for a simple admin dashboard.
+
+### Requirements:
+* **Layout:** Use `grid-template-areas` or `grid-column/row` to create:
+    * A full-width **Header**.
+    * A thin **Sidebar** on the left.
+    * A large **Main Content** area.
+    * A **Footer** at the bottom.
+* **Responsiveness:** On mobile, make the Sidebar disappear or move to the top of the content.
+
+## Project 4: The Animated Landing Page Hero
+
+Create the "Hero Section" (the very first part of a website) for **CodeHarborHub**.
+
+### Requirements:
+* **Background:** Use a linear-gradient background.
+* **Animation:** Create a `@keyframes` animation that makes the main heading "fade in" and slide up from the bottom when the page loads.
+* **Button:** Create a "Call to Action" button that pulses slowly to grab attention.
+
+## Submission Guidelines
+
+1.  **Refactor:** Don't start from scratch! Go back to your `html-mini-projects` folder.
+2.  **External CSS:** Create a `style.css` for each project. Do not use inline styles.
+3.  **The "Squish" Test:** Open your project in the browser, hit `F12` (Inspect), and drag the window width back and forth. If nothing breaks, you've passed!
+
+:::tip The "Copy-Paste" Trap
+It is tempting to find a beautiful button online and copy the code. At **CodeHarborHub**, we encourage you to **type it yourself**. Understanding *why* a property is used is more important than the final result.
+:::
+
+:::info Summary
+CSS is a superpower. You've gone from building "skeletons" to building "identities." You are now ready to add logic and make these components actually *do* things.
+:::

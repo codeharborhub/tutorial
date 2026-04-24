@@ -1,0 +1,70 @@
+---
+title: "HTTP vs HTTPS"
+sidebar_label: "2. HTTP & HTTPS"
+sidebar_position: 2
+description: "Learn the difference between the standard and secure versions of the web's primary communication protocol."
+---
+
+In the previous lesson, we learned that the Internet is the "Road." **HTTP** is the language spoken by the vehicles (data) traveling on those roads. However, not all vehicles are armored.
+
+## 1. What is HTTP?
+
+**HTTP (HyperText Transfer Protocol)** is the foundation of data exchange on the web. It is a **request-response** protocol.
+
+* **The Problem:** HTTP sends data in **Plain Text**. 
+* **The Analogy:** Imagine sending a postcard through the mail. Anyone who handles that postcard (routers, hackers on public Wi-Fi, ISPs) can read exactly what you wrote.
+
+## 2. What is HTTPS?
+
+**HTTPS (HyperText Transfer Protocol Secure)** is the secure version of HTTP. It uses a sub-protocol called **TLS (Transport Layer Security)**—formerly known as **SSL**—to encrypt the communication.
+
+* **The Solution:** HTTPS sends data in **Ciphertext** (Encrypted code).
+* **The Analogy:** Imagine putting your message inside a high-tech, armored safe before mailing it. Only the person with the "Digital Key" can open it and read the message.
+
+## Comparison Table
+
+| Feature | HTTP | HTTPS |
+| :--- | :--- | :--- |
+| **Security** | Not Secure (Plain Text) | Secure (Encrypted) |
+| **Port** | Uses Port 80 | Uses Port 443 |
+| **Search Engine Rank**| Neutral | **Boosts SEO** (Google prefers HTTPS) |
+| **Browser Status** | Shows "Not Secure" warning | Shows a **Padlock icon** |
+| **Trust** | Low | High |
+
+## 3. How the "Handshake" Works
+
+When you visit a secure site like **CodeHarborHub**, a "TLS Handshake" happens in milliseconds:
+
+1.  **The Hello:** The browser asks the server to identify itself.
+2.  **The Certificate:** The server sends its **SSL Certificate** (containing its public key).
+3.  **The Verification:** The browser checks with a "Certificate Authority" to make sure the certificate is real.
+4.  **The Key Exchange:** Both sides agree on a "Secret Session Key" to encrypt all future messages.
+
+## 4. Why HTTPS is Mandatory Today
+
+<Tabs>
+  <TabItem value="privacy" label="Privacy" default>
+    It prevents <strong>Man-in-the-Middle (MITM)</strong> attacks where hackers "eavesdrop" on your login credentials or credit card numbers.
+  </TabItem>
+  <TabItem value="integrity" label="Data Integrity">
+    It ensures that the data isn't <strong>tampered</strong> with during transit. Without HTTPS, an ISP could theoretically inject ads into a website you are visiting.
+  </TabItem>
+  <TabItem value="features" label="Modern Features">
+    Modern browser features like <strong>Geolocation</strong> (finding your location), <strong>Camera access</strong>, and <strong>Service Workers</strong> (for offline apps) <em>require</em> HTTPS to work.
+  </TabItem>
+</Tabs>
+
+## How to get HTTPS?
+
+In the past, SSL certificates cost hundreds of dollars. Today, thanks to the **Open Source** movement, you can get them for free!
+
+* **Let's Encrypt:** A free, automated, and open Certificate Authority.
+* **Cloudflare:** Provides a free "Universal SSL" to protect your site.
+
+:::tip CodeHarborHub Best Practice
+As a Full-Stack developer, **never** deploy a site to production using HTTP. Even for a simple blog, always use a free certificate to protect your users and your search engine ranking.
+:::
+
+:::danger Common Myth
+**"I don't need HTTPS because I don't process payments."** **False!** Even without payments, login forms, cookies, and user data are all vulnerable. Google also penalizes non-secure sites in search results.
+:::

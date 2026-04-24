@@ -1,0 +1,84 @@
+---
+title: "Terminal & CLI Basics"
+sidebar_label: Terminal Basics
+sidebar_position: 6
+description: "Learn the essential commands to navigate your computer like a professional engineer."
+---
+
+To the average person, a black screen with white text looks like "hacking." To a developer, the **Terminal** (also called the Command Line Interface or CLI) is the most powerful tool in the shed.
+
+Instead of clicking through folders with a mouse, you can move, create, and delete files with a few keystrokes. At **CodeHarborHub**, we use the terminal for everything from running servers to deploying apps.
+
+## 1. GUI vs. CLI
+
+* **GUI (Graphical User Interface):** Point, click, and drag. Easy to learn, but slow for repetitive tasks.
+* **CLI (Command Line Interface):** Typing commands. Faster, scriptable, and allows you to control remote servers (like those on AWS).
+
+## 2. Navigation: Finding Your Way
+
+Think of the terminal as a "You Are Here" map. You are always inside a specific folder (the **Working Directory**).
+
+| Command | Name | What it does |
+| :--- | :--- | :--- |
+| `pwd` | Print Working Directory | "Where am I right now?" |
+| `ls` | List | "Show me all files and folders in here." |
+| `cd <folder>` | Change Directory | "Go inside this folder." |
+| `cd ..` | Go Back | "Move up one level to the parent folder." |
+
+## 3. File Operations: Building & Cleaning
+
+Now let's learn how to manage your project files without a mouse.
+
+<Tabs>
+<TabItem value="create" label="Creating" default>
+
+* **`mkdir <name>`**: Make Directory (Create a new folder).
+* **`touch <filename>`**: Create a new empty file (e.g., `touch index.html`).
+
+</TabItem>
+<TabItem value="delete" label="Deleting">
+
+* **`rm <file>`**: Remove a file.
+* **`rm -rf <folder>`**: Remove a folder and everything inside it.
+
+:::danger Warning
+The terminal has no "Recycle Bin." When you delete something here, it is gone forever. Double-check before hitting Enter!
+:::
+
+</TabItem>
+</Tabs>
+
+## 4. Terminal "Superpowers"
+
+Professional developers use these tricks to work at lightning speed:
+
+1.  **Tab Completion:** Start typing a folder name and hit `Tab`. The terminal will finish the name for you!
+2.  **Up/Down Arrows:** Press the Up arrow to see the last command you typed. No need to re-type long commands.
+3.  **`clear`**: Use this when your screen gets too messy and you want a fresh start.
+4.  **`Ctrl + C`**: The "Emergency Stop." If a program is stuck or a server is running, this forces it to stop.
+
+## 5. The Full-Stack Workflow
+
+Here is a real-world example of how you will use these commands at **CodeHarborHub**:
+
+```bash
+# 1. Create a project folder
+mkdir my-cool-app
+
+# 2. Go inside it
+cd my-cool-app
+
+# 3. Create your main files
+touch index.html style.css script.js
+
+# 4. Open it in VS Code immediately
+code .
+```
+
+:::tip Which Terminal?
+
+* **Windows:** Use **PowerShell** or **Git Bash**.
+* **Mac/Linux:** Use the built-in **Terminal** (Zsh or Bash).
+
+At CodeHarborHub, we recommend learning **Bash/Zsh** commands as they are the standard for web servers and cloud environments.
+:::

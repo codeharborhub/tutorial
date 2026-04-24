@@ -1,0 +1,73 @@
+---
+title: "What is the Internet?"
+sidebar_label: "1. What is the Internet?"
+sidebar_position: 1
+description: "Understand the physical and logical infrastructure that connects the world."
+---
+
+Most people think the Internet is a "cloud" floating in the sky. In reality, the Internet is much more grounded—it is a massive, global web of **physical cables** buried under our streets and laid across the ocean floor.
+
+At **CodeHarborHub**, we define the Internet as:  
+> **A "Network of Networks" that allows billions of computers to talk to each other using a standardized set of rules.**
+
+## The Infrastructure: "The Pipes"
+
+The Internet is physical. When you send a message from India to the USA, that data travels through fiber-optic cables thinner than a human hair at the speed of light.
+
+### The Three Layers of Connection:
+1.  **Backbone:** High-speed fiber-optic cables owned by giant companies (Tier 1 Providers).
+2.  **ISPs (Internet Service Providers):** Companies like Airtel, Jio, or Comcast that connect your home to the backbone.
+3.  **Local Network:** Your home Wi-Fi router connecting your laptop and phone.
+
+## Internet vs. The Web (WWW)
+
+This is the #1 point of confusion for beginners. Let’s clear it up forever:
+
+| Feature | The Internet (The Road) | The World Wide Web (The Traffic) |
+| :--- | :--- | :--- |
+| **Definition** | The physical infrastructure of hardware. | A way of accessing information over the internet. |
+| **Analogy** | The tracks, stations, and engines of a railway. | The passengers and cargo moving on the trains. |
+| **Components** | Cables, Routers, Servers, Satellites. | HTML files, Images, Videos, Websites. |
+| **Protocols** | TCP/IP | HTTP / HTTPS |
+
+## How Data Travels: "The Packet System"
+
+Data is too "heavy" to be sent in one big chunk. Instead, the Internet uses **Packet Switching**.
+
+Imagine you are mailing a Lego castle to a friend, but the box is too big for the mail truck. What do you do?
+1.  You break the castle into **small bricks** (Packets).
+2.  You put an **address label** on every single brick.
+3.  You send them through different mail trucks.
+4.  Your friend receives the bricks and **reassembles** them using the instructions.
+
+## Standard Protocols: The Language of Rules
+
+For computers to talk, they must agree on a set of rules called **Protocols**.
+
+<Tabs>
+  <TabItem value="tcp" label="TCP/IP" default>
+    <strong>The Foundation:</strong> TCP (Transmission Control Protocol) makes sure every packet arrives safely and in the right order. IP (Internet Protocol) handles the addressing (the digital "Home Address").
+  </TabItem>
+  <TabItem value="http" label="HTTP">
+    <strong>The Web Language:</strong> This is what we use to request and receive web pages. (We will cover this deeply in the next lesson!)
+  </TabItem>
+  <TabItem value="others" label="Others">
+    The Internet also powers <strong>SMTP</strong> (Email), <strong>FTP</strong> (File Transfers), and <strong>MQTT</strong> (Smart Home/IoT devices).
+  </TabItem>
+</Tabs>
+
+## Let's Explore: See the "Hops"
+
+Want to see the physical path your data takes? You can use a tool called `traceroute`.
+
+1.  Open your **Terminal**.
+2.  Type `tracert google.com` (Windows) or `traceroute google.com` (Mac/Linux).
+3.  You will see a list of every "Hop" (router) your data hits before reaching Google's server!
+
+:::tip Why do I need to know this?
+As a **Full-Stack Engineer**, understanding the "road" helps you optimize your "traffic." If your website is slow, is it because your code is bad (The Traffic), or because the user is in a region with poor infrastructure (The Road)? 
+:::
+
+:::info Summary for Learners
+The Internet is the hardware; the Web is the software. Data moves in packets, and protocols are the rules that keep the chaos organized.
+:::

@@ -1,0 +1,81 @@
+---
+title: "Web Accessibility (a11y)"
+sidebar_label: "7. Accessibility"
+sidebar_position: 7
+description: "Learn how to make your websites usable for everyone, including people with disabilities."
+---
+
+In the real world, we build ramps for wheelchairs and put braille on elevator buttons. On the web, we do the same thing! 
+
+**Web Accessibility** means making sure your website can be used by **everyone**, including people who:
+* Are blind or have low vision.
+* Cannot use a mouse (they use only a keyboard).
+* Are colorblind.
+* Have temporary injuries (like a broken arm).
+
+## 1. The "Screen Reader" Perspective
+
+A screen reader is software that reads the code of a website out loud. Imagine trying to use your favorite app with your eyes closed—that is how many people experience your work.
+
+### How to help the Screen Reader:
+* **Use Semantic Tags:** As we learned, using `<header>` instead of a `<div>` tells the reader exactly where the top of the page is.
+* **The "Alt" Rule:** Always describe your images. 
+    * ❌ `<img src="dog.jpg">` → The reader just says "Image."
+    * ✅ `<img src="dog.jpg" alt="A golden retriever playing with a ball">` → The reader describes the scene.
+
+## 2. The Keyboard Test
+
+Some users cannot use a mouse due to motor disabilities. They navigate the web using the **Tab** key.
+
+### How to be Keyboard Friendly:
+1. **Never remove the "Focus Outline":** You know that blue box that appears around a button when you click it? That tells keyboard users where they are. Don't hide it!
+2. **Use Buttons for Actions:** If something is clickable, use a `<button>` or `<a>`. If you use a `<div>`, a keyboard user cannot "tab" to it.
+
+## 3. Color and Contrast
+
+If the text color is too similar to the background color, many people won't be able to read it.
+
+| Good Contrast | Bad Contrast |
+| :--- | :--- |
+| <span style={{backgroundColor: '#000', color: '#fff', padding: '2px'}}>White on Black</span> | <span style={{backgroundColor: '#eee', color: '#ccccccde', padding: '2px'}}>Light Grey on Grey</span> |
+
+**The Golden Rule:** Don't use color *only* to show meaning. 
+* ❌ "Click the green button to save." (A colorblind user might see two grey buttons).
+* ✅ "Click the green button labeled 'Save'."
+
+## 4. Meaningful Link Text
+
+Avoid using "Click Here" for your links. It gives no context to someone using a screen reader who is skipping from link to link.
+
+* ❌ `To see our prices, <a href="/pricing">click here</a>.`
+* ✅ `View our <a href="/pricing">full pricing plans</a>.`
+
+## 🍱 5. The "a11y" Checklist for Beginners
+
+<Tabs>
+  <TabItem value="check" label="✅ Quick Checklist" default>
+    <ul>
+      <li>Every image has an <code>alt</code> description.</li>
+      <li>The page has a clear <code>&lt;h1&gt;</code> heading.</li>
+      <li>Form inputs have <code>&lt;label&gt;</code> tags.</li>
+      <li>Text is large enough to read (at least 16px).</li>
+      <li>The language is set: <code>&lt;html lang="en"&gt;</code>.</li>
+    </ul>
+  </TabItem>
+  <TabItem value="tools" label="🛠️ Helpful Tools">
+    <ul>
+      <li><strong>Lighthouse:</strong> Built into Chrome DevTools. It gives you an accessibility score out of 100.</li>
+      <li><strong>WAVE:</strong> A browser extension that points out exactly what to fix on your page.</li>
+    </ul>
+  </TabItem>
+</Tabs>
+
+::::tip Why it matters for your career
+Big companies (like Google, Amazon, and Netflix) prioritize accessibility because it’s the law in many countries and it increases their total number of users. Learning this now makes you a much more valuable developer!
+
+
+:::info Summary
+Accessibility isn't about following hard rules; it's about **empathy**. Build your sites so that everyone, regardless of their situation, can enjoy what you've created.
+:::
+
+::::
