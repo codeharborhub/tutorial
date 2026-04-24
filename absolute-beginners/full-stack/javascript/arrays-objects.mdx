@@ -1,1 +1,100 @@
-<ComingSoon />
+---
+title: "Arrays and Objects"
+sidebar_label: "4. Arrays & Objects"
+sidebar_position: 4
+description: "Learn how to store collections of data using Arrays and Objects in JavaScript."
+---
+
+So far, we've stored one piece of data in one variable (like `let fruit = "apple"`). But what if you have a list of 100 fruits? Or what if you want to store a "User Profile" with a name, age, and email?
+
+This is where **Arrays** and **Objects** come in.
+
+## 1. Arrays (The Ordered List)
+
+An **Array** is a single variable that holds a list of items in a specific order. You define an array using square brackets `[]`.
+
+```javascript
+let fruits = ["Apple", "Banana", "Cherry"];
+```
+
+### Accessing Items (Indexing)
+In programming, we start counting at **0**.
+* `fruits[0]` is "Apple"
+* `fruits[1]` is "Banana"
+
+### Common Array Actions:
+
+```javascript
+fruits.push("Orange"); // Adds to the end
+fruits.pop();         // Removes the last item
+console.log(fruits.length); // Tells you how many items are inside (3)
+```
+
+## 2. Objects (The Labeled Cabinet)
+
+While Arrays are lists, **Objects** store data in "Key-Value" pairs. Use curly braces `{}` for objects. They are perfect for describing a single thing in detail.
+
+```javascript
+const user = {
+    firstName: "Ajay",
+    lastName: "Dhangar",
+    age: 25,
+    isDeveloper: true
+};
+```
+
+### Accessing Data:
+
+You use **Dot Notation** to get information out of an object:
+
+```javascript
+console.log(user.firstName); // Output: Ajay
+console.log(user.age);       // Output: 25
+```
+
+## 3. Which one should I use?
+
+It can be confusing at first. Use this simple rule:
+
+| Use an **Array** when... | Use an **Object** when... |
+| :--- | :--- |
+| You have a **list** of similar things. | You want to **describe** one thing. |
+| Order matters (1st, 2nd, 3rd). | Order doesn't matter. |
+| Example: A list of students. | Example: A single student's profile. |
+
+## 4. Combining Both (The Real World)
+
+In a real application like **CodeHarborHub**, we often have an **Array of Objects**. This is how a list of tutorials or users is actually stored!
+
+```javascript
+const courses = [
+    { title: "HTML Basics", status: "Completed" },
+    { title: "CSS Mastery", status: "In Progress" },
+    { title: "JS Logic", status: "Not Started" }
+];
+
+// To get the title of the first course:
+console.log(courses[0].title); // Output: HTML Basics
+```
+
+## Practice: The "My Team" List
+
+Try building this in your `script.js`:
+
+1. Create an **Object** for yourself called `me` with your name and favorite hobby.
+2. Create an **Array** called `myTeam` and put your object inside it.
+3. Add another object to the array for a friend.
+4. Use `console.log` to print the hobby of the second person in your array.
+
+```javascript
+const me = { name: "Ajay", hobby: "Cricket" };
+const friend = { name: "Rahul", hobby: "Coding" };
+
+const myTeam = [me, friend];
+
+console.log(myTeam[1].hobby); // Output: Coding
+```
+
+:::info Const with Arrays/Objects
+You'll notice we usually use `const` for Arrays and Objects. This is because even though the *content* inside might change (we add a fruit or update an age), the "cabinet" itself stays the same.
+:::

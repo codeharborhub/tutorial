@@ -1,1 +1,107 @@
-<ComingSoon />
+---
+title: "DOM Manipulation"
+sidebar_label: "5. DOM Manipulation"
+sidebar_position: 5
+description: "Learn how to use JavaScript to change your HTML and CSS on the fly."
+---
+
+The **DOM (Document Object Model)** is the map that the browser creates of your HTML. JavaScript uses this map to find, change, add, or delete things on your web page without refreshing it.
+
+Think of the DOM as a **Tree**. Every HTML tag is a branch or a leaf that JavaScript can grab onto.
+
+## 1. Selecting Elements
+
+Before you can change something, you have to "find" it. JavaScript provides several ways to grab elements from your HTML.
+
+| Method | Use case | Example |
+| :--- | :--- | :--- |
+| `getElementById()` | To find a single, unique element. | `document.getElementById('header')` |
+| `querySelector()` | To find the first element that matches a CSS selector. | `document.querySelector('.btn')` |
+| `querySelectorAll()` | To find EVERY element that matches. | `document.querySelectorAll('p')` |
+
+## 2. Changing the Content
+
+Once you have grabbed an element, you can change what is inside it.
+
+```javascript
+// 1. Find it
+const myTitle = document.getElementById('main-title');
+
+// 2. Change it
+myTitle.innerText = "Welcome to CodeHarborHub!";
+myTitle.style.color = "blue"; // You can even change CSS!
+```
+
+## 3. Listening for Events
+
+This is how we make buttons actually *do* things. We use an **Event Listener** to "listen" for user actions like clicks, typing, or scrolling.
+
+```javascript
+const btn = document.querySelector('.my-button');
+
+// "When the button is clicked, run this function"
+btn.addEventListener('click', () => {
+    alert("Button was clicked!");
+});
+```
+
+## 4. Creating New Elements
+
+You aren't stuck with the HTML you started with. You can create brand new elements out of thin air.
+
+```javascript
+// 1. Create it
+const newPara = document.createElement('p');
+
+// 2. Add content
+newPara.innerText = "I was created by JavaScript!";
+
+// 3. Put it on the page
+document.body.appendChild(newPara);
+```
+
+## Let's Practice: The Dark Mode Toggle
+
+Let's build a simple feature that changes the background color when a button is clicked.
+
+**HTML:**
+
+```html
+<button id="theme-btn">Switch Theme</button>
+```
+
+**JavaScript (`script.js`):**
+
+```javascript
+const themeBtn = document.getElementById('theme-btn');
+
+themeBtn.addEventListener('click', () => {
+    // Check the current color
+    if (document.body.style.backgroundColor === "black") {
+        document.body.style.backgroundColor = "white";
+        document.body.style.color = "black";
+    } else {
+        document.body.style.backgroundColor = "black";
+        document.body.style.color = "white";
+    }
+});
+```
+
+## 5. Common DOM Properties
+
+<Tabs>
+  <TabItem value="text" label="Text & HTML" default>
+    * `.innerText`: Changes just the text.
+    * `.innerHTML`: Changes the text AND allows you to add HTML tags.
+  </TabItem>
+  <TabItem value="classes" label="Classes">
+    It is better to change classes than individual styles:
+    * `element.classList.add('active')`
+    * `element.classList.remove('hidden')`
+    * `element.classList.toggle('dark-mode')`
+  </TabItem>
+</Tabs>
+
+:::info Don't Over-CSS in JS
+Avoid writing too much `element.style.color = "red"` in your JavaScript. Instead, define a class like `.error { color: red; }` in your CSS file and use JavaScript to `.add('error')`. This keeps your logic and design separate!
+:::
