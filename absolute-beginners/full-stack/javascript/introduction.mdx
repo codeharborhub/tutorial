@@ -1,1 +1,83 @@
-<ComingSoon />
+---
+title: "Introduction to JavaScript"
+sidebar_label: "1. Introduction"
+sidebar_position: 1
+description: "Learn what JavaScript is and how it adds interactivity to your websites."
+---
+
+If HTML is the **skeleton** and CSS is the **skin**, then **JavaScript (JS)** is the **brain**. 
+
+JavaScript is what makes a website *do* things. It handles what happens when you click a button, how data is saved, and how information updates without refreshing the whole page.
+
+## 1. The Three Layers of a Web Page
+
+To be a Full-Stack developer, you must understand how these three work together:
+
+1.  **HTML (Structure):** "There is a button here."
+2.  **CSS (Style):** "The button is blue and rounded."
+3.  **JavaScript (Logic):** "When the button is clicked, show a 'Thank You' message."
+
+## 2. Where Does JavaScript Live?
+
+Like CSS, you can add JavaScript to your project in different ways. At **CodeHarborHub**, we always recommend the **External** method to keep your "brain" separate from your "body."
+
+<Tabs>
+  <TabItem value="external" label="External (Recommended)" default>
+    Create a file named <code>script.js</code>.
+    <br/>
+    <strong>In your HTML (at the bottom of &lt;body&gt;):</strong> `script src="script.js"></script>`
+  </TabItem>
+  <TabItem value="internal" label="Internal">
+    Write code inside `<script>` tags.
+    <br/>
+    <strong>In your HTML:</strong> `<script> alert('Hello!'); </script>`
+  </TabItem>
+</Tabs>
+
+## 3. Your First Commands
+
+JavaScript is a language of instructions. Here are the three most common ways to see if your "brain" is working:
+
+1.  **`console.log()`**: Prints a message in the browser's hidden "Developer Console." This is for developers to test things.
+2.  **`alert()`**: Pops up a message box for the user.
+3.  **`prompt()`**: Asks the user to type something in.
+
+```javascript
+console.log("Welcome to CodeHarborHub!");
+alert("Warning: Learning JS is addictive!");
+```
+
+## 4. The Developer Console
+
+Every browser has a secret tool for developers. 
+1. Right-click any website.
+2. Click **Inspect**.
+3. Click the **Console** tab.
+
+You can actually type JavaScript directly into this console and it will run instantly!
+
+## Let's Try It!
+
+1. Open your project folder.
+2. Create a file named `index.html` and a file named `script.js`.
+3. Link them in your HTML:
+   ```html title="index.html"
+   <body>
+     <h1>My JS Test</h1>
+     <script src="script.js"></script>
+   </body>
+   ```
+4. In `script.js`, type:
+   ```javascript title="script.js"
+   alert("JavaScript is connected!");
+   console.log("I am a future Full-Stack Developer.");
+   ```
+5. Open your HTML in the browser. If the popup appears, you've just written your first script!
+
+:::tip Why learn JS?
+JavaScript is the most popular programming language in the world. Once you learn it for the web, you can use it to build mobile apps, desktop software, and even control robots!
+:::
+
+:::info Placement
+Always put your `<script>` tag at the very **bottom** of your `<body>`. This ensures your HTML (the skeleton) loads before the JavaScript (the brain) starts trying to control it.
+:::

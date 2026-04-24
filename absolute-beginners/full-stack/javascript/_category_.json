@@ -1,0 +1,9 @@
+{
+  "label": "JavaScript",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "title": "JavaScript: The Logic of the Web",
+    "description": "JavaScript is the programming language that brings your web pages to life. While HTML provides structure and CSS provides style, JavaScript adds the brain—allowing you to create interactive features, handle data, and build complex applications."
+  }
+}
