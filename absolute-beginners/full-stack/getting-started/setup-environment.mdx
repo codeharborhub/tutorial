@@ -1,0 +1,111 @@
+---
+title: "Setting Up Your Environment"
+sidebar_label: "Setup Environment"
+sidebar_position: 4
+description: "Prepare your machine for full-stack development by installing the essential tools of the trade."
+---
+
+To build professional software, you need professional tools. Think of this as setting up your workshop. We need a place to write code, a place to run code, and a way to manage our versions.
+
+## The Essential Toolkit
+
+We will be installing four core components today. Don't worry about how they work yet—we will master each one in the coming modules.
+
+### 1. The Browser (The Viewer)
+While you likely have a browser, we recommend **Google Chrome** or **Firefox Developer Edition**. Their "DevTools" are the industry standard for debugging.
+
+### 2. Node.js (The Engine)
+Node.js allows us to run JavaScript outside of a browser. It is the heart of our backend and our tooling.
+* **Current Recommendation:** Use the **LTS (Long Term Support)** version.
+
+### 3. Git (The Time Machine)
+Git tracks every change you make to your code. If you break something, Git allows you to "travel back in time" to when it worked.
+
+### 4. VS Code (The Workbench)
+Visual Studio Code is the world's most popular code editor. It’s where you will spend 90% of your time.
+
+## Installation Guide
+
+Follow the instructions for your specific Operating System:
+
+<Tabs>
+<TabItem value="windows" label="Windows" default>
+
+### 1. Install Package Manager (Optional but Recommended)
+Open PowerShell as Administrator and install **Winget** or **Chocolatey**. This makes installing dev tools much easier.
+
+### 2. Install Tools
+Run these commands or download the installers manually:
+* **Node.js:** [Download LTS](https://nodejs.org/)
+* **Git:** [Download for Windows](https://git-scm.com/)
+* **VS Code:** [Download](https://code.visualstudio.com/)
+
+### 3. Terminal Setup
+Windows users should use **PowerShell** or install **WSL2 (Windows Subsystem for Linux)** for a more "pro" experience later in the course.
+
+</TabItem>
+<TabItem value="mac" label="macOS">
+
+### 1. Install Homebrew (The Mac Package Manager)
+Open your Terminal and paste:
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+### 2. Install Tools
+
+Run these commands in your terminal:
+
+```bash
+brew install node
+brew install git
+brew install --cask visual-studio-code
+```
+
+</TabItem>
+<TabItem value="linux" label="Linux">
+
+Most Linux users already have a preferred way, but for Ubuntu/Debian:
+
+```bash
+sudo apt update
+sudo apt install nodejs npm git
+# For VS Code, download the .deb package from their site
+```
+
+</TabItem>
+</Tabs>
+
+## Verification: Is it Working?
+
+Once installed, we need to make sure your computer "knows" these tools exist. Open your **Terminal** (Command Prompt on Windows, Terminal on Mac/Linux) and type these commands:
+
+```bash
+# Check Node.js version
+node -v
+
+# Check NPM (Node Package Manager) version
+npm -v
+
+# Check Git version
+git -v
+```
+
+:::tip Success!
+If you see version numbers (e.g., `v20.x.x`), congratulations! Your workshop is ready. If you see "command not found," try restarting your computer to refresh the system paths.
+:::
+
+## CodeHarborHub Extensions
+
+Make your life easier! Open VS Code, go to the Extensions view (`Ctrl+Shift+X`), and install these "Must-Haves":
+
+| Extension | Purpose |
+| :--- | :--- |
+| **Prettier** | Automatically formats your code to look clean. |
+| **ESLint** | Flags errors in your JavaScript as you type. |
+| **Auto Close Tag** | Automatically adds HTML close tags. |
+| **Live Server** | Launches a local development server with a live reload feature. |
+
+:::danger Don't Skip This!
+Many beginners try to code in "Notepad" or a simple text editor. Modern development relies on the features of an IDE (Integrated Development Environment) like VS Code. Using the right tools is half the battle won.
+:::

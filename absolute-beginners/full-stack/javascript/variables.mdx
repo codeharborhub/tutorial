@@ -1,0 +1,94 @@
+---
+title: "JavaScript Variables"
+sidebar_label: "2. Variables"
+sidebar_position: 2
+description: "Learn how to store and manage data using let and const in JavaScript."
+---
+
+In programming, a **Variable** is a container for storing data values. Imagine you are moving into a new house; you put your things into boxes and put a label on each box so you know what's inside. 
+
+Variables work exactly like that!
+
+## 1. How to Create a Variable
+
+To create (or "declare") a variable in JavaScript, we follow a simple pattern:
+
+```javascript
+let name = "Ajay";
+```
+
+* **`let`**: The keyword that tells the computer we are creating a variable.
+* **`name`**: The unique name of the box (the label).
+* **`=`**: The assignment operator (it puts the value into the box).
+* **`"Ajay"`**: The actual data being stored.
+
+## 2. `let` vs `const`
+
+In modern JavaScript, we have two main ways to create variables. The choice depends on whether the value will change later.
+
+<Tabs>
+  <TabItem value="let" label="let (Changeable)" default>
+    Use `let` when the value of the variable <strong>will change</strong> later in your program.
+    
+    ```js
+    let score = 0;
+    score = 10; // This is allowed!
+    ```
+
+  </TabItem>
+  <TabItem value="const" label="const (Constant)">
+    Use `const` when the value <strong>should never change</strong>. It stands for "Constant."
+    
+    ```js
+    const birthYear = 2000;
+    birthYear = 2005; // ❌ ERROR! You cannot change a constant.
+    ```
+  </TabItem>
+</Tabs>
+
+## 3. Rules for Naming Variables
+
+You can't just name your variables anything. JavaScript has a few strict rules:
+
+1.  **No Spaces:** Use `userAge`, not `user age`.
+2.  **Camel Case:** In JS, we start the first word with a lowercase letter and every word after with a Capital (e.g., `isUserLoggedIn`).
+3.  **Start with Letters:** Names cannot start with a number.
+4.  **Meaningful Names:** Don't use `let x = "Apple"`. Instead, use `let fruit = "Apple"`. It makes your code easier to read!
+
+## 4. Using Variables
+
+Once you store a value, you can use the variable name instead of the value itself.
+
+```javascript
+let city = "Mandsaur";
+console.log("I live in " + city); 
+// Output: I live in Mandsaur
+
+city = "Indore";
+console.log("Now I live in " + city);
+// Output: Now I live in Indore
+```
+
+## Let's Practice: The Greeting Script
+
+Try writing this in your `script.js`:
+
+1. Create a variable called `developerName` and store your name in it.
+2. Create a variable called `totalProjects` and store a number (like `5`).
+3. Use `console.log` to print a message combining both.
+
+```javascript
+const developerName = "A Master"; // Using const because your name doesn't change often
+let totalProjects = 3;            // Using let because you will build more!
+
+console.log("Hello, my name is " + developerName);
+console.log("I have built " + totalProjects + " projects.");
+```
+
+:::info Always Default to Const
+Most professional developers use `const` for everything by default. They only switch to `let` if they realize they absolutely *need* to change the value later. This prevents bugs!
+:::
+
+:::warning Note on `var`
+You might see some older tutorials using the keyword `var`. At **CodeHarborHub**, we avoid `var` because it is old and can cause strange bugs in your code. Stick to `let` and `const`!
+:::

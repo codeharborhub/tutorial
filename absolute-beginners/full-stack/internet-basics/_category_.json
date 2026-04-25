@@ -1,0 +1,9 @@
+{
+  "label": "Internet Basics",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "How the Global Network Works",
+    "description": "Before building for the web, you must understand the web. Explore DNS, HTTP, Hosting, and the infrastructure that powers the modern world."
+  }
+}

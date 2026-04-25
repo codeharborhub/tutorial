@@ -1,0 +1,120 @@
+---
+title: "CSS Grid Layout"
+sidebar_label: "6. CSS Grid"
+sidebar_position: 6
+description: "Learn how to create complex 2D layouts using rows and columns with CSS Grid."
+---
+
+
+**CSS Grid** is the most powerful layout system available in CSS. While Flexbox is for 1D (rows **or** columns), Grid is for 2D (rows **and** columns at the same time). 
+
+Think of it like a graph paper where you can decide exactly which "squares" your content should occupy.
+
+## 1. Defining the Grid
+
+Like Flexbox, Grid starts with a **Parent container**. You turn it on by using `display: grid;`.
+
+```css
+.container {
+    display: grid;
+    /* Define 3 columns of equal width */
+    grid-template-columns: 200px 200px 200px;
+    /* Define 2 rows */
+    grid-template-rows: 100px 100px;
+}
+```
+
+## 2. The "Fraction" Unit (`fr`)
+
+In modern web design, we rarely use fixed pixels (`px`) for columns. Instead, we use the `fr` unit. It stands for "fractional unit" and represents a piece of the available space.
+
+```css
+.container {
+    display: grid;
+    /* Column 1 takes 1 part, Column 2 takes 2 parts */
+    grid-template-columns: 1fr 2fr;
+}
+```
+
+This is much better for responsive design because the columns will grow or shrink to fit the screen!
+
+## 3. Placing Items (Grid Lines)
+
+Every grid has invisible lines called **Grid Lines**. You can tell a "child" element to stretch across these lines.
+
+```css
+.header {
+    /* Start at line 1, end at line 4 (Stretches across 3 columns) */
+    grid-column: 1 / 4;
+    
+    /* Start at row 1, end at row 2 */
+    grid-row: 1 / 2;
+}
+```
+
+## 4. Common Grid Properties
+
+<Tabs>
+<TabItem value="repeat" label="🔁 Repeat Function" default>
+
+Instead of writing `1fr 1fr 1fr 1fr`, you can use the repeat function to save time.
+`grid-template-columns: repeat(4, 1fr);`
+
+</TabItem>
+<TabItem value="gap" label="↔️ Grid Gap">
+Just like Flexbox, you can add space between your grid cells easily.
+`gap: 20px;`
+
+</TabItem>
+</Tabs>
+
+## 5. The "Holy Grail" Layout
+
+Here is how you build a professional website structure in just a few lines of CSS:
+
+```html
+<div class="parent">
+  <header>Header</header>
+  <nav>Nav</nav>
+  <main>Main Content</main>
+  <aside>Sidebar</aside>
+  <footer>Footer</footer>
+</div>
+```
+
+```css
+.parent {
+    display: grid;
+    grid-template-columns: 200px 1fr; /* Sidebar and main content */
+    grid-template-rows: auto 1fr auto; /* Header, Body, Footer */
+    height: 100vh;
+}
+
+header { grid-column: 1 / 3; }
+nav    { grid-column: 1 / 2; grid-row: 2 / 3; }
+main   { grid-column: 2 / 3; grid-row: 2 / 3; }
+footer { grid-column: 1 / 3; }
+```
+
+## Interactive Practice: The Photo Gallery
+
+Create a grid gallery where the images automatically rearrange themselves:
+
+```css
+.gallery {
+    display: grid;
+    /* Auto-fill as many columns as will fit, each at least 200px wide */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.gallery img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+```
+
+:::info Grid or Flexbox?
+Use **Flexbox** when you have a simple list of items and you just want to align them. Use **Grid** when you have a full page layout or a design where items need to line up in both directions (like a calendar).
+:::

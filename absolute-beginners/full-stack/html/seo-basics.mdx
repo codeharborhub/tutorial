@@ -1,0 +1,81 @@
+---
+title: "SEO Basics for Developers"
+sidebar_label: "8. SEO Basics"
+sidebar_position: 8
+description: "Learn how to optimize your HTML structure so search engines can find and rank your website."
+---
+
+**SEO** stands for **Search Engine Optimization**. It is the art and science of making your website easy for search engines (like Google or Bing) to crawl, understand, and index.
+
+As a developer, you don't need to be a marketing expert, but you **must** know how to build an SEO-friendly structure.
+
+## 1. How Search Engines Work
+
+Google uses automated programs called **"Spiders"** or **"Crawlers."** They visit your site, read your HTML code, and follow your links to see what your page is about.
+
+### The Crawler's Journey:
+1.  **Crawling:** Finding your site and reading the code.
+2.  **Indexing:** Storing your information in a massive global database.
+3.  **Ranking:** Deciding if your site is the "best" answer for a user's search.
+
+## 2. The Power of Meta Tags
+
+Meta tags live inside the `<head>` of your HTML. Users don't see them, but Google loves them.
+
+```html
+<head>
+  <title>Learn Full-Stack Development | CodeHarborHub</title>
+
+  <meta name="description" content="Master HTML, CSS, and JS with CodeHarborHub's free tutorials.">
+</head>
+```
+
+## 3. Semantic Hierarchy (H1 to H6)
+
+Google uses your headings to understand the **outline** of your content.
+
+  * **H1:** The "Title" of your page. You should only have **one** H1 per page.
+  * **H2 - H3:** The "Chapters" or sections.
+  * **H4 - H6:** Sub-details.
+
+**Think of it like a book:** If the H1 is the "Book Title," the H2s are the "Chapter Titles."
+
+## 🏗️ 4. SEO Best Practices Checklist
+
+<Tabs>
+<TabItem value="onpage" label="📄 On-Page SEO" default>
+
+* **Friendly URLs:** Use `/html-tutorial` instead of `/page123?id=9`.
+* **Alt Text:** Describe your images so Google Image Search can find them.
+* **Mobile Friendly:** Google "punishes" sites that don't look good on phones.
+
+</TabItem>
+<TabItem value="technical" label="⚙️ Technical SEO">
+
+* **Page Speed:** Use optimized images so your site loads in under 3 seconds.
+* **HTTPS:** As we learned, security is a ranking factor!
+* **Internal Links:** Link between your own pages to keep the "Spider" on your site longer.
+
+</TabItem>
+</Tabs>
+
+## 5. Open Graph (Social SEO)
+
+Have you noticed how a nice card appears when you share a link on WhatsApp, LinkedIn, or Discord? That is done using **Open Graph** tags.
+
+```html
+<meta property="og:title" content="CodeHarborHub Tutorials">
+<meta property="og:image" content="https://codeharborhub.github.io/img/codeharborhub-social-card.jpg">
+```
+
+## Let's Practice
+
+Check the SEO of your `index.html`:
+
+1.  Does it have a `<title>` that includes a keyword (like "Full-Stack")?
+2.  Did you add a `<meta name="description">`?
+3.  Are you using an `<h1>` for your main title?
+
+:::tip The "Google" Secret
+Google doesn't just look for keywords; it looks for **User Experience**. If your code is clean, accessible, and fast, you are already winning at SEO\!
+:::

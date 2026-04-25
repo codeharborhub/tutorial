@@ -1,0 +1,97 @@
+---
+title: "Your First Program"
+sidebar_label: "First Program"
+sidebar_position: 7
+description: "The moment of truth. Write, run, and see your first lines of code in action."
+---
+
+The tradition of every software engineer since the 1970s is to start their journey by making the computer say **"Hello, World!"**. Today, you join that tradition.
+
+We are going to use **Node.js** (which we installed earlier) to run JavaScript directly on your computer.
+
+## 1. The Setup
+
+Open your **Terminal** and follow these commands to create a dedicated space for your first project:
+
+```bash
+# Create a folder for your practice
+mkdir hello-world-app
+
+# Move into that folder
+cd hello-world-app
+
+# Create the JavaScript file
+touch app.js
+
+# Open it in VS Code
+code .
+```
+
+## 2. Writing the Code
+
+In VS Code, open the `app.js` file you just created. Type the following code exactly as shown:
+
+```javascript
+// This is a comment - the computer ignores it
+// It's just for us humans to read!
+
+const greeting = "Hello, CodeHarborHub!";
+const date = new Date().toLocaleDateString();
+
+console.log("*******************************");
+console.log(greeting);
+console.log("Today is: " + date);
+console.log("I am officially a Developer! 🚀");
+console.log("*******************************");
+```
+
+### What is happening here?
+
+* **`const`**: We are creating a "Container" (Variable) to hold our text.
+* **`console.log()`**: This is the command that tells the computer to "print" or "speak" the text into our terminal.
+* **`new Date()`**: A built-in JavaScript tool that grabs the current time from your system.
+
+## 3. Running the Program
+
+Go back to your terminal (inside the `hello-world-app` folder). Type this command and hit Enter:
+
+```bash
+node app.js
+```
+
+**If you see the stars and the greeting in your terminal, CONGRATULATIONS! You just executed your first piece of backend code.**
+
+## Troubleshooting: "What if it didn't work?"
+
+Don't panic! Debugging is part of the job. Check these three things:
+
+| Problem | Fix |
+| :--- | :--- |
+| **"node is not recognized"** | Node.js didn't install correctly. Try restarting your terminal. |
+| **"cannot find module"** | Make sure you are inside the `hello-world-app` folder (Type `ls` to check). |
+| **SyntaxError** | You likely missed a quote `"` or a parenthesis `)`. Check your code again! |
+
+## 4. Level Up: The Interactive Version
+
+Let's make it more interesting. Copy-paste this into your `app.js` instead:
+
+```javascript
+const name = "Developer"; 
+
+function welcome(user) {
+    console.log(`Welcome to the team, ${user}!`);
+    console.log("Your journey to Full-Stack Mastery starts now.");
+}
+
+welcome(name);
+```
+
+Run `node app.js` again. Notice how we used a **Function** to reuse our code? This is the foundation of every app at **CodeHarborHub**.
+
+:::tip You are an Engineer!
+You just took an idea, wrote it in a language the computer understands, and executed it. That is the definition of Software Engineering.
+:::
+
+:::info What's Next?
+Now that you've conquered your first program, we need to understand the "Pipe System" that allows millions of these programs to talk to each other.
+:::

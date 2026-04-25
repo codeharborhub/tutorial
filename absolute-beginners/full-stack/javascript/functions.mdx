@@ -1,0 +1,104 @@
+---
+title: "JavaScript Functions"
+sidebar_label: "3. Functions"
+sidebar_position: 3
+description: "Learn how to write reusable blocks of code to make your programs efficient."
+---
+
+Imagine you are a chef. Instead of writing down the steps to bake a cake every single time someone orders one, you just write the recipe once and give it a name: **"BakeCake"**. Whenever you need a cake, you just follow that named recipe.
+
+In JavaScript, a **Function** is a reusable block of code designed to perform a particular task.
+
+## 1. How to Define a Function
+
+Creating a function is like building a machine. It has three main parts:
+
+1.  **Declaration:** Using the `function` keyword.
+2.  **Name:** A descriptive name (using camelCase).
+3.  **Parameters:** Values you "feed" into the machine (inside the parentheses `()`).
+4.  **Body:** The actual code inside the curly braces `{}`.
+
+```javascript
+function sayHello(name) {
+    console.log("Hello " + name + "! Welcome to CodeHarborHub.");
+}
+```
+
+## 2. Calling (Using) a Function
+
+Defining a function doesn't run the code inside. To use the machine, you must **"Call"** it by using its name followed by parentheses.
+
+```javascript
+// Calling the function
+sayHello("Ajay"); 
+// Output: Hello Ajay! Welcome to CodeHarborHub.
+
+sayHello("Student");
+// Output: Hello Student! Welcome to CodeHarborHub.
+```
+
+## 3. Return Values
+
+Sometimes, you don't just want a function to print a message; you want it to **give you something back** (like a calculator giving you the result of a sum). We use the `return` keyword for this.
+
+```javascript
+function addNumbers(a, b) {
+    return a + b; // Sends the result back to whoever called it
+}
+
+let result = addNumbers(5, 10);
+console.log(result); // Output: 15
+```
+
+:::warning The Return Rule
+Once a function hits a `return` statement, it stops immediately. Any code written *after* the return inside that function will be ignored.
+:::
+
+## 4. Parameters vs. Arguments
+
+These terms are often confused, but the difference is simple:
+
+* **Parameters:** The "placeholders" listed in the function definition (e.g., `a` and `b`).
+* **Arguments:** The "real values" you pass to the function when you call it (e.g., `5` and `10`).
+
+## 5. Arrow Functions (The Modern Way)
+
+In modern JavaScript (ES6+), developers use a shorter syntax called **Arrow Functions**. It's the "cool" way to write functions at **CodeHarborHub**.
+
+<Tabs>
+  <TabItem value="traditional" label="Traditional" default>
+    ```js
+    function multiply(x, y) {
+        return x * y;
+    }
+    ```
+  </TabItem>
+  <TabItem value="arrow" label="Arrow Function">
+    ```js
+    const multiply = (x, y) => x * y;
+    ```
+
+    <em>(If it's just one line, you don't even need the "return" keyword!)</em>
+
+  </TabItem>
+</Tabs>
+
+## Practice: The "Tip Calculator"
+
+Try building this reusable tool in your `script.js`:
+
+```javascript
+function calculateTip(billAmount, tipPercentage) {
+    let tip = billAmount * (tipPercentage / 100);
+    let total = billAmount + tip;
+    return "Your total bill is: " + total;
+}
+
+// Testing our machine
+console.log(calculateTip(100, 15)); // Output: Your total bill is: 115
+console.log(calculateTip(250, 10)); // Output: Your total bill is: 275
+```
+
+:::info Keep it Simple
+A good function should do **one thing** and do it well. If your function is doing 5 different tasks, it's better to break it into 5 smaller functions!
+:::
