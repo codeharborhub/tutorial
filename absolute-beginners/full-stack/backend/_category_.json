@@ -1,0 +1,9 @@
+{
+  "label": "Backend Development",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "title": "Backend Development: The Brain of the App",
+    "description": "Step behind the curtain and learn how to build powerful servers, manage databases, and create secure APIs. This track covers everything from Node.js and Express to database architecture and authentication."
+  }
+}

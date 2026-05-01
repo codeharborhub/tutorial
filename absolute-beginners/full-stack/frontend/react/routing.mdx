@@ -1,1 +1,117 @@
-<ComingSoon />
+---
+title: "React Router Basics"
+sidebar_label: "5. React Router"
+sidebar_position: 5
+description: "Learn how to create navigation and multiple pages in a Single Page Application (SPA)."
+---
+
+By default, React only shows one "page" (the `App` component). To build a site with an **About** page, a **Contact** page, and a **Dashboard**, we use a library called **React Router**.
+
+This allows us to change the URL in the browser without the page actually refreshing!
+
+## 1. Installation
+
+React Router is an external library. To use it in your CodeHarborHub project, install it via npm:
+
+```bash
+npm install react-router-dom
+```
+
+## 2. The Core Components
+
+To set up routing, you need to understand these four components:
+
+1.  **`<BrowserRouter>`**: The parent wrapper that enables routing.
+2.  **`<Routes>`**: A container that looks through all its children to find the best match for the current URL.
+3.  **`<Route>`**: Connects a specific **Path** (like `/about`) to a **Component** (like `<About/>`).
+4.  **`<Link>`**: The React version of an `<a>` tag. It changes the URL without refreshing the page.
+
+## 3. Basic Setup Example
+
+Here is how you organize your `App.js` to handle multiple pages:
+
+```jsx title="App.js"
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link> | <Link to="/about">About</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+In this example:
+
+*   The `<BrowserRouter>` wraps the entire app to enable routing.
+*   The `<nav>` contains `<Link>` components that allow users to navigate without refreshing the page.
+*   The `<Routes>` component checks the URL and renders the appropriate component based on the defined `<Route>` paths.
+
+## 4. Dynamic Routing (URL Params)
+
+What if you have 100 different blog posts? You don't want to create 100 routes. Instead, you use **Path Parameters**.
+
+```jsx title="App.js"
+// The Route
+<Route path="/user/:username" element={<UserProfile />} />
+
+// The Component (Using the useParams hook)
+import { useParams } from 'react-router-dom';
+
+function UserProfile() {
+  const { username } = useParams();
+  return <h1>Profile of {username}</h1>;
+}
+```
+
+## 5. The "404 Not Found" Page
+
+You can create a fallback route that catches any URL that doesn't match your defined paths. Use the `*` wildcard for this.
+
+```jsx title="App.js"
+<Routes>
+  <Route path="/" element={<Home />} />
+  {/* Other routes */}
+  <Route path="*" element={<h2>404: Page Not Found at the Hub!</h2>} />
+</Routes>
+```
+
+## 6. Programmatic Navigation
+
+Sometimes you want to move the user to a new page automatically (for example, after they successfully log in). For this, we use the `useNavigate` hook.
+
+```jsx title="LoginPage.js"
+import { useNavigate } from 'react-router-dom';
+
+function LoginPage() {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    // ... logic to log in ...
+    navigate('/dashboard'); // Take user to dashboard
+  };
+
+  return <button onClick={handleLogin}>Login</button>;
+}
+```
+
+## Practice: The Mini-Site Challenge
+
+1.  Create three components: `Home`, `Projects`, and `Contact`.
+2.  Set up a `<BrowserRouter>` in your main file.
+3.  Create a Navigation bar using `<Link>`.
+4.  Add a "Back to Home" button on the Contact page using `useNavigate`.
+
+:::info Link vs `<a>`
+**Never** use `<a href="/about">` in a React app. This will cause the browser to reload the entire page, losing your app state. Always use the `<Link to="/about">` component from React Router.
+:::

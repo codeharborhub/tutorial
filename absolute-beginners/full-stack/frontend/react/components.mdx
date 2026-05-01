@@ -1,1 +1,172 @@
-<ComingSoon />
+---
+title: "Components & Props"
+sidebar_label: "3. Components & Props"
+sidebar_position: 3
+description: "Learn how to build reusable UI building blocks and pass data between them using Props."
+---
+
+In React, we don't build "pages"—we build **Components**. A component is a small, reusable piece of the user interface. By combining these pieces, you can build complex applications that are easy to maintain and scale.
+
+## 1. What is a Component?
+
+Think of a component as a custom HTML element. For example, instead of writing the HTML for a user profile card five times, you create a `<UserProfile/>` component and reuse it.
+
+:::info For Example
+
+Now, instead of writing this multiple times:
+
+```jsx live
+function WelcomeMessage() {
+  return <h1>Hello, CodeHarborHub Learner!</h1>;
+}
+```
+
+You can create a reusable component:
+
+```jsx title="WelcomeMessage.js"
+function WelcomeMessage() {
+  return <h1>Hello, CodeHarborHub Learner!</h1>;
+}
+```
+
+And then use it anywhere in your app:
+
+```jsx title="App.js"
+function App() {
+  return (
+    <div>
+      <WelcomeMessage />
+      <WelcomeMessage />
+      <WelcomeMessage />
+    </div>
+  );
+}
+```
+
+This way, if you want to change the message, you only need to update it in one place!
+:::
+
+There are two types of components in React history, but at **CodeHarborHub**, we focus on the modern standard: **Functional Components**.
+
+```jsx title="Functional Component"
+function Greeting() {
+  return <h1>Welcome to CodeHarborHub!</h1>;
+}
+```
+
+## 2. Component Composition
+
+Components can be nested inside other components. This is called **Composition**. You usually have one `App` component at the top, which contains many smaller children.
+
+```jsx title="App.js"
+function Navbar() {
+  return <nav>Home | Tutorials | Projects</nav>;
+}
+
+function App() {
+  return (
+    <div>
+      <Navbar />
+      <WelcomeMessage />
+    </div>
+  );
+}
+```
+
+## 3. What are Props?
+
+Components are even more powerful when they are dynamic. **Props** (short for "properties") allow you to pass data from a parent component to a child component.
+
+Think of Props like **arguments in a function** or **attributes in an HTML tag**.
+
+:::info Why "Props"?
+The name "Props" comes from the idea of "properties" that you can set on a component, similar to how you set properties on HTML elements (like `class`, `id`, etc.). They are the way we customize and configure our components.
+:::
+
+### How to use Props:
+
+1.  **Pass the prop** in the parent component.
+2.  **Receive the prop** as an object in the child component function.
+
+```jsx title="App.js"
+// 1. The Child Component
+function GreetUser(props) {
+  return <h2>Welcome, {props.name}!</h2>;
+}
+
+// 2. The Parent Component
+function App() {
+  return (
+    <div>
+      <GreetUser name="Ajay" />
+      <GreetUser name="A Master" />
+    </div>
+  );
+}
+```
+
+## 4. Destructuring Props
+
+To make your code cleaner, developers often "destructure" the props object right in the function signature. This is the standard way we write code at the Hub.
+
+```jsx title="CourseCard.js"
+// Cleaner version using destructuring
+function CourseCard({ title, duration }) {
+  return (
+    <div className="card">
+      <h3>{title}</h3>
+      <p>Time: {duration} hours</p>
+    </div>
+  );
+}
+```
+
+## 5. The "Children" Prop
+
+Sometimes you want to pass actual JSX or elements into a component, not just strings or numbers. For this, React provides a special prop called `children`.
+
+```jsx title="Layout.js"
+function Layout({ children }) {
+  return (
+    <div className="container">
+      <header>CodeHarborHub</header>
+      <main>{children}</main>
+    </div>
+  );
+}
+
+// Usage
+<Layout>
+  <p>This paragraph is passed as 'children'!</p>
+</Layout>
+```
+
+## Practice: Building a Project Card
+
+Let's build a reusable card for your portfolio projects:
+
+```jsx title="ProjectCard.js"
+function ProjectCard({ name, tech, isCompleted }) {
+  return (
+    <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}>
+      <h3>{name}</h3>
+      <p>Tech Stack: {tech}</p>
+      <p>Status: {isCompleted ? "✅ Finished" : "⏳ In Progress"}</p>
+    </div>
+  );
+}
+
+// In your App.js
+<ProjectCard name="Chat App" tech="React & Socket.io" isCompleted={true} />
+<ProjectCard name="Portfolio" tech="React & Tailwind" isCompleted={false} />
+```
+
+:::info Props are Read-Only
+A component should never change its own props. They are "immutable." If you need to change data within a component, that’s where **State** comes in!
+:::
+
+:::warning Capitalize Component Names!
+In React, component names **must** start with a capital letter (e.g., `<MyComponent/>`). If you use a lowercase letter (`<myComponent />`), React will think it is a standard HTML tag and your code won't work.
+:::
+
+Now that you understand the basics of components and props, you're ready to start building your own reusable UI pieces and passing data around in your React apps! Next, we'll dive into **State** to make our components interactive and dynamic.

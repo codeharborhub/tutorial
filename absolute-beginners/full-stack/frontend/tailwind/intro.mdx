@@ -1,1 +1,91 @@
-<ComingSoon />
+---
+title: "Introduction to Tailwind CSS"
+sidebar_label: "1. Intro to Tailwind"
+sidebar_position: 1
+description: "Learn the fundamentals of utility-first CSS and why it is the preferred way to style modern web apps."
+tags: ["tailwind", "css", "frontend"]
+keywords: ["tailwind", "css", "utility-first", "frontend"]
+---
+
+**Tailwind CSS** is a utility-first CSS framework. Unlike Bootstrap or Material UI, it doesn't give you pre-made components like buttons or navbars. Instead, it gives you low-level "utility classes" that let you build completely custom designs without ever leaving your HTML.
+
+## 1. What is "Utility-First"?
+
+In traditional CSS, you give an element a name (`class="card"`) and then write the styles for that name in a separate file. In Tailwind, you apply small, single-purpose classes directly to the element.
+
+### The Traditional Way:
+
+<Tabs>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="my-button">Click Me</div>
+```
+
+</TabItem>
+<TabItem value="css" label="CSS">
+
+```css
+.my-button {
+  background-color: blue;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: white;
+}
+```
+
+</TabItem>
+</Tabs>
+
+### The Tailwind Way:
+
+```html title="index.html"
+<div class="bg-blue-500 p-4 rounded-lg text-white">
+  Click Me
+</div>
+```
+
+## 2. Why use Tailwind at CodeHarborHub?
+
+1.  **No More Naming Wars:** You don't have to spend hours thinking of class names like `inner-wrapper-container-v2`.
+2.  **Faster Development:** You style as you build. No switching tabs.
+3.  **Consistency:** Tailwind comes with a built-in design system. Your spacing, colors, and shadows will always look professional and aligned.
+4.  **Tiny Shipments:** Tailwind automatically removes all the CSS you aren't using, making your website load incredibly fast.
+
+## 3. The Core Concept: Designing in the Browser
+
+Tailwind encourages you to experiment. Want to see what a darker blue looks like? Just change `bg-blue-500` to `bg-blue-700`. Want more space? Change `p-4` to `p-6`.
+
+### Common Utility Categories:
+| Category | Example Classes | What it does |
+| :--- | :--- | :--- |
+| **Layout** | `flex`, `grid`, `block` | Controls how elements sit together. |
+| **Spacing** | `m-4`, `py-2`, `gap-8` | Controls margins, padding, and gaps. |
+| **Typography**| `text-xl`, `font-bold` | Controls size and weight of text. |
+| **Colors** | `bg-slate-100`, `text-red-500`| Controls background and text colors. |
+| **Effects** | `shadow-md`, `rounded-full` | Adds depth and rounded corners. |
+
+## 4. Does it replace CSS?
+
+**No.** To be great at Tailwind, you still need to understand CSS fundamentals like Flexbox, Grid, and the Box Model. Tailwind is simply a **faster way to write CSS**. Think of it as shorthand for professionals. If you need a custom animation or a very specific style, you can still write traditional CSS and use it alongside Tailwind.
+
+## Practice: Reading Tailwind
+
+Try to guess what this element will look like before looking at the explanation:
+
+```html title="index.html"
+<div class="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+  <span>☀️</span>
+</div>
+```
+
+**What’s happening here?**
+*   `w-32 h-32`: Sets a width and height of 8rem (128px).
+*   `bg-yellow-400`: Makes it bright yellow.
+*   `rounded-full`: Turns the square into a perfect circle.
+*   `flex items-center justify-center`: Centers the emoji perfectly in the middle.
+*   `shadow-lg`: Adds a nice drop shadow to make it "pop."
+
+:::info IntelliSense
+When working at the Hub, we highly recommend the **Tailwind CSS IntelliSense** extension for VS Code. It gives you autocomplete suggestions for classes so you don't have to memorize them all!
+:::

@@ -1,1 +1,107 @@
-<ComingSoon />
+---
+title: "npm: Node Package Manager"
+sidebar_label: "3. npm Basics"
+sidebar_position: 3
+description: "Learn how to manage dependencies and use external libraries in your projects."
+---
+
+When building professional applications, you don't need to "reinvent the wheel." If you need a tool to handle complex dates, a CSS framework, or a way to refresh your browser automatically, someone has likely already built it and shared it on **npm**.
+
+**npm** is the world's largest software registry. It comes automatically when you install **Node.js**.
+
+## 1. What is a "Package"?
+
+A package is just a folder containing code and a file called `package.json` that describes what the code does and what other tools it needs to work.
+
+## 2. The `package.json` File
+
+This is the most important file in any modern JavaScript project. Think of it as the **manifest** or the **recipe list** for your project. It keeps track of:
+* Your project's name and version.
+* The "Dependencies" (external libraries) your project uses.
+* Custom "Scripts" (shortcuts for commands).
+
+### How to create it:
+Open your terminal in your project folder and type:
+
+```bash
+npm init -y
+```
+
+The `-y` flag tells npm to say "yes" to all the default settings, creating a basic file instantly.
+
+## 3. Installing Packages
+
+There are two ways to install a package, depending on how you plan to use it.
+
+<Tabs>
+  <TabItem value="local" label="Local Dependency" default>
+    These are packages your website needs to <strong>run</strong> (e.g., React, Lodash).
+
+    ```bash
+    npm install name-of-package
+    ```
+
+    <em>Example: `npm install dayjs`</em>
+  </TabItem>
+  <TabItem value="dev" label="Dev Dependency">
+    These are tools you only need during <strong>development</strong> (e.g., code formatters, minifiers).
+    ```bash
+    npm install name-of-package --save-dev
+    ```
+  </TabItem>
+</Tabs>
+
+## 4. The `node_modules` Folder
+
+Once you install your first package, you will see a massive folder appear called `node_modules`. 
+
+> **Important Rule:** Never touch this folder! This is where npm stores the actual code for all your downloaded libraries. 
+
+### Git Tip:
+Because `node_modules` can be huge, we **never** upload it to GitHub. We add it to our `.gitignore` file. When another developer clones your repo, they simply run `npm install`, and npm will read your `package.json` to download everything they need automatically.
+
+## 5. Using Scripts
+
+You can create shortcuts for long commands in the `"scripts"` section of your `package.json`.
+
+```json
+"scripts": {
+  "start": "node index.js",
+  "dev": "live-server"
+}
+```
+
+To run these, you use:
+
+```bash
+npm run start
+# or for special commands like start/test:
+npm start
+```
+
+## Practice: Your First Package
+
+1. Create a folder and run `npm init -y`.
+2. Install a package called `cowsay`:
+
+   ```bash
+   npm install cowsay
+   ```
+
+3. Create a file named `app.js` and add this code:
+
+   ```javascript
+   const cowsay = require("cowsay");
+
+   console.log(cowsay.say({
+       text : "Learning npm at CodeHarborHub!",
+       e : "oO",
+       T : "U "
+   }));
+   ```
+
+4. Run your code: `node app.js`.
+
+:::info npx
+Sometimes you want to run a package once without installing it permanently. For that, use `npx`. For example, `npx cowsay hello` will run the command instantly!
+:::

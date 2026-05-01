@@ -1,1 +1,105 @@
-<ComingSoon />
+---
+title: "Responsive Design with Tailwind"
+sidebar_label: "3. Responsive Design"
+sidebar_position: 3
+description: "Learn how to build mobile-first, responsive layouts using Tailwind's simple prefix system."
+tags: ["tailwind", "css", "responsive-design", "frontend"]
+keywords: ["tailwind", "css", "responsive-design", "frontend"]
+---
+
+Today, more people browse the web on phones than on computers. This means your projects at **CodeHarborHub** must look great on every screen size. Tailwind makes this incredibly easy using **Responsive Modifiers**.
+
+## 1. The Mobile-First Strategy
+
+Tailwind uses a **Mobile-First** breakpoint system. This means:
+*   Any class you write *without* a prefix (like `bg-red-500`) applies to **all** screen sizes (starting from the smallest mobile).
+*   You only add prefixes to **override** those styles for larger screens.
+
+**Don't think:** "How do I make this look good on mobile?"  
+**Do think:** "I'll build it for mobile first, then adjust it for tablets and desktops."
+
+## 2. The Five Breakpoints
+
+Tailwind provides five default breakpoints based on common device widths:
+
+| Prefix | Minimum Width | Device Type |
+| :--- | :--- | :--- |
+| `sm` | 640px | Large Phones / Small Tablets |
+| `md` | 768px | Tablets |
+| `lg` | 1024px | Laptops |
+| `xl` | 1280px | Desktops |
+| `2xl`| 1536px | Large Monitors |
+
+## 3. How to Use Prefixes
+
+To apply a style at a specific breakpoint, just add the prefix followed by a colon `:` before the utility class.
+
+### Example: Changing Background Color
+
+```html title="index.html"
+<div class="bg-red-500 md:bg-green-500 lg:bg-blue-500">
+  <!-- 
+    Mobile: Red 
+    Tablet (md): Green
+    Laptop (lg): Blue
+  -->
+</div>
+```
+
+### Example: Responsive Grid
+
+This is how we build layouts that stack on mobile but sit side-by-side on desktop:
+
+```html title="index.html"
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="bg-slate-100 p-4">Item 1</div>
+  <div class="bg-slate-100 p-4">Item 2</div>
+  <div class="bg-slate-100 p-4">Item 3</div>
+</div>
+```
+
+## 4. Common Responsive Patterns
+
+### 1. Hiding Elements
+
+Sometimes you want a sidebar on desktop but want to hide it on mobile to save space.
+
+```html title="index.html"
+<div class="hidden md:block">
+  This only shows on Tablets and larger.
+</div>
+```
+
+### 2. Changing Text Size
+Headings should be smaller on phones so they don't wrap awkwardly.
+
+```html title="index.html"
+<h1 class="text-xl md:text-3xl lg:text-5xl font-bold">
+  Scaling Typography
+</h1>
+```
+
+## Practice: The Responsive Navigation
+
+Try building a navigation bar that changes its layout based on the device:
+
+```html title="index.html"
+<nav class="flex flex-col md:flex-row items-center justify-between p-6 bg-white shadow">
+  <div class="font-bold text-2xl text-indigo-600">CodeHarborHub</div>
+  
+  <div class="mt-4 md:mt-0 flex space-x-6">
+    <a href="#" class="text-slate-600 hover:text-indigo-600">Courses</a>
+    <a href="#" class="text-slate-600 hover:text-indigo-600">Projects</a>
+    <a href="#" class="text-slate-600 hover:text-indigo-600">Community</a>
+  </div>
+</nav>
+```
+
+**Why this works:**
+*   `flex-col`: Links stack vertically on mobile.
+*   `md:flex-row`: Links switch to a horizontal row on tablets.
+*   `mt-4 md:mt-0`: Adds space on top for mobile, but removes it when the links are side-by-side.
+
+:::info Previewing Responsiveness
+You don't need five different devices to test this. In **Chrome DevTools**, click the **"Toggle Device Toolbar"** icon (or press `Cmd+Shift+M`) to simulate different screen sizes directly in your browser.
+:::

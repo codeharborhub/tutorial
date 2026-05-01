@@ -1,1 +1,101 @@
-<ComingSoon />
+---
+title: "Props vs. State"
+sidebar_label: "4. Props vs. State"
+sidebar_position: 4
+description: "Master the difference between external data (Props) and internal data (State) in React."
+---
+
+In React, data flows through your application. To build dynamic interfaces, you need to understand the two ways a component handles that data: **Props** and **State**.
+
+## 1. The Core Difference
+
+Think of a **Component** like a **Digital Watch**:
+*   **Props:** The color of the strap, the brand name, or the material. These are assigned when the watch is made and don't change from the watch's perspective.
+*   **State:** The current time. It changes every second, and the watch is responsible for updating its own display to show the new time.
+
+| Feature | Props (Properties) | State |
+| :--- | :--- | :--- |
+| **Source** | Passed from a Parent component. | Defined inside the component itself. |
+| **Mutability** | **Read-Only** (Immutable). | **Can be changed** (Mutable). |
+| **Purpose** | Configuration & Data sharing. | Interactivity & Dynamic data. |
+| **Trigger** | Changes when the Parent updates. | Changes when user interacts (clicks, types). |
+
+## 2. Deep Dive: Props
+
+Props are like function arguments. They allow a parent to "talk" to its children.
+
+```jsx title="App.js"
+// Child Component
+function UserBadge({ username }) {
+  // ❌ props.username = "NewName"; // This would throw an error!
+  return <div className="badge">{username}</div>;
+}
+
+// Parent Component
+function App() {
+  return <UserBadge username="Ajay_CEO" />;
+}
+```
+
+## 3. Deep Dive: State
+
+State is a component's "private memory." When state changes, React automatically re-renders the component to show the new data. We use the `useState` Hook to manage this.
+
+```jsx
+import { useState } from 'react';
+
+function LikeButton() {
+  // [currentValue, functionToUpdateValue]
+  const [likes, setLikes] = useState(0);
+
+  return (
+    <button onClick={() => setLikes(likes + 1)}>
+      👍 Likes: {likes}
+    </button>
+  );
+}
+```
+
+## 4. When to use which?
+
+Ask yourself: **"Does this data need to change over time within this component?"**
+
+*   **Use Props if:** The data is just being "displayed" or was decided by the parent (e.g., a button's text, a user's ID).
+*   **Use State if:** The data changes due to user input, an API response, or a timer (e.g., text in an input field, a toggle switch, a shopping cart count).
+
+## 5. One-Way Data Flow
+
+In React, data moves in **one direction**: from Top to Bottom (Parent to Child). 
+
+1.  A Parent holds the **State**.
+2.  The Parent passes that state down to a Child as a **Prop**.
+3.  If the Child needs to change the data, the Parent passes a **Function** (as a prop) that the child can call to update the parent's state.
+
+## Practice: The Theme Switcher
+
+Let's see them working together. The `App` holds the state (the theme), and the `Button` displays it via props.
+
+```jsx title="App.js"
+function ThemeDisplay({ currentTheme }) {
+  return <p>The current theme is: <strong>{currentTheme}</strong></p>;
+}
+
+function App() {
+  const [theme, setTheme] = useState("Light");
+
+  const toggleTheme = () => {
+    setTheme(theme === "Light" ? "Dark" : "Light");
+  };
+
+  return (
+    <div className={theme}>
+      <ThemeDisplay currentTheme={theme} /> {/* Passing state as a prop */}
+      <button onClick={toggleTheme}>Toggle Theme</button>
+    </div>
+  );
+}
+```
+
+:::info Lift the State Up
+If two child components need to share the same data, don't try to pass data between them. Move the state into their **common parent** and pass it down to both as props. This is called "Lifting State Up."
+:::

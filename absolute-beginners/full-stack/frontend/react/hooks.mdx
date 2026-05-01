@@ -1,1 +1,145 @@
-<ComingSoon />
+---
+title: "React Hooks"
+sidebar_label: "6. Hooks"
+sidebar_position: 6
+description: "Learn the most commonly used React Hooks like useState and useEffect to manage state and side effects."
+---
+
+Hooks are special functions that let you "hook into" React state and lifecycle features from functional components. At **CodeHarborHub**, we use hooks to build everything from simple counters to complex, data-driven dashboards.
+
+## 1. The Rules of Hooks
+
+Before you start "hooking" into React, you must follow these two golden rules:
+1.  **Only Call Hooks at the Top Level:** Don’t call Hooks inside loops, conditions, or nested functions.
+2.  **Only Call Hooks from React Functions:** Call them from React functional components or custom Hooks.
+
+## 2. `useState`: The State Manager
+
+The most common hook is `useState`. It allows a component to "remember" things like user input, toggle states, or data from an API.
+
+```jsx title="Counter.js"
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Current Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increase</button>
+    </div>
+  );
+}
+```
+
+## 3. `useEffect`: Handling Side Effects
+
+`useEffect` tells React that your component needs to do something *after* rendering. Common examples include:
+*   Fetching data from an API.
+*   Manually changing the DOM (like page titles).
+*   Setting up a subscription or timer.
+
+```jsx title="DataFetcher.js"
+import { useState, useEffect } from 'react';
+function DataFetcher() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.example.com/data')
+      .then(response => response.json())
+      .then(json => setData(json));
+  }, []); // Empty array means this runs once on mount
+
+  return (
+    <div>
+      <h1>Fetched Data:</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+}
+```
+
+### The Dependency Array
+
+The second argument to `useEffect` controls when it runs:
+*   **`[]` (Empty array):** Runs only once (when the component "mounts").
+*   **`[value]` (With variables):** Runs every time that specific value changes.
+*   **No array:** Runs after every single render (use with caution!).
+
+```jsx title="Timer.js"
+import { useState, useEffect } from 'react';
+
+function Timer() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds(prev => prev + 1);
+    }, 1000);
+
+    // Cleanup: Stops the timer when the component is removed
+    return () => clearInterval(interval);
+  }, []); // Empty array = run once on mount
+
+  return <h1>Time spent: {seconds}s</h1>;
+}
+```
+
+## 4. `useRef`: Accessing the DOM
+
+Sometimes you need to reach out and touch a DOM element directly (e.g., to focus an input field or measure an element's size). For this, we use `useRef`.
+
+```jsx title="TextInputWithFocusButton.js"
+import { useRef } from 'react';
+
+function TextInputWithFocusButton() {
+  const inputEl = useRef(null);
+
+  const onButtonClick = () => {
+    // Directly focus the text input
+    inputEl.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputEl} type="text" />
+      <button onClick={onButtonClick}>Focus the input</button>
+    </>
+  );
+}
+```
+
+## 5. Custom Hooks
+
+One of the coolest features of React is that you can create your own hooks! This allows you to extract component logic into reusable functions. Custom hooks **must** start with the word `use`.
+
+*Example: `useFetch`, `useLocalStorage`, `useWindowSize`.*
+
+## Practice: The Document Title Updater
+
+Let's build a component that updates the browser tab title every time a counter changes.
+
+```jsx title="TitleUpdater.js"
+import React, { useState, useEffect } from 'react';
+
+function TitleUpdater() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = `Clicked ${count} times`;
+  }, [count]); // Only update title when 'count' changes
+
+  return (
+    <div className="card">
+      <h2>Check your browser tab!</h2>
+      <button onClick={() => setCount(count + 1)}>
+        Update Title
+      </button>
+    </div>
+  );
+}
+```
+
+:::info Functional Updates
+When your new state depends on the old state (like a counter), it’s safer to use the functional update pattern: `setCount(prevCount => prevCount + 1)`. This ensures you are always using the most recent value!
+:::

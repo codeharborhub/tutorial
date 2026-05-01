@@ -1,1 +1,107 @@
-<ComingSoon />
+---
+title: "JavaScript Events"
+sidebar_label: "6. Events"
+sidebar_position: 6
+description: "Learn how to make your website interactive by responding to user actions."
+---
+
+An **Event** is something that happens on your webpage that the browser can detect. JavaScript allows you to "listen" for these events and run code in response.
+
+Think of it like a doorbell:
+1. **The Event:** Someone presses the button.
+2. **The Listener:** The bell is waiting for a press.
+3. **The Action:** The bell rings.
+
+## 1. Common Types of Events
+
+Users interact with your site in many ways. Here are the most popular events you'll use:
+
+| Category | Event | Description |
+| :--- | :--- | :--- |
+| **Mouse** | `click` | When an element is clicked. |
+| **Mouse** | `mouseover` | When the mouse enters an element's area. |
+| **Keyboard** | `keydown` | When a user presses a key on the keyboard. |
+| **Form** | `submit` | When a user submits a `<form>`. |
+| **Window** | `load` | When the whole page has finished loading. |
+
+## 2. The Event Listener (The Modern Way)
+
+At **CodeHarborHub**, we use the `.addEventListener()` method. This is the cleanest way to handle interactivity because it keeps your HTML and JavaScript separate.
+
+### The Syntax:
+
+```javascript
+element.addEventListener('event-name', function-to-run);
+```
+
+### Example:
+
+```javascript
+const myButton = document.querySelector('#alert-btn');
+
+// When the button is clicked, run the arrow function
+myButton.addEventListener('click', () => {
+    console.log("The button was clicked!");
+});
+```
+
+## 3. The "Event Object" (`e`)
+
+When an event happens, JavaScript automatically passes an "Object" to your function that contains extra information about the event. By convention, we call this variable `e` or `event`.
+
+```javascript
+const myInput = document.querySelector('input');
+
+myInput.addEventListener('keydown', (e) => {
+    console.log("You pressed the key: " + e.key);
+});
+```
+
+## 4. Preventing Default Behavior
+
+Some HTML elements have "default" behaviors. For example, clicking a link takes you to a new page, and submitting a form refreshes the page. Sometimes we want to stop this so JavaScript can handle the task instead.
+
+```javascript
+const myForm = document.querySelector('form');
+
+myForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // ✋ Stop the page from refreshing!
+    console.log("Form submitted via JavaScript instead.");
+});
+```
+
+## Let's Practice: The Image Toggle
+
+Let's use a mouse event to change an image when a user hovers over it.
+
+**HTML:**
+
+```html
+<img id="my-img" src="happy.png" width="200">
+```
+
+**JavaScript (`script.js`):**
+
+```javascript
+const img = document.getElementById('my-img');
+
+// Change to "surprised" on mouse hover
+img.addEventListener('mouseover', () => {
+    img.src = "surprised.png";
+});
+
+// Change back to "happy" when mouse leaves
+img.addEventListener('mouseout', () => {
+    img.src = "happy.png";
+});
+```
+
+## 5. Event Bubbling (A Simple Concept)
+
+When you click a button inside a `<div>`, you are technically clicking both. In JavaScript, the event starts at the button and "bubbles up" to the div, then the body, then the whole document.
+
+> **Tip:** You can stop this "bubbling" using `e.stopPropagation()` if you only want the button's event to fire.
+
+:::info Clean Up
+If you have a lot of buttons, don't give every single one an event listener. You can put one listener on their **Parent** element and use `e.target` to figure out which specific button was clicked!
+:::

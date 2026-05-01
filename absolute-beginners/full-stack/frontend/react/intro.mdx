@@ -1,1 +1,62 @@
-<ComingSoon />
+---
+title: "Introduction to React"
+sidebar_label: "1. Intro to React"
+sidebar_position: 1
+description: "Understand the core concepts of React.js and why it is the industry standard for modern web apps."
+---
+
+**React** is a JavaScript **library** for building user interfaces. Created by Facebook (Meta), it has become the most popular choice for frontend developers because it makes building complex, interactive websites predictable and efficient.
+
+## 1. Why React? (The Problem it Solves)
+
+In traditional "Vanilla" JavaScript, if you want to update a piece of text on a page, you have to:
+1. Find the element in the DOM.
+2. Manually change its content.
+3. Keep track of those changes everywhere else.
+
+As your app grows, this becomes a nightmare to manage. **React** solves this by using a **Declarative** approach. You just describe what the UI should look like for a specific state, and React handles the "how" of updating the screen.
+
+## 2. Key Concepts of React
+
+To master React at **CodeHarborHub**, you need to understand these three pillars:
+
+### Components
+Imagine building a house with LEGO bricks. Each brick is a **Component**. A component is a self-contained piece of code (like a Navbar, a Button, or a User Profile) that can be reused across your entire application.
+
+### JSX (JavaScript XML)
+JSX allows us to write HTML-like code directly inside our JavaScript. It makes the structure of our components easy to see and write.
+
+```jsx
+const Welcome = () => {
+  return <h1>Hello, CodeHarborHub!</h1>;
+};
+```
+
+### The Virtual DOM
+Updating the real browser DOM is slow. React creates a lightweight "copy" called the **Virtual DOM**. When something changes:
+1. React updates the Virtual DOM first.
+2. It compares the Virtual DOM with the real DOM (Diffing).
+3. It only updates the *specific* parts of the real DOM that actually changed. This makes React incredibly fast!
+
+## 3. Library vs. Framework
+
+Is React a library or a framework? At **CodeHarborHub**, we clarify the difference:
+
+*   **Library (React):** A collection of tools. You are the boss. You decide which router or state management tool to plug in. (React = "The Engine").
+*   **Framework (Angular/Next.js):** A complete structure. It tells you exactly how to organize your files and what tools to use. (Framework = "The whole Car").
+
+## 4. Setting the Stage
+
+To use React, you need to have **Node.js** and **npm** installed on your computer. Modern React apps are usually created using a "Build Tool" like **Vite**, which sets up everything for you in seconds.
+
+### The React Ecosystem:
+| Tool | Purpose |
+| :--- | :--- |
+| **Vite** | Blazing fast build tool to start projects. |
+| **React Router** | For navigating between pages. |
+| **Tailwind CSS** | For styling your components quickly. |
+| **Axios/Fetch** | For getting data from APIs. |
+
+:::info Thinking in Components
+Before you start coding a React project, grab a pen and paper. Draw boxes around the different parts of the design. Each box is a potential component. This "Component Architecture" is the secret to clean React code!
+:::
