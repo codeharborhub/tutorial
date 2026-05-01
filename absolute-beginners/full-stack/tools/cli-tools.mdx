@@ -1,1 +1,82 @@
-<ComingSoon />
+---
+title: "Command Line Interface (CLI) Basics"
+sidebar_label: "6. CLI Basics"
+sidebar_position: 6
+description: "Master the terminal to navigate files, run scripts, and manage your development environment."
+---
+
+Most people interact with computers using a **GUI (Graphical User Interface)**—clicking icons, dragging folders, and using menus. However, developers use the **CLI**.
+
+The CLI allows you to talk directly to your computer using text commands. It is the primary tool for running servers, installing packages, and managing Git.
+
+## 1. Why Learn the CLI?
+
+At **CodeHarborHub**, we teach the terminal early because:
+1.  **Speed:** Typing `mkdir project` is faster than right-clicking, selecting "New Folder," and renaming it.
+2.  **Automation:** You can run complex sequences of tasks with a single script.
+3.  **Remote Power:** Most web servers (like those running your website) don't have a screen or a mouse—you *must* use the CLI to manage them.
+
+## 2. Essential Commands
+
+Think of these as your "Digital Survival Kit." Open your terminal (or the integrated terminal in VS Code) and try these:
+
+| Command | Action | Real-world Analogy |
+| :--- | :--- | :--- |
+| **`pwd`** | Print Working Directory | "Where am I right now?" |
+| **`ls`** | List Files | "Show me what's in this folder." |
+| **`cd`** | Change Directory | "Open this folder." |
+| **`mkdir`** | Make Directory | "Create a new empty folder." |
+| **`touch`** | Create File | "Create a new empty file." |
+| **`rm`** | Remove | "Delete this file (Be careful!)" |
+
+## 3. Navigation Mastery
+
+Moving around your computer via text takes a little practice. Here is how you "walk" through your folders:
+
+```bash
+# Go into a folder named 'projects'
+cd projects
+
+# Go back up one level (to the parent folder)
+cd ..
+
+# Go straight to your user's Home folder
+cd ~
+
+# Clear the screen if it gets too messy
+clear
+```
+
+## 4. Useful Shortcuts
+
+Professional developers rarely type every single letter. Use these "Power Moves" to work faster:
+
+* **Tab Completion:** Type the first few letters of a file name and hit `Tab`. The terminal will finish the word for you!
+* **Up/Down Arrows:** Cycle through your previous commands. Great for when you make a typo.
+* **`Ctrl + C`**: The "Emergency Stop." If a program is stuck or a server is running and you want to stop it, use this.
+
+## 5. Terminal vs. Shell
+
+You will often hear these words used interchangeably, but there is a slight difference:
+* **Terminal:** The window/app you open (e.g., Command Prompt, Terminal.app, iTerm2).
+* **Shell:** The "engine" running inside the window that processes your commands (e.g., **Bash** on Linux, **Zsh** on Mac, or **PowerShell** on Windows).
+
+## Practice: The "Speed Builder" Challenge
+
+Try to perform this entire workflow **without touching your mouse**:
+
+1.  Open your terminal.
+2.  Navigate to your Desktop: `cd Desktop`.
+3.  Create a new folder: `mkdir code-hub-practice`.
+4.  Enter that folder: `cd code-hub-practice`.
+5.  Create three files at once: `touch index.html style.css script.js`.
+6.  List the files to confirm they exist: `ls`.
+7.  Open the whole folder in VS Code: `code .` (Note: This requires the 'code' command to be installed).
+
+:::warning A Note on 'rm'
+Unlike deleting a file with your mouse, using `rm` in the terminal **does not** send the file to the Recycle Bin/Trash. It is gone forever. Always double-check before hitting Enter!
+:::
+
+:::info Customizing
+Once you get comfortable, you can customize your terminal with themes and plugins (like **Oh My Zsh**) to make it look beautiful and show you which Git branch you are currently on!
+:::

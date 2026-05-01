@@ -1,1 +1,63 @@
-<ComingSoon />
+---
+title: "Introduction to Backend Development"
+sidebar_label: "1. Introduction"
+sidebar_position: 1
+description: "Understand what happens behind the scenes of a website and learn about the Client-Server architecture. Get an overview of the backend tech stack and how it connects to the frontend."
+---
+
+Welcome to the "Brain" of the application! If you've been following the **CodeHarborHub** track, you already know how to build beautiful interfaces with React and Tailwind. Now, it's time to learn how to make those interfaces **functional** and **persistent**.
+
+## 1. What exactly is the "Backend"?
+
+The Backend (also called "Server-Side") is the part of the website you cannot see. It is responsible for:
+*   **Storing Data:** Saving user profiles, blog posts, and passwords in a database.
+*   **Business Logic:** Calculating the total of a shopping cart or checking if a user has permission to delete a post.
+*   **Communication:** Sending emails, processing payments, and talking to other services.
+
+## 2. The Client-Server Architecture
+
+To understand the backend, you must understand the relationship between the **Client** and the **Server**.
+
+1.  **The Client (Frontend):** This is the user's browser (Chrome, Safari) or a mobile app. It sends a **Request** (e.g., "Hey, I want to see Ajay's profile!").
+2.  **The Server (Backend):** This is a computer located somewhere in the world that stays on 24/7. It receives the request, talks to the **Database**, and sends back a **Response** (e.g., "Here is the data for Ajay's profile.").
+
+## 3. The Backend "Tech Stack"
+
+A professional backend at the Hub usually consists of three main parts:
+
+### 1. The Server (The Application)
+This is the code that handles requests. We will use **Node.js** with **Express.js**. Node.js allows us to use JavaScript (the same language you used for React!) to write server-side code.
+
+### 2. The Database (The Memory)
+Servers don't "remember" things once they restart. For permanent storage, we use databases.
+*   **Relational (SQL):** Like a spreadsheet (e.g., PostgreSQL).
+*   **Non-Relational (NoSQL):** Like a collection of JSON documents (e.g., **MongoDB**).
+
+### 3. The API (The Bridge)
+The **API** (Application Programming Interface) is the set of "doors" the server opens for the client. When you fetch a weather report or a cricket score, you are talking to an API.
+
+## 4. A Real-World Example: Logging In
+
+Let's see how the frontend and backend work together when you log into **CodeHarborHub**:
+
+1.  **Frontend:** You type your email and password and click "Login."
+2.  **Request:** The frontend sends that data to the server via an API.
+3.  **Backend Logic:** The server receives the data. It doesn't know who you are yet.
+4.  **Database Check:** The server asks the database: *"Do we have a user with this email?"* and *"Does this password match the one we have saved?"*
+5.  **Response:** 
+    *   **If Yes:** The server sends back a "Success" message and a digital "key" (token).
+    *   **If No:** The server sends back an "Error" message.
+6.  **Frontend:** The frontend sees the response and either takes you to your dashboard or shows an error.
+
+## The Roadmap Ahead
+
+In this module, we will follow this path to becoming a Backend pro:
+*   **Node.js Basics:** Learning to run JavaScript on your computer.
+*   **Express.js:** Creating your first web server.
+*   **Routing:** Handling different URL paths (like `/api/users` vs `/api/products`).
+*   **Databases:** Connecting to MongoDB to save real data.
+*   **Authentication:** Making sure users can log in securely.
+
+:::info for Noobs
+Don't be intimidated! Since you already know JavaScript from the Frontend track, you are already 50% of the way there. The logic is the same—only the environment has changed.
+:::

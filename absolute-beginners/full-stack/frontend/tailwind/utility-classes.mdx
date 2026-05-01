@@ -1,1 +1,104 @@
-<ComingSoon />
+---
+title: "Utility Classes in Tailwind CSS"
+sidebar_label: "2. Utility Classes"
+sidebar_position: 2
+description: "Deep dive into the most common Tailwind CSS utility classes for spacing, sizing, and typography."
+tags: ["tailwind", "css", "utility-classes", "frontend"]
+keywords: ["tailwind", "css", "utility-classes", "frontend"]
+---
+
+Tailwind is built on the idea of **Utility-First**. This means every class does exactly one thing. At first, it might feel like you're writing a lot of classes, but it prevents "CSS bloat" and keeps your design consistent.
+
+## 1. The Spacing System (Margin & Padding)
+
+In Tailwind, spacing follows a numeric scale. `1` unit is equal to `0.25rem` (or `4px`).
+
+*   **`p-{size}`**: Padding (Inside space)
+*   **`m-{size}`**: Margin (Outside space)
+
+### Directional Control:
+You can target specific sides by adding a letter after `p` or `m`:
+*   **`t`** (top), **`b`** (bottom), **`l`** (left), **`r`** (right).
+*   **`x`** (horizontal - left and right).
+*   **`y`** (vertical - top and bottom).
+
+```html title="index.html"
+<!-- Padding of 1rem (16px) on all sides, Margin top of 2rem (32px) -->
+<div class="p-4 mt-8 bg-slate-200">
+  Spacing is consistent!
+</div>
+```
+
+## 2. Sizing (Width & Height)
+
+Tailwind makes it easy to set fixed sizes or percentage-based sizes.
+
+| Class | Meaning | Real-world Result |
+| :--- | :--- | :--- |
+| **`w-full`** | Width: 100% | Fills the parent container. |
+| **`w-1/2`** | Width: 50% | Takes up half the space. |
+| **`w-screen`**| Width: 100vw | Spans the entire browser width. |
+| **`h-64`** | Height: 16rem | A fixed height of 256px. |
+
+## 3. Typography (Text Styling)
+
+Text is the most important part of the Hub's educational content. Tailwind provides utilities for every text property:
+
+*   **Size:** `text-xs`, `text-base` (default), `text-xl`, `text-5xl`.
+*   **Weight:** `font-light`, `font-medium`, `font-bold`, `font-black`.
+*   **Alignment:** `text-left`, `text-center`, `text-right`.
+*   **Color:** `text-gray-700`, `text-blue-600`, `text-white`.
+
+```html title="index.html"
+<h1 class="text-3xl font-bold text-indigo-700">
+  Welcome to CodeHarborHub
+</h1>
+```
+
+## 4. Colors and Backgrounds
+
+Tailwind includes a massive, professionally curated color palette. Each color has a shade from `50` (lightest) to `950` (darkest).
+
+*   **`bg-red-500`**: Standard red background.
+*   **`bg-opacity-50`**: Makes the background semi-transparent.
+*   **`border-2 border-green-400`**: Adds a 2px green border.
+
+## 5. Borders and Rounded Corners
+
+Making things "look modern" usually involves soft corners and subtle borders.
+
+*   **`rounded-sm`**: Small rounding.
+*   **`rounded-lg`**: Large, modern rounding.
+*   **`rounded-full`**: Creates circles or pill-shaped buttons.
+*   **`border-t-4`**: Adds a thick border only to the top.
+
+```html title="index.html"
+<button class="bg-blue-600 text-white px-4 py-2 rounded-full border-2 border-blue-800">
+  Click Me
+</button>
+```
+
+## Practice: The "Profile Card" Challenge
+
+Try to combine what you've learned to build this simple card. Copy this into your project:
+
+```html title="index.html"
+<div class="max-w-sm mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-slate-100">
+  <div class="bg-indigo-600 h-24"></div>
+  <div class="p-6 -mt-12">
+    <div class="w-20 h-20 bg-slate-300 rounded-full border-4 border-white mx-auto mb-4"></div>
+    <h2 class="text-center text-xl font-bold text-slate-800">Ajay Dhangar</h2>
+    <p class="text-center text-slate-500 text-sm">Full Stack Developer</p>
+    <div class="mt-6 flex justify-center">
+      <button class="bg-indigo-600 text-white px-6 py-2 rounded-full font-medium hover:bg-indigo-700 transition">
+        Follow
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+:::info The "Hover" Modifier
+To change a utility class when the user hovers over it, just add `hover:` before the class. 
+Example: `bg-blue-500 hover:bg-blue-700`.
+:::

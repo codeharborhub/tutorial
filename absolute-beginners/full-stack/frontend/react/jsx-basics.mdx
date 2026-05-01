@@ -1,0 +1,134 @@
+---
+title: "JSX Basics"
+sidebar_label: "2. JSX Basics"
+sidebar_position: 2
+description: "Learn the syntax rules of JSX and how to embed JavaScript logic into your HTML structure."
+---
+
+**JSX** is a syntax extension for JavaScript. It looks like HTML, but it has the full power of JavaScript behind it. In React, we use JSX to describe what the UI should look like. It allows us to write HTML-like code directly in our JavaScript files, making it easier to visualize the structure of our components. 
+
+## 1. Why JSX?
+
+Instead of using `document.createElement()` or complex DOM manipulation, JSX lets you write the UI in a way that is familiar and easy to read.
+
+For example, instead of writing:
+
+```javascript
+const element = React.createElement('h1', null, 'Hello, CodeHarborHub!');
+```
+
+You can simply write:
+
+```jsx
+const element = <h1>Hello, CodeHarborHub!</h1>;
+```
+
+This is much more intuitive and closely resembles the final HTML output.
+
+While the browser doesn't understand JSX natively, tools like **Babel** compile it into standard JavaScript that the browser can execute.
+
+## 2. The Rules of JSX
+
+To keep your React apps running smoothly at **CodeHarborHub**, you must follow these three fundamental rules:
+
+### 1. Return a Single Root Element
+A component must return **one** single parent element. If you have multiple elements, wrap them in a `<div>` or a **Fragment** (`<>...</>`).
+
+```jsx
+// This will throw an error
+return (
+  <h1>Hello</h1>
+  <p>Welcome to the hub!</p>
+);
+
+// This is correct
+return (
+  <>
+    <h1>Hello</h1>
+    <p>Welcome to the hub!</p>
+  </>
+);
+```
+
+### 2. Close All Tags
+In HTML, some tags like `<img>` or `<br>` don't need a closing tag. In JSX, **every tag must be closed**.
+*   `<br />`
+*   `<img src="..." />`
+*   `<input type="text" />`
+
+### 3. camelCase Naming
+Since JSX is closer to JavaScript than HTML, we use camelCase for attributes. 
+*   `class` becomes **`className`**
+*   `onclick` becomes **`onClick`**
+*   `tabindex` becomes **`tabIndex`**
+
+## 3. Embedding JavaScript in JSX
+
+The real power of JSX is that you can drop any JavaScript expression inside your "HTML" by using **curly braces `{ }`**.
+
+### Using Variables
+```jsx
+const name = "A Master";
+
+function Welcome() {
+  return <h1>Welcome back, {name}!</h1>;
+}
+```
+
+### Dynamic Logic
+You can perform math or call functions inside the braces:
+```jsx
+const user = { firstName: 'Ajay', lastName: 'Dhangar' };
+
+return (
+  <p>User score: {10 + 25}</p>
+  <p>Full Name: {user.firstName + " " + user.lastName}</p>
+);
+```
+
+## 4. Conditional Rendering
+
+You can't put `if/else` statements directly inside `{ }`, so we use **Ternary Operators** or the **Logical &&** operator.
+
+```jsx
+const isLoggedIn = true;
+
+return (
+  <div>
+    {isLoggedIn ? <button>Logout</button> : <button>Login</button>}
+    
+    {/* Only show this if the user is a founder */}
+    {isFounder && <p>Welcome, CEO!</p>}
+  </div>
+);
+```
+
+## Practice: The Greeting Component
+
+Try creating a component that displays a different message based on the time of day:
+
+```jsx
+function Greeting() {
+  const hours = new Date().getHours();
+  let timeOfDay;
+
+  if (hours < 12) {
+    timeOfDay = "Morning";
+  } else if (hours >= 12 && hours < 17) {
+    timeOfDay = "Afternoon";
+  } else {
+    timeOfDay = "Evening";
+  }
+
+  return (
+    <div className="card">
+      <h2>Good {timeOfDay}, Learner!</h2>
+      <p>It's currently {hours} o'clock.</p>
+    </div>
+  );
+}
+```
+
+:::info Expressions vs. Statements
+Remember: You can only put **Expressions** (things that result in a value) inside curly braces. You cannot put **Statements** (like a `for` loop or a `switch` case) inside them. 
+:::

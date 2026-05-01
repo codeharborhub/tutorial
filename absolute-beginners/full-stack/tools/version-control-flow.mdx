@@ -1,1 +1,97 @@
-<ComingSoon />
+---
+title: "The Professional Git Workflow"
+sidebar_label: "5. Version Control Flow"
+sidebar_position: 5
+description: "Learn the industry-standard workflow for managing code changes and collaborating on teams."
+---
+
+In a professional setting, we don't just commit code to the main branch and hope for the best. We follow a specific **Workflow** to ensure the code is tested, reviewed, and safe. 
+
+At **CodeHarborHub**, we teach the **Feature Branch Workflow**, which is used by top tech companies globally.
+
+## 1. The Standard Cycle
+
+A typical day in the life of a developer follows these 5 steps:
+
+1.  **Pull:** Get the latest code from the team (`git pull origin main`).
+2.  **Branch:** Create a new "workspace" for your specific task.
+3.  **Work:** Write code and make small, frequent commits.
+4.  **Push:** Upload your branch to GitHub.
+5.  **Merge:** Open a **Pull Request** to bring your changes into the main project.
+
+## 2. Step-by-Step Breakdown
+
+### Step 1: Start from the "Truth"
+Before starting new work, always make sure your local `main` branch matches the one on GitHub.
+
+```bash
+git checkout main
+git pull origin main
+```
+
+### Step 2: The Feature Branch
+Never work directly on `main`. If you break something on a branch, the main website stays safe.
+
+```bash
+git checkout -b feature/add-login-button
+```
+
+### Step 3: Atomic Commits
+An "Atomic Commit" means saving one small, logical change at a time.
+* **Bad:** `git commit -m "Fixed 10 bugs and added a logo"`
+* **Good:** `git commit -m "Fix: corrected padding on mobile navbar"`
+
+### Step 4: Syncing & Pushing
+Once your feature is ready, send it to the cloud.
+
+```bash
+git push origin feature/add-login-button
+```
+
+## 3. The Pull Request (PR)
+
+The **Pull Request** is a "request" for your teammates to look at your code before it becomes permanent. On GitHub, this is where:
+* Teammates leave comments or suggestions.
+* Automated tests check if your code breaks anything.
+* The Project Manager (or you) eventually clicks **"Merge"**.
+
+## 4. Resolving Conflicts
+
+Sometimes, two developers change the **same line** of the **same file**. When you try to merge, Git gets confused and asks: *"Which version should I keep?"*
+
+This is called a **Merge Conflict**.
+
+<Tabs>
+  <TabItem value="identify" label="Identify" default>
+    Git will mark the file with `<<<<<<< HEAD` and `>>>>>>> branch-name`.
+  </TabItem>
+  <TabItem value="solve" label="Solve">
+    Open the file in VS Code. Choose the "Current Change," the "Incoming Change," or keep both!
+  </TabItem>
+  <TabItem value="finish" label="Finish">
+    After fixing the file, `git add` and `git commit` to tell Git the conflict is resolved.
+  </TabItem>
+</Tabs>
+
+## Practice: The Team Simulation
+
+Try this workflow even if you are working alone:
+
+1.  Create a branch: `git checkout -b feature/update-readme`.
+2.  Add a new line to your `README.md` about **CodeHarborHub**.
+3.  Commit it: `git commit -m "Docs: added project description"`.
+4.  Push it: `git push origin feature/update-readme`.
+5.  Go to GitHub and open a **Pull Request**.
+6.  Merge it into `main` and delete your feature branch!
+
+:::info Branch Naming
+Use prefixes for your branch names to keep things organized:
+* `feature/` for new things.
+* `fix/` for bug fixes.
+* `docs/` for documentation changes.
+* `refactor/` for cleaning up code without changing what it does.
+:::
+
+:::warning Note on Safety
+Once you merge a Pull Request on GitHub, your **local** `main` is now outdated. Remember to `git pull origin main` again before starting your next feature!
+:::

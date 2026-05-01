@@ -1,1 +1,88 @@
-<ComingSoon />
+---
+title: "Understanding package.json"
+sidebar_label: "4. package.json"
+sidebar_position: 4
+description: "Learn how to manage your project's metadata, scripts, and dependencies in one central file."
+---
+
+Every modern JavaScript project has a `package.json` file at its root. If your project was a physical product, the `package.json` would be the **instruction manual** and the **ingredient list** found on the back of the box.
+
+## 1. What does it do?
+
+The `package.json` file serves three vital purposes:
+1.  **Metadata:** It tells people (and tools) the name, version, and author of the project.
+2.  **Dependencies:** It lists exactly which external libraries are needed to make the code run.
+3.  **Automation:** It stores "Scripts" to automate tasks like starting a server or running tests.
+
+## 2. Anatomy of the File
+
+Here is what a standard `package.json` looks like for a **CodeHarborHub** student project:
+
+```json
+{
+  "name": "my-awesome-app",
+  "version": "1.0.0",
+  "description": "A full-stack project built at CodeHarborHub",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Ajay Dhangar",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
+```
+
+## 3. Key Fields Explained
+
+### Dependencies vs. devDependencies
+This is the most common point of confusion for beginners.
+
+* **`dependencies`**: Tools required for the app to **run in production** (e.g., a web server like Express).
+* **`devDependencies`**: Tools only needed while you are **writing and testing** the code (e.g., a tool that restarts your server automatically).
+
+### The Scripts Object
+The `scripts` field allows you to create aliases for complex terminal commands. 
+* Instead of typing `node server/production/app.js --port 3000`, you can just define `"start": "..."` and run **`npm start`**.
+
+## 4. Semantic Versioning (SemVer)
+
+Have you noticed the numbers like `^4.18.2`? This is called Semantic Versioning.
+
+* **4 (Major):** Big changes that might break your code.
+* **18 (Minor):** New features added that are safe to use.
+* **2 (Patch):** Small bug fixes.
+* **The Caret (`^`):** Tells npm: "It's okay to update to any Minor or Patch version, but don't touch the Major version!"
+
+## 5. `package.json` vs. `package-lock.json`
+
+When you install a package, a second file called `package-lock.json` is created.
+* **`package.json`**: "I need version 4.x.x of Express."
+* **`package-lock.json`**: "I have installed exactly version 4.18.2, and here is the exact security hash to prove it."
+
+**Rule:** Never edit the `package-lock.json` manually. npm manages it for you to ensure that everyone on your team has the *exact* same versions of every library.
+
+## Practice: Customizing Your Project
+
+1. Open your project folder in VS Code.
+2. Open your `package.json`.
+3. Add a new script:
+
+   ```json
+   "scripts": {
+     "hello": "echo 'Hello from CodeHarborHub!'"
+   }
+   ```
+
+4. In your terminal, run: `npm run hello`.
+5. You should see your message printed in the terminal!
+
+:::info Sharing Projects
+When you share your code on GitHub, you **do not** include the `node_modules` folder. You only share the `package.json`. When your friend downloads your code, they just run `npm install`, and their computer reads your "recipe list" to download everything automatically.
+:::

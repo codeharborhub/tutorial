@@ -1,1 +1,123 @@
-<ComingSoon />
+---
+title: "Tailwind Best Practices"
+sidebar_label: "4. Best Practices"
+sidebar_position: 4
+description: "Learn how to keep your Tailwind CSS code clean, maintainable, and readable using professional workflows."
+---
+
+When you first start using Tailwind, your HTML might look messy with 20+ classes on a single line. At **CodeHarborHub**, we follow these professional standards to ensure our projects remain easy to read and scale.
+
+## 1. Order Your Classes Consistently
+
+Randomly placed classes make it hard to debug. Always follow a logical order:
+1.  **Layout** (position, display, flex, grid)
+2.  **Box Model** (width, height, margin, padding)
+3.  **Typography** (font, text-size, color)
+4.  **Visuals** (bg-color, rounded, shadows)
+5.  **Interactivity** (hover, focus, transitions)
+
+<Tabs>
+<TabItem value="bad-order" label="Bad Order">
+```html title="index.html"
+<div class="text-white p-4 flex rounded-lg bg-blue-500 items-center">
+  This is a button
+</div>
+```
+</TabItem>
+<TabItem value="good-order" label="Good Order">
+```html title="index.html"
+<div class="flex items-center p-4 bg-blue-500 text-white rounded-lg">
+  This is a button
+</div>
+```
+</TabItem>
+</Tabs>
+
+## 2. Use "Multi-Line" Formatting
+
+If an element has many classes, don't let the line stretch to the right forever. In frameworks like React, you can break them into multiple lines to improve readability.
+
+```jsx title="index.jsx"
+<button className="
+  flex items-center justify-center 
+  px-6 py-2 
+  bg-indigo-600 text-white 
+  rounded-full font-medium 
+  hover:bg-indigo-700 focus:ring-4 
+  transition-all duration-300
+">
+  Subscribe
+</button>
+```
+
+## 3. Avoid @apply (Unless Necessary)
+
+Tailwind has a feature called `@apply` that lets you move classes into a CSS file. While tempting for beginners, **avoid using it too much**. 
+
+*   **The Problem:** You lose the ability to see styles directly in the HTML, which is the whole point of Tailwind!
+*   **The Solution:** Use **Components** (React, Vue, or Docusaurus) to reuse styles instead of CSS classes.
+
+<Tabs>
+<TabItem value="avoid-apply" label="Avoid @apply">
+```css title="style.css"
+.btn-primary { 
+    @apply px-4 py-2 bg-blue-500 text-white;
+}
+```
+</TabItem>
+<TabItem value="use-components" label="Do this (React Component)">
+```jsx title="index.jsx"
+const Button = ({ children }) => (
+  <button className="px-4 py-2 bg-blue-500 text-white">
+    {children}
+  </button>
+);
+```
+</TabItem>
+</Tabs>
+
+## 4. Stay "On the Grid"
+
+Don't use arbitrary values like `mt-[17px]` or `w-[342px]` unless absolutely necessary.
+*   Stick to the default spacing scale (`m-4`, `w-64`, etc.).
+*   This ensures your website looks "aligned" and consistent, even if multiple people are working on it.
+
+## 5. Managing Conditional Classes
+
+In modern apps, you often need to change styles based on a state (e.g., if a button is "active"). Use a library like `clsx` or `tailwind-merge` to handle this cleanly.
+
+```javascript title="index.jsx"
+// Cleanly combining classes
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function Button({ active }) {
+  return (
+    <button className={twMerge(clsx(
+      "px-4 py-2 rounded",
+      active ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+    ))}>
+      Click Me
+    </button>
+  );
+}
+```
+
+## Practice: The Code Review
+
+Look at the following snippet. Can you spot three things to improve based on these best practices?
+
+```html title="index.html"
+<section class="rounded-sm p-8 text-center flex flex-col m-2 bg-slate-50 border-2 items-center hover:bg-slate-100">
+  <h2 class="text-[29px] font-bold">Our Services</h2>
+</section>
+```
+
+**Improvements:**
+1.  **Order:** Move `flex flex-col items-center` to the front.
+2.  **Spacing/Sizing:** Change `text-[29px]` to a standard `text-3xl`.
+3.  **Consistency:** Use a standard rounded corner like `rounded-md` instead of `rounded-sm`.
+
+:::info Prettier Plugin
+Download the **Prettier Plugin for Tailwind CSS**. It will automatically sort your classes in the correct order every time you save your file!
+:::

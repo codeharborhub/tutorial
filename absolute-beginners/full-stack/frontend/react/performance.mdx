@@ -1,1 +1,83 @@
-<ComingSoon />
+---
+title: "React Performance Optimization"
+sidebar_label: "8. Performance"
+sidebar_position: 8
+description: "Learn how to optimize your React applications for speed and efficiency using memoization and best practices."
+---
+
+React is fast by default, but as you add more components and complex data, you might notice your app "lagging." Performance optimization in React is mostly about one thing: **Reducing Unnecessary Re-renders.**
+
+## 1. Why do components re-render?
+
+In React, a component re-renders when:
+1.  Its **Internal State** changes.
+2.  Its **Props** change.
+3.  Its **Parent** re-renders.
+
+At **CodeHarborHub**, we teach you to identify when a component is rendering too much. If a component's output hasn't changed, it shouldn't waste energy re-rendering.
+
+## 2. `React.memo`: Skipping Re-renders
+
+If you have a child component that receives the same props every time, but its parent keeps re-rendering, you can wrap the child in `React.memo`. This tells React: "Only re-render this child if its props actually change."
+
+```jsx title="ChildComponent.js"
+import React from 'react';
+
+const ChildComponent = React.memo(({ name }) => {
+  console.log("Child rendered!");
+  return <p>Welcome, {name}!</p>;
+});
+```
+
+## 3. `useMemo`: Remembering Expensive Calculations
+
+Sometimes you have a function that takes a long time to run (like filtering a list of 10,000 items). You don't want to run that function on every single render. `useMemo` "remembers" (memoizes) the result.
+
+```jsx title="ProductList.js"
+import { useMemo } from 'react';
+
+function ProductList({ products, searchToken }) {
+  // Only re-calculates if products or searchToken change
+  const filteredProducts = useMemo(() => {
+    return products.filter(p => p.name.includes(searchToken));
+  }, [products, searchToken]);
+
+  return <div>{/* Render filteredProducts */}</div>;
+}
+```
+
+## 4. `useCallback`: Preventing Function Recreation
+
+In JavaScript, functions are objects. Every time a component renders, any function defined inside it is created as a "new" function. This can break `React.memo` for children. `useCallback` keeps the same function instance between renders.
+
+```jsx title="Parent.js"
+import { useCallback } from 'react';
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  // This function won't change unless count changes
+  const handleClick = useCallback(() => {
+    console.log("Button clicked!");
+  }, []); 
+
+  return <BigButton onClick={handleClick} />;
+}
+```
+
+## 5. Key Best Practices for Speed
+
+*   **Lazy Loading:** Don't load the entire app at once. Use `React.lazy` to load components only when they are needed (e.g., loading the "About" page only when the user clicks it).
+*   **Windowing/Virtualization:** If you have a list of 1,000 items, don't render 1,000 HTML elements. Only render the 10 that are currently visible on the screen.
+*   **Keep State Local:** Don't put everything in a global state (like Redux or Context) if only one small component needs it. 
+
+## Practice: Using the React Profiler
+
+1.  Open your React app in Chrome.
+2.  Open **Developer Tools** and go to the **Profiler** tab.
+3.  Click **Record**, interact with your app, and click **Stop**.
+4.  Look for "flame charts"—long bars mean a component took a long time to render. Identify which component is causing the bottleneck!
+
+:::warning Don't Over-Optimize!
+Optimization has a cost (it makes code harder to read). As a rule at the Hub: **Build it first, then optimize if it feels slow.** Most small apps don't need `useMemo` or `useCallback` everywhere.
+:::

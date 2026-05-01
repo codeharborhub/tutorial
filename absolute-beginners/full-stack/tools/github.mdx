@@ -1,1 +1,86 @@
-<ComingSoon />
+---
+title: "GitHub & Collaboration"
+sidebar_label: "2. GitHub"
+sidebar_position: 2
+description: "Learn how to host your code in the cloud and collaborate on open-source projects."
+---
+
+**GitHub** is a web-based platform that hosts your **Git** repositories. It is where millions of developers store their code, showcase their portfolios, and build the world's most famous open-source software (like React or VS Code).
+
+## 1. Git vs. GitHub
+
+It’s common to confuse the two, but they are very different:
+
+| Feature | Git | GitHub |
+| :--- | :--- | :--- |
+| **What is it?** | A command-line **tool** (Software). | A **website/platform** (Service). |
+| **Where is it?** | Installed on your local computer. | Hosted in the cloud (the internet). |
+| **Purpose?** | Tracking changes in your files. | Sharing code and collaborating. |
+
+## 2. Key GitHub Concepts
+
+To navigate GitHub like a pro, you need to know these four terms:
+
+1.  **Repository (Repo):** Your project's "folder" on GitHub.
+2.  **Remote:** The version of your code stored on GitHub's servers (as opposed to your "local" version).
+3.  **Push:** Sending your local commits **up** to GitHub.
+4.  **Pull:** Grabbing the latest changes **down** from GitHub to your computer.
+
+## 3. Connecting Your Computer to GitHub
+
+Once you've created a repository on GitHub.com, you need to link it to your local project.
+
+### Step 1: Add the Remote URL
+This tells your local Git where its "cloud home" is.
+
+```bash
+git remote add origin https://github.com/your-username/your-repo-name.git
+```
+
+### Step 2: Push your code
+
+This sends your "main" branch up to GitHub.
+
+```bash
+git push -u origin main
+```
+
+## 4. Collaborating with Others
+
+The real magic of GitHub happens when you work with others. Here is how that workflow looks:
+
+<Tabs>
+  <TabItem value="fork" label="Forking" default>
+    Taking a "copy" of someone else's project and putting it into your own GitHub account. This is how you start contributing to Open Source!
+  </TabItem>
+  <TabItem value="clone" label="Cloning">
+    Downloading a repository from GitHub to your computer so you can work on it locally.
+    ```bash
+    git clone https://github.com/user/repo.git
+    ```
+  </TabItem>
+  <TabItem value="pr" label="Pull Requests (PR)">
+    When you've finished a feature on your copy, you send a <strong>Pull Request</strong> to the original owner, asking them to "pull" your changes into their project.
+  </TabItem>
+</Tabs>
+
+## Project: Create Your First Remote Repo
+
+1.  Log in to [GitHub](https://github.com).
+2.  Click the **+** icon and select **New Repository**.
+3.  Name it `codeharborhub-test` and click **Create**.
+4.  Follow the instructions on the screen to "push an existing repository from the command line."
+5.  Refresh your GitHub page—you should now see your code in the cloud!
+
+## 5. GitHub Pages (Free Hosting!)
+
+GitHub offers a free service called **GitHub Pages** that turns your repository into a live website. 
+
+1.  Go to your Repository **Settings**.
+2.  Click **Pages** on the left sidebar.
+3.  Under "Branch," select `main` and click **Save**.
+4.  Within minutes, your site will be live at `https://your-username.github.io/repo-name/`!
+
+:::info Your Developer Portfolio
+Think of your GitHub profile as your resume. Employers don't just want to hear that you know how to code; they want to see your "green squares" (contribution graph) and the projects you've built.
+:::

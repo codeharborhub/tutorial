@@ -1,1 +1,99 @@
-<ComingSoon />
+---
+title: "Git & Version Control Basics"
+sidebar_label: "1. Git Basics"
+sidebar_position: 1
+description: "Learn how to track changes in your code and collaborate with others using Git."
+---
+
+Have you ever worked on a project, saved it as `final.zip`, then `final_v2.zip`, and eventually `final_REAL_v3_dont_delete.zip`? 
+
+**Git** solves this problem. It is a **Version Control System (VCS)** that tracks every single change you make to your files, allowing you to manage different versions of your project effortlessly.
+
+## 1. Why Use Git?
+
+In a professional environment like **CodeHarborHub**, Git is essential for three reasons:
+1.  **Time Travel:** You can undo any mistake by reverting to a previous "checkpoint."
+2.  **Collaboration:** Multiple developers can work on the same project without overwriting each other's work.
+3.  **Experimentation:** You can create a "Branch" to try a new feature safely without touching the main code.
+
+## 2. The Three Stages of Git
+
+Before you "save" your work in Git, your changes move through three different areas:
+
+1.  **Working Directory:** Where you are currently typing your code (Modified).
+2.  **Staging Area:** The "loading zone" where you pick which changes to save (Staged).
+3.  **Repository:** The permanent database where the changes are stored (Committed).
+
+## 3. The Core Commands
+
+Open your **Terminal** or **Command Prompt** and follow these steps to start tracking a project:
+
+### Step 1: Initialize
+Tell Git to start watching this folder.
+
+```bash
+git init
+```
+
+### Step 2: Stage Changes
+Add your files to the "loading zone."
+
+```bash
+git add index.html          # Add one file
+git add .                   # Add EVERYTHING in the folder
+```
+
+### Step 3: Commit
+Create a permanent checkpoint with a message describing what you did.
+
+```bash
+git commit -m "Added a responsive navbar"
+```
+
+### Step 4: Check Status
+Not sure what's happening? Ask Git.
+
+```bash
+git status
+```
+
+## 4. Branching: The Power of Parallel Universes
+
+Imagine you want to try a new "Dark Mode" but you don't want to break your working website. You create a **Branch**.
+
+* **`main`**: Your stable, live website.
+* **`feature-dark-mode`**: Your experimental branch.
+
+```bash
+git checkout -b feature-dark-mode   # Create and switch to a new branch
+# ... make changes ...
+git commit -m "Finished dark mode"
+git checkout main                   # Switch back to the stable version
+```
+
+## 5. Setting Up Your Identity
+
+Before you make your first commit, Git needs to know who you are. Run these two commands in your terminal:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+## Let's Practice: Your First Repo
+
+1.  Create a new folder called `my-first-repo`.
+2.  Open your Terminal inside that folder.
+3.  Run `git init`.
+4.  Create a file named `hello.txt` and write "Hello CodeHarborHub" inside.
+5.  Run `git add hello.txt`.
+6.  Run `git commit -m "First commit: added hello.txt"`.
+7.  Run `git log` to see your history!
+
+:::info Meaningful Commits
+Don't write commit messages like "Fixed stuff" or "Update." Write messages that tell your team (or your future self) exactly what changed, like "Fix: corrected the login button alignment."
+:::
+
+:::warning Don't Track Everything!
+Some files (like passwords or large hidden folders) shouldn't be saved in Git. We use a special file called `.gitignore` to tell Git which files to ignore.
+:::

@@ -1,0 +1,9 @@
+{
+  "label": "Tailwind",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "Tailwind CSS: Utility-First Styling",
+    "description": "Learn how to style your web applications without ever leaving your HTML. Master the utility-first workflow, responsive modifiers, and how to build modern, professional UIs at lightning speed."
+  }
+}
