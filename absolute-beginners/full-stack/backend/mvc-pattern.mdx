@@ -1,1 +1,114 @@
-<ComingSoon />
+---
+title: "Understanding the MVC Pattern in Backend Development"
+sidebar_label: "7. MVC Pattern"
+sidebar_position: 7
+description: "Learn how to organize your backend code using the Model-View-Controller architecture for better maintainability."
+tags: ["MVC Pattern", "Model-View-Controller", "Backend Architecture", "Code Organization", "Express.js"]
+keywords: ["MVC Pattern", "Model-View-Controller", "Backend Architecture", "Code Organization", "Express.js", "Models", "Views", "Controllers"]
+---
+
+As a "Master" developer at the Hub, your goal isn't just to write code that *works*, but code that is *clean*. **MVC (Model-View-Controller)** is a design pattern that splits your application into three logical parts.
+
+:::tip Tip for Beginners
+Think of MVC as organizing your closet. You have a section for shirts (Models), a section for pants (Controllers), and a section for shoes (Views). When you need to find something, you know exactly where to look!
+:::
+
+## 1. What does MVC stand for?
+
+### M is for Model (The Data)
+
+The Model is the "Brain" of your data. It defines what your data looks like and how it interacts with the database. If you are building a Cricket app, the Model defines that a `Player` has a `name`, a `runs` count, and a `specialShot`.
+
+*   **Responsibility:** Talking to the Database (MongoDB/SQL).
+*   **Analogy:** The Librarian who knows where every book is.
+
+### C is for Controller (The Logic)
+
+The Controller is the "Middleman." It receives the request from the user, processes it (maybe asks the Model for some data), and then sends a response back. 
+
+*   **Responsibility:** Handling "Routes" and deciding what to do.
+*   **Analogy:** The Waiter who takes your order to the kitchen and brings your food back.
+
+### V is for View (The Interface)
+
+The View is what the user sees. In a Full-Stack MERN app, your **React** frontend acts as the View. In a traditional backend, the View might be an HTML template.
+
+*   **Responsibility:** Displaying the data in a pretty way.
+*   **Analogy:** The Plate and garnish that makes the food look delicious.
+
+## 2. Why bother with MVC?
+
+Imagine you want to change your database from MongoDB to PostgreSQL. 
+*   **Without MVC:** You have to search through 50 files to find every line of database code.
+*   **With MVC:** You only change the **Model** files. The Controllers and Views don't care where the data comes from!
+
+## 3. A "Noob-Friendly" File Structure
+
+At **CodeHarborHub**, we recommend organizing your project folder like this:
+
+```text
+/my-backend-app
+├── /controllers
+│   └── userController.js  <-- (The Logic)
+├── /models
+│   └── userModel.js       <-- (The Schema/Data)
+├── /routes
+│   └── userRoutes.js      <-- (The URL Paths)
+├── /views                 <-- (Templates, if not using React)
+└── server.js              <-- (The Entry Point)
+```
+
+In this structure:
+*   The **Controllers** folder contains all the logic for handling requests.
+*   The **Models** folder defines the structure of your data and how to interact with the database.
+*   The **Routes** folder maps URLs to Controller functions.
+*   The **Views** folder is where you would put HTML templates if you're not using a frontend framework like React.
+
+## 4. MVC in Action (Code Example)
+
+Let's see how a "Get User" request flows through MVC:
+
+**1. The Route (`/routes/userRoutes.js`):** The gatekeeper that points the URL to the Controller.
+
+```javascript title="userRoutes.js"
+const express = require('express');
+const router = express.Router();
+const userController = require('../controllers/userController');
+router.get('/profile/:id', userController.getProfile);
+```
+
+**2. The Controller (`/controllers/userController.js`):** The brain that asks the Model for data.
+
+```javascript title="userController.js"
+const User = require('../models/userModel');
+
+exports.getProfile = async (req, res) => {
+    const userData = await User.findById(req.params.id); // Ask the Model
+    res.json(userData); // Send to the View (Frontend)
+};
+```
+
+**3. The Model (`/models/userModel.js`):** The definition of the data.
+
+```javascript title="userModel.js"
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    role: String
+});
+
+module.exports = mongoose.model('User', userSchema);
+```
+
+## Practice: The "AgriSense" Organization
+
+If you were building your **AgriSense** project (animal farming guide) using MVC:
+1.  What would the **Model** look like? (e.g., Animal name, species, diet).
+2.  What would the **Controller** do? (e.g., `getAnimalCareTips`).
+3.  How would the **View** (React) display it? (e.g., A clean card with images).
+
+:::tip Tip for Beginners
+When you start, it’s okay to feel like this is "extra work." But once your app has more than 5 routes, MVC will save you hours of debugging. **Think of it as organizing your toolbox before starting a big project.**
+:::

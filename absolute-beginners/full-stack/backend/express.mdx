@@ -1,1 +1,118 @@
-<ComingSoon />
+---
+title: "Express.js Framework"
+sidebar_label: "3. Express.js"
+sidebar_position: 3
+description: "Learn how to build a web server quickly using Express.js, the most popular Node.js framework. Understand routing, middleware, and how to handle requests and responses. Get hands-on experience creating your first API endpoints."
+tags: ["Express.js", "Backend", "Node.js", "Web Server", "API"]
+keywords: ["Express.js", "Web Framework", "Routing", "Middleware", "API Endpoints", "Node.js"]
+---
+
+If Node.js is the "Environment," then **Express.js** is the "Framework." It is designed to make building web applications and APIs much easier and faster. At **CodeHarborHub**, we use Express because it is the industry standard for JavaScript backends.
+
+## 1. Why use Express?
+
+Building a server using only built-in Node.js `http` module is like building a house by making your own bricks. Express gives you the bricks already made:
+*   **Easy Routing:** Define what happens when a user visits `/home` vs `/profile`.
+*   **Middleware Support:** Add extra features like logging or security with one line of code.
+*   **JSON Friendly:** Perfect for talking to React frontends.
+
+## 2. Setting Up Express
+
+First, create a folder for your project, initialize it, and install Express:
+
+```bash
+mkdir my-server
+cd my-server
+npm init -y
+npm install express
+```
+
+## 3. The "Hello World" Server
+
+Create a file named `server.js` and add this code. This is the simplest Express server possible:
+
+```javascript title="server.js"
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+// This is a "Route"
+app.get('/', (req, res) => {
+  res.send('Welcome to the CodeHarborHub Server!');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
+});
+```
+
+To start it, run `node server.js` in your terminal. Open your browser and go to `http://localhost:3000`.
+
+## 4. Understanding Request and Response
+
+Every route handler in Express gives you two important objects:
+
+1.  **`req` (Request):** Information coming *from* the user (e.g., what they typed in a search bar).
+2.  **`res` (Response):** What the server sends *back* to the user (e.g., text, HTML, or an image).
+
+## 5. Handling Routes (The Roadmap)
+
+A "Route" is a combination of a **URL** and an **HTTP Method**. The most common methods are:
+*   **GET:** To "Get" data (e.g., reading a blog post).
+*   **POST:** To "Send" data (e.g., creating a new user account).
+*   **PUT:** To "Update" data (e.g., changing your profile picture).
+*   **DELETE:** To "Remove" data.
+
+```javascript title="server.js"
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.get('/api/cricket', (req, res) => {
+  res.json({ player: "MS Dhoni", shot: "Helicopter Shot" });
+});
+
+app.post('/api/login', (req, res) => {
+  res.send("Processing login...");
+});
+```
+
+## 6. Nodemon: The Developer's Best Friend
+
+Normally, every time you change your code, you have to stop and restart the server manually. **Nodemon** does this for you automatically!
+
+**Install it:**
+
+```bash
+npm install -g nodemon
+```
+
+**Run your server with it:**
+
+```bash
+nodemon server.js
+```
+
+## Practice: The Dynamic Greeter
+
+Let's use **URL Parameters** to greet users by name!
+
+```javascript title="server.js"
+const express = require('express');
+const app = express();
+
+app.get('/greet/:name', (req, res) => {
+  const userName = req.params.name;
+  res.send(`Hello ${userName}, welcome to the backend!`);
+});
+```
+
+*If you visit `http://localhost:3000/greet/Ajay`, the page will say "Hello Ajay, welcome to the backend!"*
+
+:::info Middleware
+Middleware functions are functions that have access to the request and response objects. They run *before* your route handler. A very common one is `express.json()`, which allows your server to read JSON data sent from the frontend.
+
+```javascript title="server.js"
+app.use(express.json());
+```
+:::

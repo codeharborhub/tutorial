@@ -1,1 +1,132 @@
-<ComingSoon />
+---
+title: "Express Routing & Controllers"
+sidebar_label: "4. Routing"
+sidebar_position: 4
+description: "Learn how to organize your server paths and handle different HTTP methods. Understand how to use Express Router for modular code and Controllers for separating logic. Build a mini-library API to practice your routing skills."
+tags: ["Express.js", "Routing", "Controllers", "Backend", "Node.js"]
+keywords: ["Express.js", "Routing", "Controllers", "API Endpoints", "Node.js", "Backend Development"]
+---
+
+In the previous lesson, we created a basic server. But as your project grows, you can't put 100 different routes in a single `server.js` file. Routing allows us to split our application into small, manageable pieces.
+
+## 1. The Anatomy of a Route
+
+A route in Express follows this structure:
+`app.METHOD(PATH, HANDLER)`
+
+*   **`app`**: The instance of express.
+*   **`METHOD`**: The HTTP verb (GET, POST, PUT, DELETE).
+*   **`PATH`**: The URL on the server (e.g., `/api/users`).
+*   **`HANDLER`**: The function that runs when the route is matched.
+
+## 2. Route Parameters
+
+Sometimes parts of your URL are dynamic. For example, in [https://codeharborhub.github.io/our-team/details/?member=ajay-dhangar](https://codeharborhub.github.io/our-team/details/?member=ajay-dhangar), the "ajay-dhangar" part changes depending on the user. We handle this using **Params**.
+
+```javascript
+// The colon (:) tells Express this part is a variable
+app.get('/user/:username', (req, res) => {
+  const name = req.params.username;
+  res.send(`Viewing profile of: ${name}`);
+});
+```
+
+## 3. Query Strings
+
+Query strings are the key-value pairs you see after a `?` in a URL (e.g., `/search?club=cricket&sort=new`). These are optional and used for filtering or searching.
+
+```javascript title="server.js"
+app.get('/search', (req, res) => {
+  const { club, sort } = req.query;
+  res.send(`Searching for ${club} sorted by ${sort}`);
+});
+```
+
+## 4. The Express Router
+
+To keep our code clean, we use `express.Router()` to group related routes into separate files. This is how we organize large projects at the Hub.
+
+### Step 1: Create a route file
+
+```javascript title="routes/userRoutes.js"
+const express = require('express');
+const router = express.Router();
+
+router.get('/profile', (req, res) => res.send('User Profile'));
+router.get('/settings', (req, res) => res.send('User Settings'));
+
+module.exports = router;
+```
+
+### Step 2: Use it in your main server
+
+```javascript title="server.js"
+const express = require('express');
+const app = express();
+const userRouter = require('./routes/userRoutes');
+
+// All routes in userRouter will now start with /user
+app.use('/user', userRouter);
+```
+
+## 5. Controllers: Separating Logic
+
+To be a professional "Master" developer, you shouldn't put your logic inside the route file. Instead, we use **Controllers**.
+
+*   **Route file:** Defines the URL.
+*   **Controller file:** Contains the function logic.
+
+**Example Structure:**
+
+```javascript title="controllers/userController.js"
+exports.getUserProfile = (req, res) => {
+    // Logic to fetch user from database would go here
+    res.json({ name: "Ajay", role: "Developer" });
+};
+```
+
+Now, in your route file, you can import this controller:
+
+```javascript title="routes/userRoutes.js"
+const userController = require('../controllers/userController');
+router.get('/profile', userController.getUserProfile);
+```
+
+## Practice: The Mini-Library API
+
+Try to create a router for a "Book" system:
+1.  Create a `bookRoutes.js` file.
+2.  Add a GET route for `/all` to see all books.
+3.  Add a GET route for `/:id` to see a specific book by its ID.
+4.  Link it to your `server.js` under the path `/api/books`.
+
+:::info HTTP Status Codes
+When responding to a route, always send the correct status code.
+*   `200`: OK (Success)
+*   `201`: Created (Success after POST)
+*   `404`: Not Found
+*   `500`: Server Error
+
+```javascript title="bookRoutes.js"
+const express = require('express');
+const router = express.Router();
+
+router.get('/all', (req, res) => {
+  res.json([{ id: 1, title: "The Great Gatsby" }, { id: 2, title: "To Kill a Mockingbird" }]);
+});
+
+router.get('/:id', (req, res) => {
+  const bookId = req.params.id;
+  // In a real app, you'd fetch the book from the database
+  if (bookId == 1) {
+    res.json({ id: 1, title: "The Great Gatsby" });
+  } else if (bookId == 2) {
+    res.json({ id: 2, title: "To Kill a Mockingbird" });
+  } else {
+    res.status(404).send("Book not found!");
+  }
+});
+
+module.exports = router;
+```
+:::

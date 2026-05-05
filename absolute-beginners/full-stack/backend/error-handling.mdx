@@ -1,1 +1,121 @@
-<ComingSoon />
+---
+title: "Error Handling in Express"
+sidebar_label: "5. Error Handling"
+sidebar_position: 5
+description: "Learn how to catch and handle errors in your Node.js and Express applications to prevent crashes."
+tags: ["Error Handling", "Express.js", "Node.js", "Backend Development"]
+keywords: ["Error Handling", "Express.js", "Node.js", "Try...Catch", "Error Middleware", "Custom Errors", "404 Handling"]
+---
+
+In a basic script, if an error happens, the program stops. In a backend server, if the program stops, your entire website goes offline for everyone! Error handling is the art of catching those "oops" moments and responding gracefully.
+
+## 1. The Try...Catch Block
+
+The most basic way to handle errors in JavaScript is the `try...catch` block. You "try" to run some code, and if it fails, the "catch" block takes over.
+
+```javascript title="server.js"
+app.get('/api/data', async (req, res) => {
+  try {
+    const data = await someDatabaseCall(); 
+    res.json(data);
+  } catch (error) {
+    console.error(error); // Log it for the developer
+    res.status(500).send("Something went wrong on our end!");
+  }
+});
+```
+
+## 2. Express Error Middleware
+
+Express has a special type of middleware specifically for errors. While normal middleware has three arguments `(req, res, next)`, error middleware has **four**: `(err, req, res, next)`.
+
+If you place this at the very bottom of your `server.js` (after all your routes), it will catch every error that happens in your app.
+
+```javascript title="server.js"
+// Universal Error Handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: "Internal Server Error",
+    error: err.message // Optional: only show in development
+  });
+});
+```
+
+## 3. Throwing Custom Errors
+
+Sometimes, the code isn't "broken," but the user did something wrong (like entering the wrong password). In these cases, you can "throw" your own error to trigger the catch block.
+
+```javascript title="server.js"
+app.post('/login', (req, res, next) => {
+  const { password } = req.body;
+
+  if (password !== "12345") {
+    const error = new Error("Wrong Password!");
+    error.status = 401;
+    return next(error); // Passes the error to the error middleware
+  }
+
+  res.send("Logged in!");
+});
+```
+
+## 4. Handling 404 (Not Found)
+
+What happens if a user visits a URL that doesn't exist? By default, Express sends a plain text message. At the Hub, we prefer to send a clean JSON response or a custom 404 page.
+
+**Add this right before your error middleware:**
+
+```javascript title="server.js"
+app.use((req, res) => {
+  res.status(404).json({ message: "Requested resource not found" });
+});
+```
+
+## 5. Best Practices for Error Messages
+
+When an error occurs, you must be careful about what you tell the user:
+
+| Scenario | Good Response | Bad Response |
+| :--- | :--- | :--- |
+| **Database Failed** | "Service temporarily unavailable." | "Error: Cannot connect to MongoDB at 192.168..." |
+| **Wrong Input** | "Please enter a valid email." | "Internal logic failed at line 42." |
+| **Security** | "Invalid credentials." | "That email exists, but the password is wrong." |
+
+:::tip
+Never reveal your database structure or file paths in an error message. It gives hackers a map of your server!
+:::
+
+## Practice: The "Safe Divider"
+
+Build a route `/divide/:a/:b` that:
+1.  Takes two numbers from the URL.
+2.  Divides `a` by `b`.
+3.  **Error Check:** If `b` is `0`, throw an error (you can't divide by zero!).
+4.  **Error Check:** If `a` or `b` are not numbers, throw an error.
+
+```javascript title="server.js"
+app.get('/divide/:a/:b', (req, res, next) => {
+    const a = parseFloat(req.params.a);
+    const b = parseFloat(req.params.b);
+    
+    if (isNaN(a) || isNaN(b)) {
+        const error = new Error("Both parameters must be numbers.");
+        error.status = 400;
+        return next(error);
+    }
+    
+    if (b === 0) {
+        const error = new Error("Cannot divide by zero.");
+        error.status = 400;
+        return next(error);
+    }
+    
+    res.json({ result: a / b });
+});
+```
+
+:::info Async Wrapper
+In modern Express, catching errors in `async` functions can be repetitive. Many developers use a "Catch-Async" helper function or a library like `express-async-errors` to automatically catch errors and send them to the global error handler.
+:::
