@@ -88,6 +88,21 @@ exports.getProfile = async (req, res) => {
 };
 ```
 
+:::info
+The `async` controller function lacks error handling. If the database call fails, the promise will reject without being caught, which can lead to unhandled promise rejections. It is best practice to wrap the logic in a `try...catch` block and pass the error to the `next` middleware.
+
+```javascript title="userController.js"
+exports.getProfile = async (req, res, next) => {  
+    try {  
+        const userData = await User.findById(req.params.id);  
+        res.json(userData);  
+    } catch (error) {  
+        next(error);  
+    }  
+};
+```
+:::
+
 **3. The Model (`/models/userModel.js`):** The definition of the data.
 
 ```javascript title="userModel.js"

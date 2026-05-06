@@ -93,6 +93,32 @@ npm install -g nodemon
 nodemon server.js
 ```
 
+:::info
+Installing packages globally with `-g` is generally discouraged for project-specific tools. It is better to install nodemon as a development dependency to ensure that all developers working on the project use the same version.
+
+```bash
+npm install --save-dev nodemon
+```
+
+Then, you can add a script to your `package.json`:
+
+```json title="package.json"
+{
+  "scripts": {
+    "dev": "nodemon server.js"
+  }
+}
+```
+
+Now you can start your server with:
+
+```bash
+npm run dev
+```
+
+This way, everyone on the project will have the same version of nodemon, and you won't run into issues if someone doesn't have it installed globally.
+:::
+
 ## Practice: The Dynamic Greeter
 
 Let's use **URL Parameters** to greet users by name!
