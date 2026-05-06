@@ -1,1 +1,117 @@
-<ComingSoon />
+---
+title: "Understanding Middleware in Express"
+sidebar_label: "6. Middleware"
+sidebar_position: 6
+description: "Learn how to use and create middleware to process requests before they reach your routes."
+tags: ["Middleware", "Express.js", "Node.js", "Backend Development"]
+keywords: ["Middleware", "Express.js", "Node.js", "Custom Middleware", "Built-in Middleware", "Third-Party Middleware", "next() Function"]
+---
+
+In Express, **Middleware** is a function that runs **after** the incoming request is received and **before** the final response is sent. It has access to the Request (`req`), Response (`res`), and the next function in the cycle.
+
+## 1. How Middleware Works
+
+Think of Middleware as a series of checkpoints. Each middleware can:
+1.  Execute any code.
+2.  Make changes to the `req` and `res` objects.
+3.  End the request-response cycle (e.g., if a user isn't logged in).
+4.  Call the **`next()`** function to pass control to the next middleware.
+
+```javascript title="server.js"
+app.use((req, res, next) => {
+  console.log("This runs for every request!");
+  next(); // Passes control to the next middleware or route handler
+});
+```
+
+## 2. Types of Middleware
+
+### 1. Built-in Middleware
+Express comes with some tools already included. The most common one is `express.json()`, which helps your server understand JSON data sent by a frontend (like a React app).
+
+```javascript title="server.js"
+app.use(express.json()); // Essential for modern apps!
+```
+
+### 2. Third-Party Middleware
+The community has built amazing tools that you can install via NPM.
+*   **Morgan:** Logs every request so you can see who is visiting your site.
+*   **Cors:** Allows your frontend to talk to your backend safely.
+*   **Dotenv:** Helps manage "secret" environment variables.
+
+```bash
+npm install morgan
+```
+
+Now, let's use it in our `server.js`:
+
+```javascript title="server.js"
+const morgan = require('morgan');
+app.use(morgan('dev')); // Now every request shows up in your terminal!
+```
+
+### 3. Custom Middleware
+You can write your own middleware to do anything you want! This is great for things like checking if a user is an admin or logging the time of a request.
+
+## 3. Building Your First Custom Middleware
+
+Let's create a "Logger" that prints the URL and the current time whenever someone visits our site.
+
+```javascript title="server.js"
+const myLogger = (req, res, next) => {
+  const currentTime = new Date().toLocaleTimeString();
+  console.log(`[${currentTime}] Request made to: ${req.url}`);
+  
+  // CRITICAL: You must call next() or the browser will hang forever!
+  next(); 
+};
+
+// Apply it to the whole app
+app.use(myLogger);
+```
+
+## 4. Global vs. Specific Middleware
+
+At **CodeHarborHub**, we teach you to be precise with your code. You don't always want middleware to run on *every* page.
+
+### Global Middleware
+
+Runs for every single route in your app.
+
+```javascript title="server.js"
+app.use(express.json());
+```
+
+### Specific Middleware
+
+Only runs for a specific route. This is perfect for "Protected Routes" (e.g., only users who are logged in can see `/dashboard`).
+
+```javascript title="server.js"
+const checkAuth = (req, res, next) => {
+  const isAuthorized = true; // In real life, check for a token
+  if (isAuthorized) {
+    next();
+  } else {
+    res.status(401).send("Access Denied!");
+  }
+};
+
+app.get('/dashboard', checkAuth, (req, res) => {
+  res.send("Welcome to your secret dashboard!");
+});
+```
+
+## 5. The Importance of `next()`
+
+If you forget to call `next()`, your request will get "stuck" in that middleware. The user's browser will show a spinning loading icon until it eventually times out. Always remember: **Middleware is a relay race—you must pass the baton!**
+
+## Practice: The "Maintenance Mode" Challenge
+
+Try to create a middleware that prevents anyone from visiting your site.
+1.  Create a middleware function.
+2.  Instead of calling `next()`, it should send a message: `"Site under maintenance. Check back later!"`.
+3.  Apply it to your app and try to visit any route.
+
+:::info Order Matters!
+Express runs middleware in the order you write them in your code. If you put your error-handling middleware at the top, it won't catch any errors from the routes below it. Always place global middleware and routes first, and error handlers last.
+:::

@@ -1,1 +1,80 @@
-<ComingSoon />
+---
+title: "Backend Mini-Projects for Absolute Beginners"
+sidebar_label: "Mini-Projects"
+sidebar_position: 8
+description: "Build real-world server-side applications to master Node.js, Express, and MongoDB."
+tags: ["Backend Projects", "Node.js", "Express.js", "MongoDB", "API Design", "Full-Stack Development"]
+keywords: ["Backend Projects", "Node.js", "Express.js", "MongoDB", "API Design", "Full-Stack Development", "URL Shortener", "Expense Tracker", "Notes API", "Weather API"]
+---
+
+You've learned how to build servers, handle routes, and manage databases. Now, it's time to build independent services. These projects focus on **API Design**, **Data Persistence**, and **Logic**.
+
+## Project 1: The "CodeHarbor" URL Shortener
+
+**Focus:** *Express, MongoDB, NanoID*
+
+Build a service that takes a long URL and turns it into a short, shareable link.
+
+*   **Requirements:**
+    *   A `POST` route to accept a long URL and save it to MongoDB.
+    *   Generate a unique short ID for each link.
+    *   A `GET` route `/:shortId` that redirects the user to the original long URL.
+*   **Backend Challenge:** Track "Analytics"—every time a link is clicked, increment a `clicks` counter in your database.
+
+## Project 2: Personal Expense Tracker API
+
+**Focus:** *CRUD Operations, MVC Pattern*
+
+Create a system to manage daily expenses. This is a perfect exercise for practicing the **Model-View-Controller** structure.
+
+*   **Requirements:**
+    *   **Model:** `title`, `amount`, `category`, and `date`.
+    *   **GET /expenses:** Fetch all records.
+    *   **POST /expenses:** Add a new expense.
+    *   **DELETE /expenses/:id:** Remove a record.
+*   **Logic Challenge:** Create a route `GET /expenses/total` that calculates the sum of all expenses using a MongoDB aggregation or a JavaScript `.reduce()` function.
+
+## Project 3: Secure "Master" Notes API
+
+**Focus:** *JWT Authentication, Middleware*
+
+Build a private note-taking backend where users can only see their own notes.
+
+*   **Requirements:**
+    *   **User Auth:** Signup and Login routes using **Bcrypt** for password hashing and **JWT** for tokens.
+    *   **Protected Routes:** Use a custom `authMiddleware` to ensure only logged-in users can access the notes.
+    *   **Association:** Each note in the database must be linked to a specific `userId`.
+*   **Security Challenge:** Ensure that User A cannot delete a note belonging to User B by checking ownership in the controller.
+
+## Project 4: AgriSense Weather & Log API
+
+**Focus:** *External APIs, Environment Variables*
+
+Integrate your backend with the real world. This project mimics the "AgriSense" minor project logic.
+
+*   **Requirements:**
+    *   Create a route that takes a city name and fetches weather data from the OpenWeather API.
+    *   Save a "log" of every weather check in your database (City, Temp, Timestamp).
+    *   **Environment Variables:** Use a `.env` file to keep your API keys secret.
+*   **Integration Challenge:** Build a "History" route that shows the last 5 weather searches made by any user.
+
+## The "Professional" Checklist
+
+Before you consider a project "Done" at the Hub, make sure it passes these checks:
+
+1.  **Environment Setup:** Does it have a `.env.example` file?
+2.  **Status Codes:** Does it return `201` for creations and `404` for missing items?
+3.  **Validation:** Does the server crash if you send an empty body? (Use `Joi` or manual checks).
+4.  **Documentation:** Does your `README.md` explain how to install and what the API endpoints are?
+5.  **Error Handling:** Do you have a global error handler to catch unexpected bugs?
+
+## Submission & Portfolio
+
+A backend project doesn't have a "screenshot," but you can still show it off!
+*   **Postman/Thunder Client:** Export your collection so others can test your API.
+*   **Render/Railway:** Deploy your backend for free so your frontend projects can talk to a live URL.
+*   **GitHub:** Write a great README. Use clear commit messages like `feat: add user authentication`.
+
+:::tip Stuck?
+Backend bugs are often "invisible." Use `console.log(req.body)` or the **VS Code Debugger** to see exactly what is happening inside your functions. If you get a `500` error, check your terminal—the answer is usually hiding in the stack trace!
+:::

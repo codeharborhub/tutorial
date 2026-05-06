@@ -1,0 +1,108 @@
+---
+title: "Node.js Basics"
+sidebar_label: "2. Node.js Basics"
+sidebar_position: 2
+description: "Learn how to run JavaScript on your computer and understand the Node.js runtime environment. Get familiar with core modules, the global object, and how to share code using modules."
+tags: ["Node.js", "Backend", "JavaScript"]
+keywords: ["Node.js", "Runtime Environment", "Global Object", "Core Modules", "Modules", "CommonJS"]
+---
+
+What exactly is **Node.js**? It is not a programming language, and it is not a framework. It is a **Runtime Environment**. It takes the same engine that powers Google Chrome (the V8 engine) and lets it run directly on your computer's operating system.
+
+## 1. Why Node.js?
+
+At the Hub, we love Node.js for three main reasons:
+1.  **JavaScript Everywhere:** You don't need to learn a new language like Python or PHP for the backend.
+2.  **Blazing Fast:** Node.js is designed for "non-blocking" operations, making it perfect for real-time apps like chat or live cricket score updates.
+3.  **NPM (Node Package Manager):** Access to millions of ready-to-use code libraries created by the global community.
+
+## 2. Checking your Environment
+
+Before we start, make sure you have Node.js installed. Open your terminal and type:
+
+```bash
+node -v
+```
+
+If you see a version number (like `v20.x.x`), you are ready to go!
+
+## 3. Running your first Node Script
+
+In the frontend, you had to link a `.js` file to an `.html` file to see it work. In Node, you run it directly.
+
+1.  Create a file named `hello.js`.
+2.  Write the following code:
+    
+    ```javascript title="hello.js"
+    console.log("Welcome to the Backend, A Master!");
+    
+    const colors = ["Red", "Green", "Blue"];
+    console.log("Your available colors are:", colors);
+    ```
+
+3.  In your terminal, run:
+    
+    ```bash
+    node hello.js
+    ```
+
+## 4. The `Global` Object
+
+In the browser, the top-level object is `window`. In Node.js, there is no window (because there is no browser!). Instead, the top-level object is called `global`.
+
+| Feature | Browser (Frontend) | Node.js (Backend) |
+| :--- | :--- | :--- |
+| **Global Object** | `window` | `global` |
+| **DOM** | Access to `document` | **No DOM** |
+| **File System** | Blocked for security | Can read/write files |
+| **Location** | `location.href` | `process.cwd()` |
+
+## 5. Modules: Sharing Code
+
+Node.js uses a system called **CommonJS** to share code between files. You use `require` to import code and `module.exports` to send it out.
+
+```javascript title="math.js"
+const add = (a, b) => a + b;
+module.exports = add;
+```
+
+And then in another file, you can use it:
+
+```javascript title="app.js"
+const add = require('./math');
+console.log("2 + 3 =", add(2, 3)); // Output: 2 + 3 = 5
+```
+
+## 6. Core Modules
+
+Node.js comes with built-in "Superpowers" called Core Modules. You don't need to install them; you just import them.
+
+*   **`fs` (File System):** To read and write files on your computer.
+*   **`path`:** To handle file and folder paths.
+*   **`http`:** To create a basic web server.
+
+### Example: Reading a File
+
+```javascript title="readFile.js"
+const fs = require('fs');
+
+fs.readFile('note.txt', 'utf8', (err, data) => {
+  if (err) throw err;
+  console.log("File content:", data);
+});
+```
+
+## Practice: The Greeting Machine
+
+1.  Create a file named `greet.js`.
+2.  Use `process.argv` to get a name from the terminal command.
+3.  Run it like this: `node greet.js Ajay`.
+
+```javascript title="greet.js"
+const name = process.argv[2] || "Guest";
+console.log(`Hello, ${name}! Welcome to CodeHarborHub.`);
+```
+
+:::info Package.json
+Always start a new project by running `npm init -y`. This creates a `package.json` file, which is like a **manifest** for your project. It keeps track of your project's name, version, and the libraries you install.
+:::
