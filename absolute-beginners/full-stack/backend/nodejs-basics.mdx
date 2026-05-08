@@ -92,6 +92,20 @@ fs.readFile('note.txt', 'utf8', (err, data) => {
 });
 ```
 
+:::info Error Handling
+In the above example, if `note.txt` does not exist, the `err` object will contain the error details. Throwing an error inside an asynchronous callback will cause the Node.js process to crash. Instead of throwing, you should log the error or handle it gracefully to keep the server running.
+
+```javascript title="readFile.js"
+fs.readFile('note.txt', 'utf8', (err, data) => {  
+  if (err) {  
+    console.error("Error reading file:", err);  
+    return;  
+  }  
+  console.log("File content:", data);  
+});
+```
+:::
+
 ## Practice: The Greeting Machine
 
 1.  Create a file named `greet.js`.

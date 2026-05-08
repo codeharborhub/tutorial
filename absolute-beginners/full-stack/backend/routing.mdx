@@ -118,11 +118,11 @@ router.get('/all', (req, res) => {
 router.get('/:id', (req, res) => {
   const bookId = req.params.id;
   // In a real app, you'd fetch the book from the database
-  if (bookId == 1) {
-    res.json({ id: 1, title: "The Great Gatsby" });
-  } else if (bookId == 2) {
-    res.json({ id: 2, title: "To Kill a Mockingbird" });
-  } else {
+  if (bookId === "1") {  
+    res.json({ id: 1, title: "The Great Gatsby" });  
+  } else if (bookId === "2") {  
+    res.json({ id: 2, title: "To Kill a Mockingbird" });  
+  } else {  
     res.status(404).send("Book not found!");
   }
 });

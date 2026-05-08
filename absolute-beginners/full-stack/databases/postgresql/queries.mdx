@@ -1,1 +1,110 @@
-<ComingSoon />
+---                                                               
+title: "Basic SQL Queries"
+sidebar_label: "2. Basic Queries"
+sidebar_position: 2
+description: "Master the four basic operations of SQL (CRUD) to interact with your PostgreSQL tables."
+tags: [sql, queries, crud, beginners]
+keywords: [sql, queries, crud, beginners]
+---
+
+In the world of databases, almost everything we do falls under **CRUD**: **C**reate, **R**ead, **U**pdate, and **D**elete. In SQL, we use specific commands for each of these actions.
+
+## 1. CREATE (Insert Dataz)
+
+To add new information to a table, we use the `INSERT INTO` command. You must specify the table name and the columns you are filling.
+
+```sql title="Insert Query"
+INSERT INTO users (username, email, age)
+VALUES ('amaster', 'ajay@codeharborhub.com', 25);
+```
+
+:::tip
+If a column has `SERIAL` (like an ID), you don't need to include it in your query; Postgres will generate it automatically!
+:::
+
+## 2. READ (Select Data)
+
+The `SELECT` statement is the most common command you will use. It allows you to pull data out of your tables.
+
+### Select All Columns
+
+```sql title="Select All"
+SELECT * FROM users;
+```
+
+### Select Specific Columns
+
+```sql title="Select Specific Columns"
+SELECT username, email FROM users;
+```
+
+### Filtering with WHERE
+
+You don't usually want *all* users. Use `WHERE` to narrow it down:
+
+```sql title="Select with WHERE"
+-- Find a specific user
+SELECT * FROM users WHERE username = 'amaster';
+
+-- Find all users older than 18
+SELECT * FROM users WHERE age > 18;
+```
+
+## 3. UPDATE (Change Data)
+
+To change existing information, we use `UPDATE`. 
+
+:::warning Warning: The WHERE Clause
+Always use a `WHERE` clause with `UPDATE`. If you forget it, Postgres will update **every single row** in your table!
+:::
+
+```sql title="Update Query"
+UPDATE users 
+SET email = 'newemail@hub.com' 
+WHERE username = 'amaster';
+```
+
+## 4. DELETE (Remove Data)
+
+To remove a record, use `DELETE`. Like update, this requires a `WHERE` clause to avoid clearing your entire database.
+
+```sql title="Delete Query"
+DELETE FROM users 
+WHERE username = 'amaster';
+```
+
+## 5. Sorting and Limiting
+
+As a developer at **CodeHarborHub**, you'll often want to show the "latest" items or "top" scores.
+
+### ORDER BY (Sorting)
+
+```sql title="Order By"
+-- Sort by age (Youngest first)
+SELECT * FROM users ORDER BY age ASC;
+
+-- Sort by age (Oldest first)
+SELECT * FROM users ORDER BY age DESC;
+```
+
+### LIMIT (Pagination)
+
+If you have 1,000,000 users, you only want to show a few at a time.
+
+```sql title="Limit Query"
+-- Get only the first 5 users
+SELECT * FROM users LIMIT 5;
+```
+
+## Practice: The Cricket Scoreboard
+
+Imagine you have a table called `scores` with columns `player_name` and `runs`. Try to write queries for the following:
+
+1.  **Add a player:** Insert "MS Dhoni" with 183 runs.
+2.  **Find the winner:** Select the player with the highest runs.
+3.  **Correction:** Update the runs for a player who just hit a six (+6).
+4.  **Cleanup:** Delete players who have 0 runs.
+
+:::info SQL Case Sensitivity
+While SQL keywords (like `SELECT`) are not case-sensitive, it is standard practice to write them in **ALL CAPS** to make your queries easier to read. Table and column names should stay lowercase.
+:::

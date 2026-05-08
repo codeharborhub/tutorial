@@ -1,0 +1,9 @@
+{
+  "label": "PostgreSQL",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "PostgreSQL: A Powerful Open-Source Database",
+    "description": "Learn how to use PostgreSQL, a powerful open-source relational database system. This track covers everything from basic queries to advanced features like indexing, transactions, and replication."
+  }
+}

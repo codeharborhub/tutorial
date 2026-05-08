@@ -43,6 +43,18 @@ app.use((err, req, res, next) => {
 });
 ```
 
+:::info Security Tip
+Exposing the error message directly to the client can leak sensitive information about the server's internal state. It is safer to only include detailed error information when the application is running in a development environment.
+
+```javascript title="server.js"
+  res.status(500).json({  
+    success: false,  
+    message: "Internal Server Error",  
+    error: process.env.NODE_ENV === 'development' ? err.message : {}  
+  });  
+```
+:::
+
 ## 3. Throwing Custom Errors
 
 Sometimes, the code isn't "broken," but the user did something wrong (like entering the wrong password). In these cases, you can "throw" your own error to trigger the catch block.

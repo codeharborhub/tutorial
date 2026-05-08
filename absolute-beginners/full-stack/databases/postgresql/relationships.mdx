@@ -1,1 +1,131 @@
-<ComingSoon />
+---
+title: "PostgreSQL Relationships & Joins"
+sidebar_label: "3. Relationships & Joins"
+sidebar_position: 3
+description: "Learn how to connect different tables using Primary Keys, Foreign Keys, and Joins."
+tags: ["databases", "postgresql", "sql", "relationships", "joins", "full-stack"]
+keywords: ["postgresql", "sql", "relationships", "joins", "primary key", "foreign key", "one-to-many", "many-to-many"]
+---
+
+In PostgreSQL, we don't store everything in one place. We create specialized tables and link them. This prevents data duplication and keeps our "CodeHarbor" projects organized.
+
+:::info
+Think of it like a library. You have a "Books" section and an "Authors" section. Instead of writing the author's name in every book entry, you create an "Authors" table and link it to the "Books" table.
+:::
+
+## 1. The Key Players: PK and FK
+
+To link two tables, we use two types of "Keys":
+
+1.  **Primary Key (PK):** A unique identifier for every row in a table (usually an `id`). No two rows can have the same PK.
+2.  **Foreign Key (FK):** A column in one table that points to the **Primary Key** of another table.
+
+## 2. Types of Relationships
+
+### One-to-Many (1:N)
+The most common relationship. 
+*   *Example:* One **User** can write many **Posts**.
+*   *Implementation:* Put the `user_id` (FK) inside the `posts` table.
+
+### Many-to-Many (M:N)
+*   *Example:* One **Student** can enroll in many **Courses**, and one **Course** has many **Students**.
+*   *Implementation:* Use a "Join Table" (also called a Junction Table) that sits in the middle and holds the IDs of both.
+
+```sql title="Many-to-Many Example"
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+CREATE TABLE courses (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(100)
+);
+
+CREATE TABLE enrollments (
+    student_id INT REFERENCES students(id),
+    course_id INT REFERENCES courses(id),
+    PRIMARY KEY (student_id, course_id)
+);
+```
+
+In this example, `enrollments` is the join table that connects `students` and `courses`. Each row in `enrollments` represents one student enrolling in one course.
+
+## 3. Joining Tables with SQL
+
+When you want to see data from two tables at once, you use the `JOIN` command. 
+
+Imagine we have two tables: `users` and `orders`.
+
+### a. The INNER JOIN
+
+This returns only the rows where there is a match in both tables.
+
+```sql title="Inner Join Example"
+SELECT users.username, orders.product_name, orders.price
+FROM users
+INNER JOIN orders ON users.id = orders.user_id;
+```
+
+### b. The LEFT JOIN
+
+This returns all users, even if they haven't placed an order. If they haven't ordered, the order columns will show as `NULL`.
+
+```sql title="Left Join Example"
+SELECT users.username, orders.product_name, orders.price
+FROM users
+LEFT JOIN orders ON users.id = orders.user_id;
+```
+### c. The RIGHT JOIN
+
+This is the opposite of LEFT JOIN. It returns all orders, even if they don't have a matching user. If an order doesn't have a user, the user columns will show as `NULL`.
+
+```sql title="Right Join Example"
+SELECT users.username, orders.product_name, orders.price
+FROM users
+RIGHT JOIN orders ON users.id = orders.user_id;
+```
+### d. The FULL OUTER JOIN
+
+This returns all users and all orders. If there is no match, the missing side will show as `NULL`.
+
+```sql title="Full Outer Join Example"
+SELECT users.username, orders.product_name, orders.price
+FROM users
+FULL OUTER JOIN orders ON users.id = orders.user_id;
+```
+
+## 4. Defining Relationships in Code
+
+When you create your tables, you must tell Postgres about the link.
+
+```sql title="Defining Relationships"
+-- 1. Create the parent table
+CREATE TABLE authors (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+-- 2. Create the child table with a Foreign Key
+CREATE TABLE books (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(200),
+    author_id INT REFERENCES authors(id) ON DELETE CASCADE
+);
+```
+
+> **What is `ON DELETE CASCADE`?** This is a "Master" move. It means if you delete an Author, all of their Books will be automatically deleted too. No "orphan" data left behind!
+
+## Practice: The Team & Player Link
+
+Try to build a small system for a Cricket League:
+1.  Create a `teams` table (id, team_name).
+2.  Create a `players` table (id, player_name, team_id).
+3.  Insert your favorite team and a few players (don't forget to link them via `team_id`).
+4.  Write a `JOIN` query to show every player alongside their team name.
+
+:::info Aliases
+SQL queries can get long. Use "Aliases" (nicknames) to keep them short!
+`SELECT u.username, o.price FROM users u JOIN orders o ON u.id = o.user_id;`
+(Here, `u` is an alias for `users` and `o` is an alias for `orders`).
+:::

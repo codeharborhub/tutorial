@@ -1,1 +1,98 @@
-<ComingSoon />
+---
+title: "Authentication Best Practices"
+sidebar_label: "7. Best Practices"
+sidebar_position: 7
+description: "Essential security checklist for building professional and secure authentication systems."
+tags: ["authentication", "security", "best practices", "full-stack development"]
+keywords: ["authentication best practices", "password security", "HTTPS", "JWT security", "rate limiting", "multi-factor authentication", "RBAC", "security checklist"]
+---
+
+In the world of security, we assume that attackers are smart and persistent. Following these rules will protect your application from 99% of common attacks.
+
+## 1. Password Security
+
+### Use Salted Hashing
+
+As we learned, never store passwords as plain text. Use **Bcrypt** with at least **10-12 salt rounds**.
+
+### Enforce Strong Password Policies
+
+Don't let users use `password123`. Require a mix of:
+*   Minimum 8-12 characters.
+*   At least one uppercase letter.
+*   At least one number and one special character.
+
+## 2. Transport & Storage
+
+### HTTPS is Non-Negotiable
+Without SSL/TLS (HTTPS), passwords and JWTs are sent across the internet in plain text. Any "man-in-the-middle" can steal them. **Always use HTTPS in production.**
+
+### Use HttpOnly and Secure Cookies
+If you store tokens in cookies, set these flags:
+*   `HttpOnly`: Prevents JavaScript from reading the cookie (stops XSS attacks).
+*   `Secure`: Ensures the cookie is only sent over HTTPS.
+*   `SameSite=Strict`: Prevents CSRF (Cross-Site Request Forgery) attacks.
+
+## 3. Handling JWTs (Tokens)
+
+### Keep Secrets Secret
+Never hardcode your `JWT_SECRET`. Use environment variables (`.env`) and make sure `.env` is in your `.gitignore`.
+
+### Use Short Expiration Times
+Tokens should not last forever. A good standard is **15 minutes to 1 hour** for access tokens. 
+
+## 4. Protection Against Attacks
+
+### Rate Limiting
+Prevent "Brute Force" attacks (where a bot tries thousands of passwords) by limiting how many requests an IP can make to your `/login` route.
+
+```javascript title="rateLimiter.js"
+const rateLimit = require('express-rate-limit');
+
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Limit each IP to 5 login requests per window
+    message: "Too many login attempts, please try again after 15 minutes"
+});
+
+app.use('/api/auth/login', loginLimiter);
+
+```
+
+### Generic Error Messages
+
+Never tell a hacker *which* part of the login was wrong.
+
+* **Bad:** "User not found" or "Incorrect password."
+* **Good:** "Invalid email or password."
+
+## 5. Multi-Factor Authentication (MFA)
+
+For high-security apps, a password isn't enough. Implement MFA using:
+
+* **TOTP:** Apps like Google Authenticator.
+* **Email/SMS:** Sending a one-time code (OTP).
+
+## 6. The "Master" Checklist
+
+| Category | Requirement | Check |
+| --- | --- | --- |
+| **Passwords** | Hashed with Bcrypt + Salt | ☐ |
+| **Transport** | All traffic over HTTPS | ☐ |
+| **Tokens** | Short-lived + Securely stored | ☐ |
+| **Database** | Roles (RBAC) implemented | ☐ |
+| **Monitoring** | Logs for failed login attempts | ☐ |
+
+## Practice: The Vulnerability Hunt
+
+Go through your current project and check:
+
+1. Is your `JWT_SECRET` in a `.env` file?
+2. Do your login routes have a rate limiter?
+3. Are you using generic error messages?
+
+If you answered "No" to any of these, now is the time to fix it!
+
+:::info Security Audits
+Use tools like `npm audit` frequently. It will scan your project for libraries with known security holes and tell you how to patch them.
+:::

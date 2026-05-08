@@ -1,0 +1,9 @@
+{
+  "label": "Authentication",
+  "position": 10,
+  "link": {
+    "type": "generated-index",
+    "title": "Authentication: Securing Your Application",
+    "description": "Learn how to implement secure authentication mechanisms in your applications. This track covers everything from basic login systems to advanced topics like OAuth, JWT, and multi-factor authentication."
+  }
+}

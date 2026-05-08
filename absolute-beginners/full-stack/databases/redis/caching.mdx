@@ -1,1 +1,114 @@
-<ComingSoon />
+---
+title: "Caching with Redis"
+sidebar_label: "3. Caching Strategy"
+sidebar_position: 3
+description: "Learn the Cache-Aside pattern to speed up your API responses and reduce database load."
+tags: ["Redis", "Caching", "Backend Performance", "Node.js", "Database Optimization"]
+keywords: ["Redis", "Caching", "Cache-Aside Pattern", "Backend Performance", "Node.js", "Database Optimization", "Cache Invalidation"]
+---
+
+Caching is the process of storing copies of data in a temporary storage location (Redis) so that future requests for that data can be served faster.
+
+## 1. The "Cache-Aside" Pattern
+
+This is the most common strategy used by "Master" developers. The logic follows these steps:
+
+1.  **Check the Cache:** Does Redis have the data?
+2.  **Cache Hit:** If yes, return the data immediately. (Super Fast ⚡)
+3.  **Cache Miss:** If no, go to the Database (MongoDB/Postgres).
+4.  **Update Cache:** Take the data from the database and save it in Redis for next time.
+5.  **Return Data:** Send the data to the user.
+
+## 2. Implementing Caching in Node.js
+
+Let's say we have a slow route that fetches a list of products. Here is how we add a Redis layer:
+
+```javascript title="server.js"
+const client = require('./redisClient');
+const Product = require('./models/productModel');
+
+app.get('/api/products', async (req, res) => {
+    const cacheKey = 'all_products';
+
+    try {
+        // 1. Try to get data from Redis
+        const cachedData = await client.get(cacheKey);
+
+        if (cachedData) {
+            console.log("⚡ Serving from Cache");
+            return res.json(JSON.parse(cachedData));
+        }
+
+        // 2. If not in cache, fetch from Database
+        console.log("🐢 Serving from Database");
+        const products = await Product.find();
+
+        // 3. Save the result in Redis for next time (expires in 1 hour)
+        await client.set(cacheKey, JSON.stringify(products), {
+            EX: 3600 
+        });
+
+        // 4. Send response
+        res.json(products);
+        
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+```
+
+## 3. When to Cache (and when not to)
+
+Caching is powerful, but it's not for everything.
+
+| Good for Caching | Bad for Caching |
+| --- | --- |
+| **Static Data:** FAQ pages, product catalogs. | **Rapidly Changing Data:** Live stock prices, GPS locations. |
+| **Expensive Queries:** Complex calculations or long reports. | **Personalized Data:** Shopping carts (store these in sessions instead). |
+| **High-Traffic Pages:** The homepage or trending posts. | **Sensitive Data:** Passwords or private bank details. |
+
+## 4. Cache Invalidation (The Hard Part)
+
+There is a famous saying in programming: *"There are only two hard things in Computer Science: cache invalidation and naming things."*
+
+**Cache Invalidation** means deleting the old data from Redis when the database changes. If you update a product's price in MongoDB but don't delete the Redis cache, your users will still see the old, wrong price!
+
+**Solution:** Whenever you `UPDATE` or `DELETE` data in your database, make sure to delete the corresponding key in Redis:
+
+```javascript title="server.js"
+app.put('/api/products/:id', async (req, res) => {
+    // 1. Update the DB
+    await Product.findByIdAndUpdate(req.params.id, req.body);
+
+    // 2. DELETE the old cache!
+    await client.del('all_products');
+
+    res.send("Product updated and cache cleared!");
+});
+
+```
+
+## 5. Performance Comparison
+
+| Action | Time Taken (Approx) |
+| --- | --- |
+| **Database Query (No Cache)** | 100ms - 500ms |
+| **Redis Cache Hit** | 1ms - 5ms |
+
+*By using Redis, you can make your application up to **100x faster** for your users!*
+
+## Practice: The Cricket Live Score Cache
+
+1. Create a route `/api/score`.
+2. Inside, simulate a slow process (like a 2-second delay using `setTimeout`).
+3. Implement the Cache-Aside pattern.
+4. Notice how the first request takes 2 seconds, but every request after that is instant!
+
+:::info Naming Keys
+As your app grows, you will have hundreds of keys. Use a colon `:` to organize them like folders:
+
+* `user:profile:101`
+* `product:details:505`
+* `site:settings`
+:::

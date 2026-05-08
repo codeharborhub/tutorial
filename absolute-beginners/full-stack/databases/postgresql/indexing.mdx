@@ -1,1 +1,72 @@
-<ComingSoon />
+---
+title: "PostgreSQL Indexing & Performance"
+sidebar_label: 4. Indexing & Performance
+sidebar_position: 4
+description: "Learn how to speed up your database queries using indexes and understand when to use them."
+tags: ["databases", "postgresql", "sql", "indexing", "performance", "full-stack"]
+keywords: ["postgresql", "sql", "indexing", "performance", "explain analyze", "unique index", "b-tree"]
+---
+
+Imagine you are looking for a specific topic in a 500-page textbook. 
+*   **Without an Index:** You have to read every single page from the beginning until you find what you need. This is called a **Full Table Scan**.
+*   **With an Index:** You flip to the back of the book, find the topic alphabetically, see the page number, and jump straight to it.
+
+In PostgreSQL, an **Index** works exactly the same way. It is a separate data structure that allows the database to find rows much faster without scanning the entire table.
+
+## 1. How Indexing Works
+
+When you create an index on a column (like `email`), Postgres creates a separate, sorted data structure (usually a **B-Tree**) that points to the actual rows in your table.
+
+Instead of checking every row, Postgres uses this "map" to find the data in a fraction of the time.
+
+## 2. Creating your first Index
+
+By default, PostgreSQL automatically creates an index for your **Primary Key**. But for other columns you search frequently, you have to create them manually.
+
+```sql title="Creating an Index"
+-- Syntax: CREATE INDEX index_name ON table_name (column_name);
+
+CREATE INDEX idx_user_email ON users (email);
+```
+
+Now, any query using `WHERE email = '...'` will run significantly faster.
+
+## 3. When should you Index?
+
+Indexing isn't free. Every index takes up extra disk space and slows down **INSERT**, **UPDATE**, and **DELETE** operations (because the index must be updated too).
+
+| Index These | Don't Index These |
+| :--- | :--- |
+| Columns used in `WHERE` clauses frequently. | Columns that are rarely searched. |
+| Columns used to `JOIN` tables. | Columns with very few unique values (e.g., `gender`). |
+| Columns used for `ORDER BY` (sorting). | Small tables (Postgres is faster scanning small tables directly). |
+| Columns with unique constraints (like `username`). | Tables that get thousands of writes per second. |
+
+## 4. The "Explain" Command (The Developer's X-Ray)
+
+How do you know if your index is actually working? Use the `EXPLAIN` keyword before your query. It shows you the "Execution Plan" the database intends to use.
+
+```sql title="Using EXPLAIN"
+EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'ajay@hub.com';
+```
+
+Look for **"Index Scan"** in the results. If you see **"Seq Scan"** (Sequential Scan), it means Postgres is reading the whole table because it didn't find a useful index.
+
+## 5. Unique Indexes
+
+A Unique Index does two things: it speeds up searches AND ensures no two rows have the same value in that column. This is perfect for things like `passport_number` or `aadhaar_card`.
+
+```sql title="Creating a Unique Index"
+CREATE UNIQUE INDEX idx_unique_username ON users (username);
+```
+
+## Practice: The Performance Test
+
+1.  Create a table called `large_data` with 100,000 random entries.
+2.  Run a query searching for a specific ID *without* an index and note the time (using `EXPLAIN ANALYZE`).
+3.  Add an index to that column.
+4.  Run the same query again. Notice the massive jump in speed!
+
+:::info The "Master" Rule
+Don't over-index! A table with too many indexes becomes heavy and slow to update. Only add an index when you notice a specific query is becoming sluggish. **Measure first, then optimize.**
+:::

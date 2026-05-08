@@ -1,0 +1,91 @@
+---
+title: "Redis Pub/Sub & Real-time Data"
+sidebar_label: "4. Pub/Sub Pattern"
+sidebar_position: 4
+description: "Learn how to build real-time communication systems using the Redis Publish/Subscribe pattern."
+tags: ["Redis", "Pub/Sub", "Real-time Communication", "Node.js", "WebSockets"]
+keywords: ["Redis", "Pub/Sub", "Real-time Communication", "Node.js", "WebSockets", "Message Broadcasting", "Scalability"]
+---
+
+In traditional web apps, the client has to ask the server for updates. With **Pub/Sub**, the server can "push" information to multiple parts of your application instantly.
+
+## 1. How it Works
+
+The Pub/Sub pattern involves three main parts:
+1.  **Publisher:** Sends a message to a specific "Channel."
+2.  **Channel:** A named pipe (like `chat_room_1` or `live_scores`).
+3.  **Subscriber:** Listens to a channel and reacts whenever a message arrives.
+
+**The Key Rule:** Unlike a database, Pub/Sub is "Fire and Forget." If a subscriber is offline when a message is sent, they will **not** see it when they come back online.
+
+## 2. Implementing Pub/Sub in Node.js
+
+To use Pub/Sub, you usually need **two** Redis client connections: one for publishing and one for subscribing.
+
+```javascript title="pubsub.js"
+const redis = require('redis');
+
+async function startPubSub() {
+    const publisher = redis.createClient();
+    const subscriber = redis.createClient();
+
+    await publisher.connect();
+    await subscriber.connect();
+
+    // 1. Subscriber listens to a channel
+    await subscriber.subscribe('cricket_updates', (message) => {
+        console.log(`📢 Live Update: ${message}`);
+    });
+
+    // 2. Publisher sends a message
+    setTimeout(async () => {
+        await publisher.publish('cricket_updates', 'Dhoni hits a helicopter shot! 🚁');
+    }, 2000);
+}
+
+startPubSub();
+
+```
+
+## 3. Real-World Use Case: Global Notifications
+
+Imagine you have a project like **CodeHarborHub** and you want to notify all online students when a new tutorial is uploaded.
+
+1. **Backend:** When the admin uploads a tutorial, the server publishes a message to the `new_content` channel.
+2. **WebSockets:** Your WebSocket server (Socket.io) is subscribed to that channel.
+3. **Client:** The WebSocket server pushes the notification to every connected browser instantly.
+
+## 4. Redis Pub/Sub vs. Message Queues (RabbitMQ/Kafka)
+
+As a "Master" developer, you should know when to use the right tool:
+
+| Feature | Redis Pub/Sub | Message Queues |
+| --- | --- | --- |
+| **Persistence** | None (Messages are lost if no one is listening). | Persistent (Messages wait until read). |
+| **Delivery** | Instant/Real-time. | Can be delayed/scheduled. |
+| **Speed** | Ultra-Fast. | Fast, but heavier. |
+| **Best For** | Chat, Notifications, Live Stats. | Order processing, Email sending. |
+
+## 5. Pattern Matching (PSUBSCRIBE)
+
+What if you want to listen to multiple channels? Redis allows you to use "Wildcards."
+
+* `subscribe('news:*')` will listen to `news:sports`, `news:tech`, and `news:weather`.
+
+```javascript
+await subscriber.pSubscribe('orders:*', (message, channel) => {
+  console.log(`Order event in ${channel}: ${message}`);
+});
+
+```
+
+## Practice: The "Chat Room" Logic
+
+1. Create two separate terminal scripts: `sender.js` and `receiver.js`.
+2. Make `receiver.js` subscribe to a channel called `codeharbor_chat`.
+3. Use the `readline` module in `sender.js` to take user input and publish it.
+4. Open 3 terminals running `receiver.js` and one running `sender.js`. Watch as all three receivers get the message at once!
+
+:::info Scalability
+If you run your app on multiple servers (Load Balancing), standard WebSockets won't work easily because a user on Server A can't talk to a user on Server B. **Redis Pub/Sub solves this!** It acts as the "glue" that connects all your servers together.
+:::

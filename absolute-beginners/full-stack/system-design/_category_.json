@@ -1,0 +1,9 @@
+{
+  "label": "System Design",
+  "position": 13,
+  "link": {
+    "type": "generated-index",
+    "title": "System Design: Building Scalable and Reliable Applications",
+    "description": "Learn the principles and practices of system design to build scalable and reliable applications. This track covers everything from architecture patterns to performance optimization and fault tolerance."
+  }
+}

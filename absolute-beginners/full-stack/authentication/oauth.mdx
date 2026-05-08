@@ -1,1 +1,89 @@
-<ComingSoon />
+---
+title: "OAuth & Social Login"
+sidebar_label: "4. OAuth (Social Login)"
+sidebar_position: 4
+description: "Understand how OAuth works and how to integrate Login with Google using Passport.js."
+tags: ["authentication", "oauth", "social login", "passport.js", "google login", "full-stack development"]
+keywords: ["oauth", "social login", "passport.js", "google login", "authentication", "Node.js", "Express", "MongoDB", "PostgreSQL"]
+---
+
+**OAuth 2.0** is an open-standard authorization protocol that allows a website to access a user's information from another service (like Google or Facebook) without actually seeing the user's password.
+
+## 1. How the OAuth Flow Works
+
+Think of OAuth as a **Valet Key** for a car. You give the valet a special key that lets them park the car, but it won't let them open the trunk or glove box.
+
+1.  **The Request:** The user clicks "Login with Google."
+2.  **The Permission:** Google asks the user, "Do you allow CodeHarborHub to see your email and profile?"
+3.  **The Code:** Google sends a temporary "Authorization Code" back to your server.
+4.  **The Exchange:** Your server sends that code + your **Secret Key** to Google to prove it's really you.
+5.  **The Token:** Google gives your server an `access_token` and the user's profile data.
+6.  **The Session:** Your server saves the user to the database and logs them in.
+
+## 2. Key Terms You Need to Know
+
+*   **Resource Owner:** The User (You).
+*   **Client:** Your Application (CodeHarborHub).
+*   **Authorization Server:** The service providing the login (Google/GitHub).
+*   **Client ID:** A public identifier for your app (given by Google).
+*   **Client Secret:** A private password for your server (KEEP THIS SECRET!).
+*   **Callback URL (Redirect URI):** The specific link where Google sends the user after they log in.
+
+## 3. Implementing OAuth with Passport.js
+
+In the Node.js ecosystem, **Passport.js** is the "Master" middleware for authentication. It uses "Strategies" for different providers.
+
+### Installation
+
+```bash
+npm install passport passport-google-oauth20 express-session
+```
+
+### Basic Configuration
+
+```javascript title="passportConfig.js"
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "/auth/google/callback"
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    // 1. Check if user exists in our DB
+    // 2. If not, create a new user using profile.id and profile.emails[0].value
+    // 3. Return the user
+    return done(null, profile);
+  }
+));
+
+```
+
+## 4. The Developer Console Step
+
+You cannot code OAuth without first registering your app with the provider.
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a Project and go to **APIs & Services > Credentials**.
+3. Create an **OAuth 2.0 Client ID**.
+4. Set the **Authorized Redirect URI** to `http://localhost:5000/auth/google/callback`.
+5. Copy your `CLIENT_ID` and `CLIENT_SECRET` to your `.env` file.
+
+## 5. Pros and Cons of OAuth
+
+| Pros | Cons |
+| --- | --- |
+| **User Experience:** One-click login is faster. | **Dependence:** If Google goes down, users can't log in. |
+| **High Security:** No passwords stored on your server. | **Privacy:** Some users don't like sharing data between sites. |
+| **Verified Emails:** You know the user's email is real. | **Complexity:** Setting up multiple providers can be tedious. |
+
+## Practice: The Social Audit
+
+1. Go to your Google Account settings under **"Security"**.
+2. Find **"Your connections to third-party apps & services"**.
+3. See which websites you have given "Valet Keys" to. Notice how you can revoke access at any time!
+
+:::info
+When building a real project, always offer a **Hybrid** approach: Let users sign up with an Email/Password (using Bcrypt) OR use Social Login (OAuth). This gives your users the most flexibility!
+:::

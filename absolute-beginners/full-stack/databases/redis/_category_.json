@@ -1,0 +1,9 @@
+{
+  "label": "Redis",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "Redis: An In-Memory Data Structure Store",
+    "description": "Learn how to use Redis, an in-memory data structure store. This track covers everything from basic operations to advanced features like pub/sub, transactions, and persistence."
+  }
+}
