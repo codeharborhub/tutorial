@@ -1,0 +1,149 @@
+---
+title: "Setting Up Redis with Node.js"
+sidebar_label: "2. Setup & Connection"
+sidebar_position: 2
+description: "Learn how to install Redis and connect it to your Express server using the official Redis client."
+tags: ["databases", "redis", "node.js", "full-stack"]
+keywords: ["redis setup", "redis node.js connection", "redis client", "redis server installation", "redis commands in node", "redis ttl"]
+---
+
+To use Redis in your full-stack projects, you need two things: the **Redis Server** running on your computer (or in the cloud) and the **Redis Client** library in your Node.js code.
+
+## 1. Installing the Redis Server
+
+### For Windows Users:
+Redis was originally built for Linux. For Windows, the easiest way is to use **WSL2** (Windows Subsystem for Linux) or download the pre-compiled `.msi` from the [MicrosoftArchive GitHub](https://github.com/microsoftarchive/redis/releases). 
+
+Once installed, start the server:
+
+```bash
+redis-server
+```
+
+### For macOS Users:
+
+```bash
+brew install redis
+brew services start redis
+```
+
+## 2. Installing the Client Library
+
+In your Node.js project folder, install the official Redis package via NPM:
+
+```bash
+npm install redis
+```
+
+## 3. Creating the Connection
+
+Create a file named `redisClient.js`. In modern Redis (version 4+), we use a Promise-based approach which works perfectly with `async/await`.
+
+```javascript title="redisClient.js"
+const redis = require('redis');
+
+// 1. Create the client
+const client = redis.createClient({
+    url: 'redis://localhost:6379' // Default Redis port
+});
+
+// 2. Handle connection events
+client.on('error', (err) => console.log('Redis Client Error', err));
+client.on('connect', () => console.log('✅ Connected to Redis!'));
+
+// 3. Connect to the server
+async function connectRedis() {
+    await client.connect();
+}
+
+connectRedis();
+
+module.exports = client;
+
+```
+
+## 4. Basic Operations (SET & GET)
+
+Now let's use the client in your `server.js` or a controller.
+
+```javascript title="server.js"
+const client = require('./redisClient');
+
+async function testRedis() {
+    // Storing a value
+    await client.set('favorite_shot', 'Helicopter Shot');
+    
+    // Retrieving a value
+    const value = await client.get('favorite_shot');
+    console.log('The stored value is:', value);
+}
+
+testRedis();
+
+```
+
+## 5. Storing Complex Data (Objects)
+
+Redis strings can only store text. To store a JavaScript object (like a user profile), you must **Stringify** it first and **Parse** it when you get it back.
+
+```javascript title="server.js"
+const user = {
+    id: 1,
+    name: "Ajay",
+    role: "Developer"
+};
+
+// Saving the object
+await client.set('user:1', JSON.stringify(user));
+
+// Getting the object
+const cachedUser = await client.get('user:1');
+const finalData = JSON.parse(cachedUser);
+
+console.log(finalData.name); // Output: Ajay
+
+```
+
+## 6. The Power of "TTL" (Time to Live)
+
+One of the best features for a "Master" developer is setting an expiration time. This ensures your RAM doesn't get cluttered with old data.
+
+```javascript title="server.js"
+// This key will automatically delete itself after 3600 seconds (1 hour)
+await client.set('weather_data', '32°C', {
+    EX: 3600
+});
+
+```
+
+## Practice: The "Fast-Welcome" Middleware
+
+Try to create a middleware that:
+
+1. Checks if a user's name is in Redis.
+2. If it is, send a response: `"Welcome back, [Name]! (Served from Cache)"`.
+3. If not, set the name in Redis for 30 seconds and send: `"Hello! (Saved to Cache)"`.
+
+```javascript title="welcomeMiddleware.js"
+const client = require('./redisClient');
+async function welcomeMiddleware(req, res) {
+    const name = req.query.name || 'Guest';
+    
+    // Check Redis for the name
+    const cachedName = await client.get(`welcome:${name}`);
+    
+    if (cachedName) {
+        return res.send(`Welcome back, ${cachedName}! (Served from Cache)`);
+    } else {
+        // Save the name in Redis for 30 seconds
+        await client.set(`welcome:${name}`, name, { EX: 30 });
+        return res.send('Hello! (Saved to Cache)');
+    }
+}
+module.exports = welcomeMiddleware;
+
+```
+
+:::info GUI for Redis
+If you want to see your data visually instead of using the terminal, download **Redis Insight**. It’s a free tool that lets you browse your keys, see memory usage, and debug your data easily.
+:::

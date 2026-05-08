@@ -1,1 +1,83 @@
-<ComingSoon />
+---
+title: "Introduction to Redis"
+sidebar_label: "1. Introduction"
+sidebar_position: 1
+description: "Learn what Redis is, why it's so fast, and how it's used for caching and real-time data."
+tags: ["databases", "redis", "cache", "full-stack"]
+keywords: ["redis", "cache", "in-memory database", "real-time data", "key-value store", "redis commands"]
+---
+
+**Redis** stands for **Remote Dictionary Server**. It is an open-source, in-memory data structure store. In the "Master" developer's toolkit, Redis is primarily used as a **Cache** or a **Message Broker**.
+
+## 1. Why is Redis so Fast?
+
+Standard databases (like MongoDB or Postgres) write data to a **Solid State Drive (SSD)** or **Hard Drive**. Reading from a disk is slow. 
+
+Redis keeps all its data in the **RAM**. 
+*   **Disk access:** Takes milliseconds.
+*   **RAM access:** Takes microseconds.
+
+Because of this, Redis can handle **millions of requests per second**, making it perfect for high-traffic apps.
+
+## 2. Common Use Cases
+
+At the Hub, we don't replace our main database with Redis. Instead, we use them together:
+
+### Caching
+If a user requests the same "Top 10 Cricket Scores" 1,000 times a minute, why ask the slow database every time?
+1.  Ask the database once.
+2.  Save the result in **Redis**.
+3.  For the next 999 requests, serve it instantly from Redis.
+
+### Session Management
+When you log in to a website, the server needs to remember you are logged in for every page you click. Storing these "Sessions" in Redis ensures the login check happens instantly.
+
+### Real-time Leaderboards
+Since Redis is great at updating numbers quickly, it is the #1 choice for live game leaderboards or trending topics.
+
+## 3. Redis Data Types
+
+Unlike SQL tables, Redis uses a **Key-Value** system. You give it a "Key" (like a name) and store a "Value" (the data).
+
+| Type | Description | Example |
+| :--- | :--- | :--- |
+| **Strings** | Simple text or numbers. | `name` -> `Ajay` |
+| **Lists** | A list of strings in order. | `recent_searches` -> `[React, Node, Redis]` |
+| **Sets** | Unordered collection of unique items. | `unique_visitors` -> `{User1, User2}` |
+| **Hashes** | Maps between string fields and values (like a JS Object). | `user:101` -> `{name: "Ajay", role: "Admin"}` |
+
+## 4. The "Key" Command Basics
+
+You can test Redis commands directly in your terminal using `redis-cli`.
+
+```bash title="Redis CLI"
+# Setting a value
+SET player "MS Dhoni"
+
+# Getting a value
+GET player
+# Output: "MS Dhoni"
+
+# Setting an Expiration (The most powerful feature!)
+# This key will disappear automatically after 60 seconds
+SETEX temporary_code 60 "123456"
+```
+
+## 5. Redis vs. The Others
+
+| Feature | PostgreSQL / MongoDB | Redis |
+| :--- | :--- | :--- |
+| **Storage** | Disk (Permanent) | RAM (Temporary/Volatile) |
+| **Speed** | Fast | Ultra-Fast |
+| **Capacity** | Massive (Terabytes) | Limited by your RAM size |
+| **Usage** | Primary Data Source | Caching / Speeding up apps |
+
+## Practice: The "Speed-Up" Strategy
+
+Imagine you are building a website for a major Cricket tournament. 
+1.  **Main Database:** Stores all players, historical stats, and user accounts.
+2.  **Redis:** Stores the **Live Score**. Since the score changes every few seconds and everyone is looking at it, Redis handles the thousands of hits per second while the main database stays relaxed.
+
+:::info Don't forget to PERSIST!
+By default, if your server loses power, everything in Redis is deleted. While you can configure Redis to save to disk, always remember: **Never store data in Redis that you cannot afford to lose** (unless it's also backed up in your main database).
+:::

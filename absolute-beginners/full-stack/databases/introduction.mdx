@@ -1,1 +1,83 @@
-<ComingSoon />
+---
+title: "Introduction to Databases"
+sidebar_label: "1. Introduction"
+sidebar_position: 1
+description: "Learn the basics of data persistence and the difference between SQL and NoSQL databases."
+tags: ["databases", "mongodb", "sql", "nosql", "full-stack"]
+keywords: ["database", "sql", "nosql", "mongodb", "data persistence", "collections", "documents", "schemas"]
+---
+
+In the "Absolute Beginners" journey, you've built interfaces and servers. Now, we need a place to store data like user profiles, blog posts, and cricket scores so they don't disappear. This is the role of a **Database**.
+
+## 1. Why do we need a Database?
+
+Imagine you are building a social media app. When a user signs up, you need to save their:
+*   Username and Password
+*   Profile Picture
+*   Followers list
+
+If we stored this in a simple JavaScript variable, it would be deleted the second the server restarted. A database writes this information to a **Physical Disk**, ensuring it stays there until you explicitly delete it.
+
+## 2. The Two Main Types of Databases
+
+In the modern web, databases are generally split into two categories. At **CodeHarborHub**, we focus on both, but we start with NoSQL.
+
+### Relational Databases (SQL)
+Think of these like an **Excel Spreadsheet**. Data is organized into tables with fixed rows and columns.
+*   **Examples:** PostgreSQL, MySQL, SQLite.
+*   **Best for:** Financial systems, inventory, or apps where data structure never changes.
+
+### Non-Relational Databases (NoSQL)
+Think of these like a **Folder of JSON Files**. Data is stored in flexible "documents."
+*   **Examples:** **MongoDB** (Our Choice), Firebase, Cassandra.
+*   **Best for:** Social media, content management, and fast-moving startups where the data structure might grow over time.
+
+## 3. Why we use MongoDB for Full-Stack
+
+As a JavaScript developer, **MongoDB** is your best friend because it stores data in a format called **BSON**, which looks and acts exactly like a **JavaScript Object**.
+
+**Traditional SQL (Table):**
+| ID | Name | Role |
+| :--- | :--- | :--- |
+| 1 | Ajay | Mentor |
+
+**MongoDB (Document):**
+
+```json
+{
+  "_id": 1,
+  "name": "Ajay",
+  "role": "Mentor",
+  "skills": ["React", "Node", "Tailwind"]
+}
+```
+
+*Notice how we can easily add an array of "skills" inside the document? That's the power of NoSQL!*
+
+## 4. How the Database fits in the Stack
+
+The database sits at the very end of the "Request-Response" chain.
+
+
+1.  **The Client (React):** Asks for data (e.g., "Show me my notes").
+2.  **The Server (Express):** Receives the request and asks the database.
+3.  **The Database (MongoDB):** Finds the data and sends it back to the server.
+4.  **The Server:** Sends the data back to the client to be displayed.
+
+
+## 5. Key Terms to Remember
+
+*   **Database:** The entire container for your data.
+*   **Collection:** A "folder" inside the database (e.g., a "Users" collection).
+*   **Document:** A single item inside a collection (e.g., one specific User's data).
+*   **Schema:** The "blueprint" or rules for what a document should look like.
+
+## The "Persistence" Mindset
+
+As you move forward, always ask yourself: *"If I restart my computer right now, will this data still exist?"* 
+If the answer is **No**, it’s in the RAM. 
+If the answer is **Yes**, it’s in the Database.
+
+:::info
+At the Hub, we use **MongoDB Atlas**. It is a "Database-as-a-Service," meaning your data lives in the cloud, so you don't have to worry about managing a database server on your own computer.
+:::

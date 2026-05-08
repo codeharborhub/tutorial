@@ -1,1 +1,104 @@
-<ComingSoon />
+---
+title: "Setting Up PostgreSQL"
+sidebar_label: "1. Setup & Installation"
+sidebar_position: 1
+description: "Step-by-step guide to installing PostgreSQL locally and using pgAdmin for database management."
+tags: ["databases", "postgresql", "sql", "full-stack"]
+keywords: ["postgresql", "pgadmin", "sql", "database setup", "psql", "node-postgres", "database connection"]
+---
+
+PostgreSQL (often called **Postgres**) is a Relational Database Management System (RDBMS). Unlike MongoDB, where you just "throw" data in, Postgres requires a solid foundation. Let's get your environment ready.
+
+## 1. Installation
+
+### For Windows:
+1.  Download the installer from the [Official PostgreSQL Website](https://www.postgresql.org/download/windows/).
+2.  Run the `.exe` file.
+3.  **Components:** Ensure you select **PostgreSQL Server**, **pgAdmin 4** (the visual editor), and **Command Line Tools**.
+4.  **Password:** Set a password for the default user (`postgres`). **Do not forget this password!**
+5.  **Port:** Keep the default port `5432`.
+
+### For macOS:
+The easiest way is using **Homebrew**:
+
+```bash
+brew install postgresql
+brew services start postgresql
+```
+
+## 2. Meet pgAdmin 4
+
+pgAdmin is the "Dashboard" for your Postgres databases. It allows you to create tables, write queries, and view data without using the terminal.
+
+1.  Open **pgAdmin 4**.
+2.  Enter the "Master Password" you created during installation.
+3.  In the left sidebar, right-click **Servers** > **Register** > **Server**.
+4.  Give it a name (e.g., "LocalHost").
+5.  In the **Connection** tab, enter `localhost` as the hostname and your password.
+
+## 3. Creating Your First Database
+
+You can create a database using the GUI or the **Query Tool**. As a developer, you should get comfortable with SQL commands.
+
+1.  Right-click your server and select **Query Tool**.
+2.  Type the following command:
+   
+    ```sql
+    CREATE DATABASE codeharbor_db;
+    ```
+
+3.  Highlight the text and click the **Execute (Play)** button.
+
+## 4. Connecting via Terminal (psql)
+
+Sometimes you need to access Postgres quickly via your terminal.
+
+```bash
+# Log in as the default postgres user
+psql -U postgres
+```
+
+*   `\l` — List all databases.
+*   `\c database_name` — Connect to a specific database.
+*   `\dt` — Display all tables in the current database.
+*   `\q` — Quit the terminal.
+
+## 5. Connecting Postgres to Node.js
+
+To let your Express server talk to Postgres, you need a driver. We use the `pg` library.
+
+**Install it:**
+
+```bash
+npm install pg
+```
+
+**Basic Connection Code:**
+
+```javascript
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'codeharbor_db',
+  password: 'your_password',
+  port: 5432,
+});
+
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) console.error("Connection Error:", err);
+  else console.log("Connected to Postgres at:", res.rows[0].now);
+  pool.end();
+});
+```
+
+## Common Pitfalls for Beginners
+
+*   **Port Conflicts:** If port `5432` is already in use, Postgres won't start. Ensure no other database (like an old MySQL install) is using it.
+*   **Case Sensitivity:** In Postgres, table names are usually lowercase. If you create a table named `Users`, Postgres might look for `users` and throw an error. **Pro Tip: Always use snake_case (`user_profiles`).**
+*   **Forgeting the Semicolon:** Unlike JavaScript, every SQL command **must** end with a `;`.
+
+:::info
+If you don't want to install Postgres on your computer, you can use **Supabase** or **ElephantSQL**. They provide cloud-based PostgreSQL databases for free, similar to how MongoDB Atlas works!
+:::

@@ -1,0 +1,9 @@
+{
+  "label": "Projects",
+  "position": 14,
+  "link": {
+    "type": "generated-index",
+    "title": "Projects: Hands-On Experience",
+    "description": "Apply your knowledge by working on real-world projects. This track provides practical experience in building and deploying applications."
+  }
+}

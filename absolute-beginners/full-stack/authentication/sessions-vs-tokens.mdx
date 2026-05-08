@@ -1,1 +1,76 @@
-<ComingSoon />
+---
+title: "Sessions vs. Tokens"
+sidebar_label: "5. Sessions vs. Tokens"
+sidebar_position: 5
+description: "A deep dive comparison between stateful session-based auth and stateless token-based auth."
+tags: ["authentication", "sessions", "tokens", "jwt", "security", "full-stack development"]
+keywords: ["sessions", "tokens", "jwt", "authentication", "Node.js", "Express", "MongoDB", "PostgreSQL", "stateful", "stateless"]
+---
+
+To understand the difference, we have to look at where the "Proof of Identity" is stored: on the **Server** or with the **User**.
+
+## 1. Session-Based Authentication (Stateful)
+
+In a session-based system, the server is responsible for remembering the user. When a user logs in, the server creates a "Session" and stores it in memory or a database. The server then gives the user a unique **Session ID** (usually stored in a cookie). Every time the user makes a request, they send that Session ID, and the server looks it up to see who they are.
+
+1.  **Login:** User sends credentials.
+2.  **Creation:** Server creates a session record in the database (or Redis) and a unique **Session ID**.
+3.  **Cookie:** Server sends the Session ID to the browser in a cookie.
+4.  **Verification:** For every request, the browser sends the cookie. The server looks up the ID in its database to see who it belongs to.
+
+**Characteristics:**
+*   **Stateful:** The server must keep track of active sessions.
+*   **Heavy:** Requires a database lookup for every single request.
+*   **Easy Revocation:** If you want to log a user out remotely, you just delete the session from your database.
+
+## 2. Token-Based Authentication (Stateless)
+
+In a token-based system (like JWT), the user is responsible for carrying their own identity.
+
+1.  **Login:** User sends credentials.
+2.  **Creation:** Server verifies and "signs" a **JSON Web Token (JWT)** containing user info.
+3.  **Response:** Server sends the JWT to the user. The server **does not** save anything.
+4.  **Verification:** For every request, the user sends the JWT. The server checks the "Signature." If the signature is valid, the server trusts the data inside.
+
+**Characteristics:**
+*   **Stateless:** The server doesn't need to store anything.
+*   **Lightweight:** No database lookups needed to verify identity.
+*   **Difficult Revocation:** Once a token is issued, it is valid until it expires. You can't easily "un-sign" it.
+
+## 3. Direct Comparison
+
+| Feature | Sessions | Tokens (JWT) |
+| :--- | :--- | :--- |
+| **Storage** | Server-side (DB/Redis) | Client-side (Cookie/LocalStorage) |
+| **Scalability** | Harder (Servers must share session data) | Easier (Any server can verify the token) |
+| **Revocation** | Instant (Delete session) | Hard (Must wait for expiry or use Blacklists) |
+| **Payload** | Small (Only an ID) | Large (Contains user data/claims) |
+| **Best For** | Monoliths & High-Security Apps | APIs, Microservices, & Mobile Apps |
+
+## 4. The "MERN" Standard
+
+At **CodeHarborHub**, we primarily teach **JWT (Tokens)** for our MERN stack projects. 
+
+**Why?** Because modern web development often separates the Frontend (React) and the Backend (Node/Express). Often, these are hosted on different domains. JWTs are built to work perfectly across different domains and are the native language of mobile applications.
+
+## 5. When to choose what?
+
+### Use Sessions if:
+*   You are building a traditional website where the frontend and backend are tightly coupled.
+*   You need the ability to instantly kick users off the platform (e.g., a banking app).
+
+### Use Tokens if:
+*   You are building a Single Page Application (SPA) with React/Next.js.
+*   You plan to have a Mobile App (Android/iOS) using the same API.
+*   You want a "Stateless" architecture that is easy to scale to millions of users.
+
+## Practice: The "Network" Test
+
+1.  Open your browser's **Developer Tools (F12)**.
+2.  Go to the **Application** tab.
+3.  Check **Cookies**: If you see a long string labeled `connect.sid` or `session_id`, the site uses **Sessions**.
+4.  Check **Local Storage**: If you see a key labeled `token` or `jwt`, the site likely uses **Tokens**.
+
+:::info
+You don't have to choose 100%. Some "Master" developers use **Hybrid** systems: They use JWTs for API access but store those JWTs inside an **HttpOnly Cookie** for the security benefits of sessions with the scalability of tokens!
+:::

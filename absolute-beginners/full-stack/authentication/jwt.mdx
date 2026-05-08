@@ -1,1 +1,104 @@
-<ComingSoon />
+---
+title: "JWT (JSON Web Tokens) Explained"
+sidebar_label: "3. JWT Tokens"
+sidebar_position: 3
+description: "Learn how to use JSON Web Tokens for stateless authentication in your MERN stack applications."
+tags: ["authentication", "JWT", "json web tokens", "security", "full-stack development"]
+keywords: ["JWT", "json web tokens", "authentication", "Node.js", "Express", "MongoDB", "PostgreSQL", "jsonwebtoken", "token-based authentication"]
+---
+
+A **JWT** is a compact, URL-safe way of representing claims to be transferred between two parties. In simple terms: it is a digital ID card that proves who you are.
+
+## 1. Why use JWT?
+
+In modern web apps (like the ones we build at the Hub), we want our backend to be **Stateless**.
+*   **Stateful:** The server must remember every logged-in user in its RAM. (Heavy and hard to scale).
+*   **Stateless (JWT):** The server doesn't remember you. You carry your own "Identity" in your token. The server just verifies the signature on the token.
+
+
+## 2. Anatomy of a JWT
+
+A JWT looks like a long string of gibberish separated by two dots: `xxxxx.yyyyy.zzzzz`. It has three parts:
+
+1.  **Header:** Tells the server what algorithm is used (e.g., HS256).
+2.  **Payload:** Contains the user data (claims) like `userId` or `username`. **Warning:** Never put passwords here! This part is encoded, not encrypted (anyone can read it).
+3.  **Signature:** This is the secret sauce. It is a combination of the Header, Payload, and a **Secret Key** known only to your server. 
+
+> If a user tries to change the `userId` in the Payload, the **Signature** will no longer match, and the server will reject the token!
+
+## 3. Using JWT in Node.js
+
+We use the `jsonwebtoken` library to handle tokens.
+
+### Installation
+
+```bash
+npm install jsonwebtoken
+```
+
+### Generating a Token (On Login)
+
+When a user successfully logs in, you "Sign" a token and send it to them.
+
+```javascript title="generateToken.js"
+const jwt = require('jsonwebtoken');
+
+const token = jwt.sign(
+    { userId: user._id, role: 'student' }, // Payload
+    process.env.JWT_SECRET,               // Your Secret Key
+    { expiresIn: '1h' }                   // Token expires in 1 hour
+);
+
+res.json({ token });
+
+```
+
+### Verifying a Token (Middleware)
+
+When the user wants to access a "Protected" route, they send the token in the **Header**. Your server verifies it:
+
+```javascript title="verifyToken.js"
+const verifyToken = (req, res, next) => {
+    const token = req.header('Authorization');
+
+    if (!token) return res.status(401).send("Access Denied!");
+
+    try {
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = verified; // Add user info to the request object
+        next(); // Move to the actual route
+    } catch (err) {
+        res.status(400).send("Invalid Token!");
+    }
+};
+
+```
+
+## 4. Where to store the Token?
+
+As a developer, you have two main choices for where the browser should save the token:
+
+| Location | Security | Complexity |
+| --- | --- | --- |
+| **LocalStorage** | Vulnerable to XSS (Scripts can steal it). | Very Easy to use. |
+| **HttpOnly Cookie** | Immune to XSS. (Best Practice). | Requires more setup. |
+
+At **CodeHarborHub**, we recommend starting with LocalStorage for learning, but moving to **HttpOnly Cookies** for professional projects.
+
+## 5. The "Secret Key" Rule
+
+Your `JWT_SECRET` is the most important piece of data in your backend.
+
+* If someone gets your secret, they can create tokens for **any user** and log in as anyone (even the Admin!).
+* **Always** store your secret in a `.env` file and **never** push it to GitHub.
+
+## Practice: The Token Decoder
+
+1. Go to [JWT.io](https://jwt.io/).
+2. Paste a token you generated in your code.
+3. Look at the "Payload" on the right. Can you see your `userId`?
+4. Try changing a single letter in the token string. Watch how the "Signature Invalid" warning appears!
+
+:::info Token Expiration
+Always set an expiration time (like `1h` or `7d`). If a token is ever stolen, it won't be useful forever. For "Master" level security, look into **Refresh Tokens** later!
+:::

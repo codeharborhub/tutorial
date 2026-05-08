@@ -1,0 +1,9 @@
+{
+  "label": "Resources",
+  "position": 16,
+  "link": {
+    "type": "generated-index",
+    "title": "Resources: Learning Materials and Tools",
+    "description": "Access a collection of learning materials and tools to support your software engineering journey. This track provides everything from documentation and tutorials to community resources and best practices."
+  }
+}

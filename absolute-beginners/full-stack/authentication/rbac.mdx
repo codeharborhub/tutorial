@@ -1,0 +1,105 @@
+---
+title: "Role-Based Access Control (RBAC)"
+sidebar_label: "6. RBAC (Authorization)"
+sidebar_position: 6
+description: "Learn how to manage user permissions and protect routes based on user roles like Admin, Editor, or Student."
+tags: ["authentication", "authorization", "rbac", "role-based access control", "security", "full-stack development"]
+keywords: ["rbac", "role-based access control", "authorization", "user roles", "admin", "editor", "student", "middleware", "Node.js", "Express", "MongoDB", "PostgreSQL"]
+---
+
+RBAC is a method of restricting network access based on the roles of individual users within an enterprise. It is the industry-standard way to handle **Authorization**.
+
+## 1. The Hierarchy of Roles
+
+At CodeHarborHub, we typically use three levels of access:
+
+1.  **Admin:** Full access. Can create, edit, and delete anything (Users, Courses, Lessons).
+2.  **Editor/Instructor:** Can create and edit content but cannot manage users or delete the entire database.
+3.  **Student/User:** Can view content and manage their own profile.
+4.  **Guest:** Can only view public landing pages.
+
+## 2. Storing Roles in the Database
+
+The first step is adding a `role` field to your User Schema.
+
+**Mongoose Example:**
+
+```javascript title="userModel.js"
+const mongoose = require('mongoose');
+const userSchema = new mongoose.Schema({
+    username: String,
+    email: String,
+    role: {
+        type: String,
+        enum: ['student', 'editor', 'admin'],
+        default: 'student'
+    }
+});
+
+```
+
+## 3. Creating Authorization Middleware
+
+To protect your routes, you need a "gatekeeper" function that checks the user's role before letting them pass.
+
+```javascript title="middleware/authorize.js"
+
+const authorize = (requiredRoles) => {
+    return (req, res, next) => {
+        // req.user is populated by your JWT middleware
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        if (!requiredRoles.includes(req.user.role)) {
+            return res.status(403).json({ 
+                message: "Access Denied: You do not have the required permissions!" 
+            });
+        }
+
+        next(); // User has the role, proceed to the controller
+    };
+};
+
+module.exports = authorize;
+
+```
+
+## 4. Protecting Your Routes
+
+Now you can apply this middleware to specific Express routes.
+
+```javascript title="routes.js"
+const express = require('express');
+const router = express.Router();
+const verifyToken = require('./middleware/verifyToken');
+const authorize = require('./middleware/authorize');
+
+// Public route
+router.get('/all-courses', getAllCourses);
+
+// Student/Editor/Admin route
+router.post('/enroll', verifyToken, authorize(['student', 'editor', 'admin']), enrollInCourse);
+
+// Admin-only route
+router.delete('/delete-user/:id', verifyToken, authorize(['admin']), deleteUser);
+
+```
+
+## 5. 401 Unauthorized vs. 403 Forbidden
+
+As a "Master" developer, you must use the correct HTTP status codes:
+
+* **401 Unauthorized:** "I don't know who you are." (The user isn't logged in or the token is invalid).
+* **403 Forbidden:** "I know who you are, but you aren't allowed to be here." (The user is logged in as a Student but is trying to access the Admin panel).
+
+## Practice: The "Admin" Test
+
+1. Log in as a user with the role `'student'`.
+2. Try to send a `DELETE` request to an admin-only route using Postman.
+3. Ensure your server returns a `403 Forbidden` status.
+4. Manually change your role in MongoDB to `'admin'` and try the request again. It should now work!
+
+:::info Frontend Security
+RBAC isn't just for the backend! On your React frontend, you should hide buttons or links that the user doesn't have permission to use. However, **never rely on frontend security alone.** A smart user can always open the console and show a hidden button. Always verify the role on the **Backend**.
+:::

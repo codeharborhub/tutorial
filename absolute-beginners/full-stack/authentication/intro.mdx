@@ -1,1 +1,65 @@
-<ComingSoon />
+---
+title: "Introduction to Authentication"
+sidebar_label: "1. Introduction"
+sidebar_position: 1
+description: "Learn the fundamental concepts of Authentication vs. Authorization and how security works in web apps."
+tags: ["authentication", "authorization", "security", "full-stack development"]
+keywords: ["authentication", "authorization", "security", "JWT", "sessions", "hashing", "bcrypt"]
+---
+
+In full-stack development, security isn't just an "add-on"—it's the foundation. Before we write any code, we need to understand the two most important concepts in security.
+
+## 1. Authentication vs. Authorization
+
+These terms sound similar, but they do very different things. Think of a **Hotel**:
+
+*   **Authentication (AuthN):** This is the **Check-in** process. You show your ID to prove you are who you say you are. The hotel gives you a Key Card. 
+    *   *Question:* "Who are you?"
+*   **Authorization (AuthZ):** This is the **Key Card** itself. Your card lets you into your room (Room 302), but it won't let you into the Manager's office or the Kitchen.
+    *   *Question:* "What are you allowed to do?"
+
+## 2. How it works on the Web
+
+The web is "stateless," meaning the server forgets you the moment a request is finished. To stay logged in, we use a cycle:
+
+1.  **Identify:** The user sends their `email` and `password`.
+2.  **Verify:** The server checks the database (MongoDB/Postgres) to see if the password matches.
+3.  **Token/Session:** The server sends back a "Proof of Identity" (like a JWT or a Session ID).
+4.  **Persistence:** The browser stores this proof (usually in a Cookie or LocalStorage) and sends it with every future request.
+
+## 3. Common Auth Methods
+
+At the Hub, we focus on the two industry standards:
+
+### JSON Web Tokens (JWT)
+The most popular method for modern MERN apps. The server gives you a "Digital Ticket" (the token). You keep the ticket. Every time you want data, you show the ticket. The server doesn't need to check the database every time; it just validates the ticket.
+*   **Best for:** Mobile apps, APIs, and Scalable apps.
+
+### Session-Based (Cookies)
+The server creates a "file" for you in its memory (or Redis) and gives you an ID number. Your browser saves that ID in a cookie.
+*   **Best for:** Traditional websites and high-security banking apps.
+
+## 4. The Golden Rules of Security
+
+As you start building auth systems, follow these "Master" principles:
+
+1.  **Never store plain-text passwords:** If a hacker steals your database, they shouldn't see "password123." We use **Hashing** (like Bcrypt) to turn passwords into unreadable gibberish.
+2.  **Always use HTTPS:** Without encryption, anyone on the same Wi-Fi can see the passwords being sent to your server.
+3.  **Don't reinvent the wheel:** Security is hard. Use trusted libraries like `Passport.js`, `Bcrypt`, or `JsonWebToken`.
+
+## 5. Key Vocabulary
+
+*   **Credentials:** Your username and password.
+*   **Hashing:** A one-way mathematical function that hides passwords.
+*   **Salt:** Random data added to a password before hashing to make it even harder to crack.
+*   **Middleware:** The code that stands between a user and a protected route to check if they are logged in.
+
+## Practice: The Security Audit
+
+Look at the apps on your phone (Instagram, WhatsApp, Bank). 
+*   How do they **Authenticate** you? (Password? FaceID? OTP?)
+*   What are you **Authorized** to see? (Can you see your friend's private messages? Why not?)
+
+:::info
+Authentication is where most beginners make mistakes. In the next few lessons, we will build a "Safe" login system step-by-step. **Take your time here—it’s the most important skill in a backend developer's resume.**
+:::
