@@ -1,1 +1,101 @@
-6
+---
+title: "API Documentation with Swagger and OpenAPI"
+sidebar_label: "8. API Documentation"
+sidebar_position: 8
+description: "Learn how to use Swagger and OpenAPI to create interactive and professional documentation for your APIs."
+tags: ["API documentation", "Swagger", "OpenAPI", "interactive docs", "full-stack development"]
+keywords: ["API documentation", "Swagger", "OpenAPI", "interactive API docs", "API design", "Node.js", "Express", "API testing", "Postman collections"]
+---
+
+A professional API should be "self-documenting." This means another developer should be able to understand your endpoints, required parameters, and response formats without ever looking at your backend source code.
+
+## 1. What is OpenAPI and Swagger?
+
+*   **OpenAPI Specification (OAS):** The industry-standard "language" used to describe REST APIs. It’s a set of rules for writing a JSON or YAML file that describes your API.
+*   **Swagger:** The set of tools that uses the OpenAPI spec to generate beautiful, interactive UI pages.
+
+## 2. Why use Interactive Docs?
+
+1.  **Try it Out:** Swagger allows users to send real requests to your API directly from the documentation page. No Postman required!
+2.  **Consistency:** It forces you to define your data models (Schemas), ensuring your API is consistent.
+3.  **Client Generation:** You can use your Swagger file to automatically generate frontend code (SDKs) in various languages.
+
+## 3. Implementing Swagger in Node.js
+
+We use `swagger-jsdoc` to read our code comments and `swagger-ui-express` to serve the interactive page.
+
+### Installation
+
+```bash
+npm install swagger-jsdoc swagger-ui-express
+```
+
+### Basic Configuration
+
+```javascript title="Basic Swagger Setup in Express"
+const express = require('express');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'CodeHarborHub API',
+      version: '1.0.0',
+      description: 'The official API for the CodeHarborHub platform',
+    },
+    servers: [{ url: 'http://localhost:5000' }],
+  },
+  apis: ['./routes/*.js'], // Path to the API docs (where your comments are)
+};
+
+const specs = swaggerJsdoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+```
+
+## 4. Documenting an Endpoint
+
+You write the documentation directly above your routes using JSDoc comments. This ensures your docs are always close to your logic!
+
+```javascript title="Example of Swagger Documentation for a GET Route"
+/**
+ * @openapi
+ * /api/courses:
+ *   get:
+ *     summary: Retrieve a list of all courses
+ *     responses:
+ *       200:
+ *         description: A list of courses.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id: { type: string }
+ *                   title: { type: string }
+ */
+router.get('/courses', getCourses);
+
+```
+
+## 5. Best Practices for Great Docs
+
+* **Be Descriptive:** Don't just say `200 OK`. Say `200 OK - Returns an array of course objects`.
+* **Document Errors:** Always include common error codes like `401 Unauthorized` or `404 Not Found` so frontend developers can handle them.
+* **Use Tags:** Group your routes (e.g., "Authentication", "Courses", "Users") to keep the UI organized.
+* **Keep it Updated:** If you change a parameter in your route, update the comment immediately!
+
+## Practice: The Documentation Audit
+
+1. Set up Swagger in your current project.
+2. Navigate to `http://localhost:5000/api-docs`.
+3. Click the **"Try it out"** button on one of your GET routes.
+4. Examine the response. Does it match what you expected?
+
+:::info Postman Collections
+While Swagger is great for public documentation, you can also export your Swagger file and import it into **Postman**. This gives you a "Master" workspace where you can save tests and share them with your team!
+:::

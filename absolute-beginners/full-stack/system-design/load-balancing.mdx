@@ -1,1 +1,67 @@
-<ComingSoon />
+---
+title: "Load Balancing: The Traffic Controller"
+sidebar_label: "3. Load Balancing"
+sidebar_position: 3
+description: "Learn how Load Balancers distribute traffic across multiple servers to ensure high availability and reliability."
+tags: ["load balancing", "high availability", "round robin", "least connections", "ip hash", "health checks", "layer 4 vs layer 7", "software vs hardware load balancers"]
+keywords: ["load balancing", "high availability", "round robin", "least connections", "ip hash", "health checks", "layer 4 vs layer 7", "software vs hardware load balancers", "ssl termination", "weighted round robin"]
+---
+
+A Load Balancer is a device (or software) that sits between the user and your server fleet. Its job is simple: **Distribute incoming network traffic across multiple backend servers.**
+
+## 1. Why do we need a Load Balancer?
+
+Without a Load Balancer, your application has a **Single Point of Failure**. 
+*   **The Problem:** If you have one server and it crashes, CodeHarborHub goes offline. 
+*   **The Solution:** You run three servers. If Server A crashes, the Load Balancer instantly detects it and sends all traffic to Server B and C. This is called **High Availability**.
+
+## 2. How the "Traffic Cop" Decides (Algorithms)
+
+A Master chooses the right "strategy" for their traffic. Here are the most common ways a Load Balancer picks a server:
+
+### Round Robin
+The simplest way. It goes in order: User 1 goes to Server A, User 2 goes to Server B, User 3 goes to Server C, then it starts over at A.
+*   *Best for:* When all your servers have the same power.
+
+### Least Connections
+The Load Balancer checks which server is currently handling the fewest active users and sends the new request there.
+*   *Best for:* When some requests take a long time (like uploading a video) and others are fast.
+
+### IP Hash
+The Load Balancer uses the user's IP address to ensure that a specific user **always** goes to the same server.
+*   *Best for:* When your app is "Stateful" and needs to remember a user's temporary data.
+
+## 3. Health Checks: The "Are You Okay?" Test
+
+A Load Balancer isn't just a blind distributor. It is constantly "pinging" your servers (usually every 5-10 seconds) to ask: *"Are you still alive?"*
+
+*   **Healthy:** The server responds with `200 OK`. Traffic continues.
+*   **Unhealthy:** The server doesn't respond or gives an error. The Load Balancer **automatically stops** sending traffic there until the server is fixed.
+
+## 4. Layer 4 vs. Layer 7 Load Balancing
+
+You will hear these terms in professional "Master" circles. Here is the simple version:
+
+*   **Layer 4 (Transport):** Bases decisions on raw data like IP address and Port. It's very fast because it doesn't "read" the content of the message.
+*   **Layer 7 (Application):** The "Smart" version. It reads the HTTP header. 
+    *   *Example:* It can send all traffic for `codeharborhub.com/api` to your Node.js servers and all traffic for `codeharborhub.com/images` to your S3 bucket.
+
+## 5. Software vs. Hardware Load Balancers
+
+1.  **Hardware:** Expensive physical boxes (like F5) used by giant banks or telecommunications companies.
+2.  **Software:** Flexible and code-based.
+    *   **Nginx / HAProxy:** Open-source software you can install yourself.
+    *   **Cloud Load Balancers:** (AWS ALB, DigitalOcean Load Balancer) - You just click a button, and the cloud provider manages it for you.
+
+## Practice: The "Think Like a Cop" Challenge
+
+Imagine you are running CodeHarborHub and you have 2 servers. 
+1.  Server A has 8GB of RAM.
+2.  Server B has 32GB of RAM.
+
+**Which algorithm would you use?** 
+> *Hint: A "Master" wouldn't use Round Robin here! You would use "Weighted Round Robin" to send 4x more traffic to the bigger server.*
+
+:::info SSL Termination
+Load Balancers can also handle your **SSL/HTTPS decryption**. This is called "SSL Offloading." The Load Balancer handles the heavy math of encrypting the connection, so your web servers can focus 100% on running your code!
+:::

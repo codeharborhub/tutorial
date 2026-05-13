@@ -1,1 +1,65 @@
-<ComingSoon />
+---
+title: "AWS S3: The Infinite Hard Drive"
+sidebar_label: "4. S3 (Cloud Storage)"
+sidebar_position: 4
+description: "Learn how to store and serve files like images, videos, and static websites using Amazon S3."
+tags: ["aws", "s3", "cloud storage", "file hosting", "static website hosting", "storage classes"]
+keywords: ["aws", "s3", "cloud storage", "file hosting", "static website hosting", "storage classes", "buckets", "objects", "public vs private", "versioning"]
+---
+
+**S3** stands for **Simple Storage Service**. 
+
+Think of it like a **Google Drive for your code.** While you *could* save images directly on your EC2 server, that's a bad idea (if the server crashes, you lose the photos!). Instead, a "Master" developer puts the files in S3 and just keeps a link to them in their database.
+
+## 1. Buckets and Objects
+
+To understand S3, you only need to know two words:
+
+1.  **Buckets:** Think of these as "Root Folders." Every bucket name must be **unique in the entire world.** You might name yours `codeharborhub-user-assets-2026`.
+2.  **Objects:** These are the "Files" (images, videos, PDFs, or HTML files). Each object gets its own unique URL.
+
+## 2. Why is S3 better than a regular folder?
+
+*   **99.999999999% Durability:** Amazon spreads your file across multiple data centers. The chance of losing a file is basically zero.
+*   **Static Website Hosting:** You can put an `index.html` file in a bucket, click a button, and boom—you have a live website without needing a server!
+*   **Infinite Space:** You don't have to worry about "running out of disk space." S3 grows as you add more files.
+*   **Cheap:** You only pay for the megabytes people actually download.
+
+## 3. Public vs. Private (The "Oops" Factor)
+
+By default, everything in S3 is **Private**. This is good! You don't want the whole world seeing your private data. 
+
+However, if you are hosting profile pictures for **CodeHarborHub**, you need to make them "Publicly Readable" so users can see them on your site. 
+
+:::warning The Data Leak
+Many big companies have accidentally left their S3 buckets "Public," allowing hackers to steal customer data. **Always double-check your "Block Public Access" settings!**
+:::
+
+## 4. How to use S3 in your App
+
+As a developer, you won't usually upload files through the AWS website. You will use the **AWS SDK** in your Node.js code.
+
+The logic looks like this:
+1.  User uploads a photo on your website.
+2.  Your Node.js server sends that photo to an **S3 Bucket**.
+3.  S3 sends back a **URL** (e.g., `https://my-bucket.s3.amazonaws.com/photo.jpg`).
+4.  You save that **URL** in your database.
+
+## 5. Storage Classes (Saving Money)
+
+S3 has different "levels" based on how often you need the files:
+*   **S3 Standard:** For files you need instantly and often (like website images).
+*   **S3 Glacier:** For "Cold Storage" (like backups you might only need once a year). It's much cheaper, but it takes minutes or hours to get the file back.
+
+## Practice: Create your first Bucket
+
+1.  Log in to the **AWS Console** and search for **S3**.
+2.  Click **Create Bucket**.
+3.  Give it a unique name (try adding your name and the date).
+4.  Upload an image from your computer.
+5.  Try to open the "Object URL." (Note: It will likely give you an "Access Denied" error—this means the security is working!)
+6.  Go to the **Permissions** tab and see if you can figure out how to make that one specific image public.
+
+:::tip Versioning
+You can turn on **Versioning** in S3. This means if you upload a new version of `logo.png`, S3 keeps the old one hidden in the background. If you accidentally delete a file, you can "roll back" to the previous version!
+:::

@@ -1,1 +1,65 @@
-<ComingSoon />
+---
+title: "AWS: The Cloud Giant"
+sidebar_label: "2. AWS Overview"
+sidebar_position: 2
+description: "An introduction to Amazon Web Services and the core services every full-stack developer should know."
+tags: ["aws", "cloud computing", "ec2", "s3", "rds", "lambda"]
+keywords: ["aws", "cloud computing", "ec2", "s3", "rds", "lambda", "regions", "availability zones", "iam", "free tier"]
+---
+
+If the Cloud is a kitchen you rent, **AWS** is a massive industrial kitchen with every tool ever invented. It powers everything from Netflix to NASA. For a beginner, the goal isn't to learn every tool, but to learn how to use the "Stove" and the "Fridge."
+
+## 1. Why AWS?
+
+*   **Market Leader:** Most high-paying tech jobs require AWS knowledge.
+*   **The Free Tier:** AWS offers a "Free Tier" for 12 months, allowing you to run small servers and databases for $0.
+*   **Global Reach:** You can host your CodeHarborHub site in Mumbai, Virginia, or London with one click to keep it fast for local users.
+
+## 2. The "Big 4" Services You Must Know
+
+As a Full-Stack developer, 90% of your work will involve these four services:
+
+### 1. EC2 (Elastic Compute Cloud) - The Server
+Think of this as a **Virtual Computer** in the sky. You choose the RAM, CPU, and OS (usually Ubuntu), and you get full control to install Node.js and run your code.
+
+
+### 2. S3 (Simple Storage Service) - The Hard Drive
+This is where you store **Files**. If your users upload profile pictures or if you have static PDF tutorials, you put them here. It's virtually "infinite" storage.
+
+
+### 3. RDS (Relational Database Service) - The Database
+Instead of installing MongoDB or PostgreSQL on your server (which is hard to manage), AWS manages it for you. They handle backups and security updates automatically.
+
+### 4. Lambda - The "Function" (Serverless)
+This is for "Master" level efficiency. You don't even rent a whole server; you just upload a single function (like "Send Email"), and AWS only runs it (and charges you) when someone calls it.
+
+## 3. Regions and Availability Zones
+
+AWS infrastructure is organized geographically:
+*   **Regions:** Physical locations in the world (e.g., `ap-south-1` is Mumbai).
+*   **Availability Zones (AZ):** Discrete data centers within a Region. 
+*   **Master Strategy:** You should host your app in the Region closest to your users. If most CodeHarborHub users are in India, use the Mumbai region!
+
+## 4. The AWS Management Console
+
+This is the web-based "Dashboard" where you manage your services.
+1.  **Search Bar:** Your best friend. Type "EC2" or "S3" to find services quickly.
+2.  **IAM (Identity and Access Management):** This is where you create "User Accounts" for your team. 
+    *   **CRITICAL:** Never use your "Root" (main) account for daily work. Create an IAM user with limited permissions to keep your account safe.
+
+## 5. Understanding the Free Tier
+
+AWS has three types of free offers:
+*   **12-Months Free:** Includes EC2 and RDS (with limits).
+*   **Always Free:** Includes Lambda and some DynamoDB storage.
+*   **Short-term Trials:** Specialized services for 30-60 days.
+
+## Practice: The AWS Tour
+
+1.  Create an **AWS Free Tier** account (you will need a credit/debit card for verification, but they won't charge you if you stay in the limits).
+2.  Search for **"Billing Dashboard"** and set up a **Budget Alert** for $1.00. This ensures you never get a surprise bill.
+3.  Navigate to the **S3** console and try creating a "Bucket"—it's like a folder for the whole internet!
+
+:::danger The "API Key" Trap
+If you ever create an AWS Access Key, **NEVER** push it to GitHub. Hackers scan GitHub every second for AWS keys so they can use your account to mine Bitcoin, leaving you with a bill for thousands of dollars! Always use `.env` files and `.gitignore`.
+:::

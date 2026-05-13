@@ -1,1 +1,92 @@
-<ComingSoon />
+---
+title: "Infrastructure Provisioning with Terraform"
+sidebar_label: "2. Terraform"
+sidebar_position: 2
+description: "Learn how to use Infrastructure as Code (IaC) to build and manage cloud resources using Terraform."
+tags: ["terraform", "infrastructure as code", "cloud provisioning", "devops"]
+keywords: ["terraform", "infrastructure as code", "cloud provisioning", "devops", "hcl", "state file", "providers", "modules"]
+---
+
+Terraform is an open-source tool created by HashiCorp. It allows you to define your data center infrastructure in a high-level configuration language called **HCL** (HashiCorp Configuration Language).
+
+## 1. The "Declarative" Philosophy
+
+Terraform is **Declarative**. This means you describe the **End State** you want, and Terraform figures out how to get there.
+
+*   **Imperative (Shell Script):** "Create a server. Wait 10 seconds. Add a firewall."
+*   **Declarative (Terraform):** "I want a server with these specs and this firewall." (Terraform handles the 'how' and the order).
+
+## 2. The Terraform Lifecycle
+
+Every Terraform project follows a specific workflow. As "A Master," you must memorize these four commands:
+
+1.  **`terraform init`**: Initializes the working directory and downloads the necessary "Providers" (e.g., the AWS or DigitalOcean plugin).
+2.  **`terraform plan`**: Shows you a "preview" of what will happen. It compares your code to the real world.
+3.  **`terraform apply`**: Executes the plan and builds the infrastructure.
+4.  **`terraform destroy`**: Tears everything down. (Use with caution!).
+
+## 3. A Simple Example: Creating a VPS
+
+Let's say you want to host a CodeHarborHub API on DigitalOcean. You would create a file named `main.tf`:
+
+```hcl title="main.tf"
+# 1. Define the Provider
+terraform {
+  required_providers {
+    digitalocean = {
+      source = "digitalocean/digitalocean"
+    }
+  }
+}
+
+# 2. Configure the Provider with your API Token
+provider "digitalocean" {
+  token = var.do_token
+}
+
+# 3. Define the Resource (The Server)
+resource "digitalocean_droplet" "web_server" {
+  image  = "ubuntu-22-04-x64"
+  name   = "codeharbor-prod-01"
+  region = "nyc3"
+  size   = "s-1vcpu-1gb"
+}
+
+```
+
+## 4. The "State" File: The Source of Truth
+
+When Terraform builds something, it creates a file called `terraform.tfstate`.
+
+* This file is a **map** of your configuration to the real-world resources.
+* **Master Rule:** Never edit this file manually.
+* **Master Rule:** Never commit this file to GitHub if it contains sensitive data. In a team, we store this in a secure "Remote Backend" (like an S3 bucket).
+
+## 5. Terraform vs. Ansible
+
+| Feature | Terraform | Ansible |
+| --- | --- | --- |
+| **Main Goal** | **Provisioning** (Building the house). | **Configuration** (Painting the walls). |
+| **Language** | HCL (Declarative). | YAML (Procedural/Declarative mix). |
+| **State** | Keeps track of everything it built. | Does not keep a "state" file. |
+| **Best For** | Servers, DBs, Networks, DNS. | Installing Node.js, Users, Security. |
+
+## 6. Why "A Master" uses both
+
+Professional DevOps engineers use them together:
+
+1. **Terraform** builds the Virtual Machine and the Database.
+2. Terraform passes the IP address to **Ansible**.
+3. **Ansible** logs in and installs the CodeHarborHub application.
+
+## Practice: The Cloud Architect Challenge
+
+1. Install the Terraform CLI on your machine.
+2. Choose a provider (DigitalOcean or AWS have great free/cheap tiers).
+3. Write a script to create a single "t2.micro" or "5$ Droplet."
+4. Run `terraform plan` to see the magic.
+5. Run `terraform apply` and go check your cloud dashboard. **It's alive!**
+
+:::info Variables & Modules
+To keep your code clean, use `variables.tf` for values that change (like region or instance size) and **Modules** to group resources together (e.g., a "Network Module" that creates a VPC, Subnet, and Firewall in one go).
+:::

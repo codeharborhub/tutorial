@@ -1,1 +1,64 @@
-<ComingSoon />
+---
+title: "Intermediate Full-Stack Projects"
+sidebar_label: "2. Intermediate Systems"
+sidebar_position: 2
+description: "Challenge yourself with multi-service architectures, real-time data, and advanced cloud integrations."
+---
+
+You’ve mastered the basics of CRUD. Now, it's time to dive into the world of **distributed systems**. These projects require you to think about concurrency, real-time communication, and background processing.
+
+## Project 1: Miniature Video Streaming Platform
+Think of this as a "CodeHarborHub Clips" platform.
+
+*   **The System:** 
+    *   **Frontend:** A video player with "Netflix-style" hover previews.
+    *   **Backend:** Node.js API that handles metadata (titles, tags).
+    *   **Storage:** **AWS S3** for the video files.
+    *   **The Master's Twist:** Implement **Transcoding**. Use a background worker (or AWS Lambda) to automatically create a "Low Resolution" (360p) version of any video a user uploads.
+
+## Project 2: Real-Time Collaborative Workspace
+A simplified version of Slack or Discord for study groups.
+
+*   **The System:**
+    *   **Communication:** Use **WebSockets (Socket.io)** for instant messaging.
+    *   **Database:** PostgreSQL for message history and Redis for "Who's Online" status.
+    *   **Cloud:** Deploy using **Docker Containers**.
+    *   **The Master's Twist:** Implement **Horizontal Scaling**. If you have two servers, how do you make sure a user on Server A can chat with a user on Server B? (Hint: Use the **Redis Pub/Sub** pattern).
+
+## Project 3: Real-Time Analytics Dashboard
+An app that tracks "Live Visitors" on a website and shows them on a map.
+
+*   **The System:**
+    *   **Data Ingestion:** A tiny script (Pixel) that sends a "ping" to your server whenever a page is viewed.
+    *   **Processing:** Use a **Message Queue (like RabbitMQ or BullMQ)** to handle thousands of pings per second without crashing the main API.
+    *   **Visualization:** Use **D3.js** or **Chart.js** on the frontend.
+    *   **The Master's Twist:** Use **Database Sharding**. Store visitor data in different table partitions based on the month to keep queries fast.
+
+## Project 4: AI-Powered Resume Screener
+An automated tool that reads PDFs and ranks them based on keywords.
+
+*   **The System:**
+    *   **Frontend:** Drag-and-drop file upload.
+    *   **Backend:** Python or Node.js service that parses PDF text.
+    *   **AI Integration:** Send the text to an LLM (like Gemini or OpenAI) to summarize the skills.
+    *   **The Master's Twist:** Implement an **Asynchronous Workflow**. Don't make the user wait for the AI to finish. Give them a "Processing..." status and send an email notification when the result is ready.
+
+## 5. The "Intermediate" Architecture Standard
+
+To pass the "Master" level for these projects, your architecture must include:
+
+1.  **Containerization:** Everything must run in **Docker**.
+2.  **API Gateway:** A single entry point (like Nginx) that routes traffic to different microservices.
+3.  **Centralized Logging:** Use a tool (like Winston or ELK stack) to see logs from all your services in one place.
+4.  **Health Checks:** A `/health` route that monitors if your database and cache are actually connected.
+
+## Practice: The "Architecture First" Approach
+
+Before you write a single line of code for these projects:
+1.  Draw a **System Diagram** showing how the Frontend, API, Database, and Cache interact.
+2.  Identify the **Bottleneck**. (Where will the system break first if 100,000 people join?)
+3.  Choose your **Cloud Strategy**. (Will you use EC2, Lambda, or a Managed Kubernetes service?)
+
+:::warning The Cost
+At the intermediate level, you are using more cloud resources. **Always** check the pricing of the services you use. A Master never leaves a "Heavy" database or an "Autoscaling Group" running over the weekend if they aren't using it!
+:::

@@ -1,1 +1,118 @@
-<ComingSoon />
+---
+title: "GitHub Actions Essentials"
+sidebar_label: "2. GitHub Actions"
+sidebar_position: 2
+description: "Learn how to create workflows, jobs, and steps to automate your CodeHarborHub projects."
+tags: ["github actions", "ci/cd", "devops", "automation", "pipeline"]
+keywords: ["github actions", "ci/cd", "devops", "automation", "pipeline"]
+---
+
+GitHub Actions uses **YAML** files to define your automation. These files live in a specific folder in your project: `.github/workflows/`. Each YAML file represents a separate workflow. When you push code to GitHub, the platform reads these files and executes the defined steps.
+
+## 1. Core Concepts
+
+To be "A Master" of Actions, you must understand these four terms:
+
+1.  **Workflow:** The top-level automated process (e.g., "Test and Deploy").
+2.  **Event:** The trigger that starts the workflow (e.g., `push`, `pull_request`).
+3.  **Job:** A set of steps that run on the same runner. Jobs usually run in parallel.
+4.  **Step:** An individual task (e.g., running a command or an "Action").
+
+## 2. Your First Workflow
+
+Create a file at `.github/workflows/hello-world.yml`:
+
+```yaml title=".github/workflows/hello-world.yml"
+name: Greeting Workflow
+
+# 1. When should this run?
+on: [push]
+
+# 2. What should it do?
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest # The OS of the runner
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # A pre-built action to copy your code
+
+      - name: Greet the Master
+        run: echo "Hello, CodeHarborHub! Your code has been pushed."
+
+```
+
+## 3. A Real-World Node.js CI Pipeline
+
+For your full-stack projects, you want to ensure that your dependencies install correctly and your tests pass before you ever think about deploying.
+
+Create `.github/workflows/node-ci.yml`:
+
+```yaml title=".github/workflows/node-ci.yml"
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci # Faster and cleaner than 'npm install' for CI
+
+      - name: Run Linting
+        run: npm run lint
+
+      - name: Run Tests
+        run: npm test
+
+```
+
+## 4. Using Secrets (The Vault)
+
+Never, ever put passwords or API keys directly in your YAML files. Instead, use **GitHub Secrets**.
+
+1. Go to your GitHub Repo → **Settings** → **Secrets and variables** → **Actions**.
+2. Add a secret like `MONGODB_URI`.
+3. Access it in your workflow like this:
+
+```yaml title=".github/workflows/node-ci.yml"
+      - name: Run DB Tests
+        env:
+          DATABASE_URL: ${{ secrets.MONGODB_URI }}
+        run: npm run test:db
+
+```
+
+## 5. The Power of the Marketplace
+
+You don't have to write everything from scratch. The **GitHub Marketplace** has thousands of pre-built actions for:
+
+* Sending Slack/Discord notifications.
+* Deploying to AWS, Firebase, or Heroku.
+* Scanning code for security vulnerabilities.
+* Automating version numbers.
+
+## Practice: The Automation Badge
+
+1. Create the `.github/workflows/node-ci.yml` file in your repository.
+2. Commit and push it to GitHub.
+3. Click on the **"Actions"** tab at the top of your GitHub page.
+4. Watch your workflow run in real-time! If it turns **Green**, your code is healthy. If it's **Red**, check the logs to see what failed.
+
+:::info Status Badges
+You can add a "Build Status" badge to your `README.md` file! It shows everyone visiting your repo that your CodeHarborHub project is currently passing all its tests.
+`![Build Status](https://github.com/USER/REPO/actions/workflows/node-ci.yml/badge.svg)`
+:::

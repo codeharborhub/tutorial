@@ -1,1 +1,74 @@
-<ComingSoon />
+---
+title: "Introduction to System Design"
+sidebar_label: "1. What is System Design?"
+sidebar_position: 1
+description: "Learn the fundamental concepts of designing scalable, reliable, and maintainable software systems."
+---
+
+System Design is the process of defining the architecture, modules, interfaces, and data for a system to satisfy specific requirements. 
+
+In simple terms: **It is the art of planning how your application will handle growth.**
+
+## 1. Why do we need System Design?
+
+When you are a "noob" coder, you build apps for yourself. But in the real world, things break.
+*   **The Problem:** Your Node.js server crashes because too many users are logging in.
+*   **The Solution:** You design a system with a **Load Balancer** and multiple servers to share the work.
+
+System Design helps you answer questions like:
+1.  How do we keep the site fast? (**Latency**)
+2.  How do we make sure it never goes down? (**Availability**)
+3.  How do we store billions of messages? (**Storage**)
+
+## 2. The Core Building Blocks
+
+Every great system is built using these fundamental components:
+
+### Load Balancers
+A traffic cop that sits in front of your servers and directs users to the server that is least busy.
+
+### Databases (SQL vs. NoSQL)
+Choosing where to store your data. Do you need strict rules (SQL) or high speed and flexibility (NoSQL)?
+
+### Caching
+Storing frequently used data in "fast memory" (like Redis) so you don't have to ask the slow database every time.
+
+### Message Queues
+A "To-Do" list for your servers. If 10,000 users sign up at once, the queue holds the "Send Welcome Email" tasks so the server can process them one by one without crashing.
+
+## 3. Vertical vs. Horizontal Scaling
+
+Imagine your CodeHarborHub site is getting slow. You have two choices:
+
+*   **Vertical Scaling (Scaling UP):** Buying a bigger, more expensive server with more RAM and CPU. (There is a limit to how big a single computer can get!).
+*   **Horizontal Scaling (Scaling OUT):** Adding more cheap servers to your "fleet." This is how "A Master" builds systems that never die.
+
+## 4. The "CAP" Theorem (The Rule of Trade-offs)
+
+In System Design, you can't have everything. You have to choose between:
+1.  **Consistency:** Every user sees the same data at the exact same time.
+2.  **Availability:** The system is always online, even if some data is slightly old.
+3.  **Partition Tolerance:** The system keeps working even if parts of the network fail.
+
+**Note:** You can usually only pick **two** at the same time!
+
+## 5. How to Approach a Design Interview
+
+If someone asks you, *"Design YouTube,"* don't start coding! A Master follows these steps:
+1.  **Clarify Requirements:** How many users? What features?
+2.  **Back-of-the-envelope Math:** How much data will we store per day?
+3.  **High-Level Design:** Draw the boxes (User -> Load Balancer -> Server -> DB).
+4.  **Deep Dive:** How will we handle video compression? How will we make it fast in India?
+
+## Practice: The "What If" Game
+
+Think about your current project and ask yourself:
+*   "What if my database server catches fire? Will my app still work?"
+*   "What if 10,000 people click 'Sign Up' at the exact same second?"
+*   "What if the internet cable between the US and India is cut?"
+
+**If your answer is "The site will crash," then you need System Design!**
+
+:::info Start Simple
+You don't need a complex system for a site with 10 users. Over-engineering is a common "noob" mistake. Only add complexity when you actually have the traffic to justify it.
+:::

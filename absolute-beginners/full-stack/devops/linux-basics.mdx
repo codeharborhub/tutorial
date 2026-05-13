@@ -1,1 +1,85 @@
-<ComingSoon />
+---
+title: "Linux Basics for Developers"
+sidebar_label: "2. Linux Basics"
+sidebar_position: 2
+description: "Learn the essential Linux commands and concepts every developer needs to know for DevOps."
+tags: ["linux", "cli", "commands", "file system", "permissions", "editing files"]
+keywords: ["linux", "cli", "commands", "file system", "permissions", "editing files"]
+---
+
+Linux is an open-source operating system. In DevOps, we rarely use a mouse or a graphical interface; we interact with Linux through the **CLI (Command Line Interface)**.
+
+:::info Why Linux?
+Linux is the backbone of the internet. Most servers run on Linux because it's stable, secure, and free. As a developer, knowing how to navigate and manage Linux is essential for deploying and maintaining your applications.
+:::
+
+## 1. The Linux File System
+
+Unlike Windows (C:\, D:\), Linux uses a single unified tree structure. Everything starts from the **Root** directory, represented by a forward slash `/`.
+
+*   `/bin` & `/usr/bin`: Where standard programs (commands) live.
+*   `/etc`: Where configuration files are stored (the "Settings" of Linux).
+*   `/home`: Where user files live (e.g., `/home/ajay`).
+*   `/var/log`: Where your application logs are kept (crucial for debugging!).
+
+## 2. Essential Navigation Commands
+
+You need to move through the server like a pro. Here are your "Master" keys:
+
+*   `pwd`: **Print Working Directory** (Where am I right now?).
+*   `ls`: **List** files in the current folder. (Use `ls -la` to see hidden files).
+*   `cd`: **Change Directory**.
+    *   `cd ..` (Go up one level).
+    *   `cd ~` (Go to your home folder).
+*   `clear`: Cleans up your terminal screen.
+
+## 3. File & Folder Manipulation
+
+Managing your source code and logs directly on the server:
+
+*   `mkdir <name>`: Create a new folder.
+*   `touch <file>`: Create a new empty file.
+*   `cp <source> <dest>`: Copy files.
+*   `mv <source> <dest>`: Move or **Rename** files.
+*   `rm <file>`: Remove a file. (Be careful: there is no "Recycle Bin" in Linux!).
+*   `rm -rf <folder>`: Forcefully delete a folder and everything inside it.
+
+## 4. Permissions & The "Sudo" Power
+
+Linux is built on security. Every file has an owner and specific permissions.
+
+*   **Read (r)**, **Write (w)**, and **Execute (x)**.
+*   **sudo**: Stands for "SuperUser Do." It allows you to run commands with administrative privileges. 
+
+:::warning
+With `sudo`, you have the power to delete the entire operating system. Use it only when necessary!
+:::
+
+## 5. Viewing and Editing Files
+
+Sometimes you need to check a log file or change a `.env` variable without a code editor.
+
+*   **cat**: Dumps the entire file content into the terminal.
+*   **tail -f**: Watches a file in real-time (Perfect for watching server logs!).
+*   **nano**: A simple, beginner-friendly text editor inside the terminal.
+*   **vim**: The "Master" editor. It has a steep learning curve but is incredibly fast once mastered.
+
+## 6. Pipes and Redirection
+
+This is where Linux becomes a superpower. You can take the output of one command and send it to another using the "Pipe" `|`.
+
+*   `ls -la | grep "config"`: List all files but only show the ones with "config" in the name.
+*   `cat logs.txt > output.txt`: Save the content of a file into a new one.
+
+## Practice: The Terminal Challenge
+
+1.  Open your terminal (or use a Git Bash / WSL if on Windows).
+2.  Navigate to your Desktop: `cd ~/Desktop`.
+3.  Create a folder: `mkdir codeharbor_test`.
+4.  Enter the folder and create a file: `touch hello.txt`.
+5.  Write your name into the file: `echo "A Master" > hello.txt`.
+6.  Read it back: `cat hello.txt`.
+
+:::tip Tab Completion
+Never type out long file names! Start typing the first few letters and hit the **Tab** key. Linux will auto-complete the name for you. This is the #1 habit of productive developers.
+:::

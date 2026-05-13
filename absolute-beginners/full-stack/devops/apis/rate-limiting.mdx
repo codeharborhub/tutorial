@@ -1,1 +1,98 @@
-5
+---
+title: "API Rate Limiting & Throttling"
+sidebar_label: "7. Rate Limiting"
+sidebar_position: 7
+description: "Protect your API from brute-force attacks and denial-of-service (DoS) by limiting user requests."
+tags: ["API rate limiting", "throttling", "express-rate-limit", "Node.js", "Express", "full-stack development"]
+keywords: ["API rate limiting", "throttling", "express-rate-limit", "Node.js", "Express", "429 Too Many Requests", "Retry-After header", "Redis", "scalable rate limiting", "API security"]
+---
+
+Rate limiting is the practice of limiting the number of requests a user can make to your API within a specific timeframe (e.g., 100 requests every 15 minutes). This is crucial for protecting your server from abuse, preventing brute-force attacks, and managing costs when using third-party APIs.
+
+## 1. Why do we need Rate Limiting?
+
+1.  **Prevent Abuse:** Stop bots from "scraping" all your course data from CodeHarborHub.
+2.  **Brute Force Protection:** Prevent hackers from trying millions of passwords on your login route.
+3.  **Cost Management:** If you use paid third-party APIs (like OpenAI), rate limiting saves you from huge bills.
+4.  **Server Stability:** Ensures that one heavy user doesn't slow down the experience for the "Masters" using your site.
+
+## 2. Rate Limiting vs. Throttling
+
+While often used interchangeably, there is a slight difference:
+*   **Rate Limiting:** Hard limit. Once you hit the limit, you get an error (429 Too Many Requests).
+*   **Throttling:** Soft limit. The server slows down your connection speed instead of blocking you entirely.
+
+## 3. Implementing Rate Limiting in Node.js
+
+We use the popular `express-rate-limit` package to handle this easily.
+
+### Installation
+
+```bash
+npm install express-rate-limit
+```
+
+### Basic Setup
+
+You can apply a global limit to your entire API:
+
+```javascript title="Basic Express Rate Limiting Setup"
+const rateLimit = require('express-rate-limit');
+
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: {
+        status: 429,
+        message: "Too many requests from this IP, please try again later."
+    },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Apply to all requests
+app.use('/api/', globalLimiter);
+
+```
+
+## 4. Tiered Rate Limiting
+
+As a "Master" architect, you shouldn't treat all routes equally.
+
+### Example Strategy:
+
+* **Login/Signup:** Very strict (e.g., 5 attempts per hour) to prevent hacking.
+* **Search/Courses:** Medium (e.g., 100 requests per 15 minutes).
+* **Public Landing Page:** Very loose or no limit.
+
+```javascript title="Tiered Rate Limiting Example"
+const authLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5, 
+    message: "Too many login attempts. Take a break!"
+});
+
+app.use('/api/auth/login', authLimiter);
+
+```
+
+## 5. Handling the "429 Too Many Requests"
+
+When a user hits the limit, your API should return a **429 status code**. It is also a best practice to include a `Retry-After` header telling the client exactly how many seconds to wait before trying again.
+
+## 6. Using Redis for Scalability
+
+In a professional "Master" setup with multiple servers, `express-rate-limit` (which stores data in RAM) won't work well because different servers won't know about each other's limits.
+
+**The Pro Solution:** Use **Redis** as a central store for rate-limit data. This way, if a user hits Server A or Server B, their total count is tracked in one place.
+
+## Practice: The Stress Test
+
+1. Apply a limit of **5 requests per minute** to your project.
+2. Open your browser and refresh the page 6 times quickly.
+3. Did you see your custom error message?
+4. Check the "Network" tab in your DevTools—can you see the `RateLimit-Limit` and `RateLimit-Remaining` headers?
+
+:::info Whitelisting
+Always provide a "Whitelist" for your own IP address or internal services (like your monitoring tools) so you don't accidentally lock yourself out of your own API!
+:::

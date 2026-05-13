@@ -1,1 +1,103 @@
-<ComingSoon />
+---
+title: "Server Automation with Ansible"
+sidebar_label: "1. Ansible"
+sidebar_position: 1
+description: "Learn how to automate server configuration and management using Ansible Playbooks."
+tags: ["ansible", "configuration management", "automation"]
+keywords: ["ansible", "configuration management", "automation", "playbooks", "idempotency"]
+---
+
+Ansible is a configuration management tool that allows you to describe how your server should look using **YAML**. 
+
+## 1. Why use Ansible?
+
+*   **Idempotency:** This is a fancy word meaning you can run the same script 100 times, and it will only make changes if they are needed. If Node.js is already installed, Ansible will skip that step.
+*   **Inventory Management:** You can group your servers (e.g., `[web-servers]`, `[database-servers]`) and target them specifically.
+*   **Readable:** Unlike complex Shell scripts, Ansible Playbooks look like a simple "To-Do" list.
+
+## 2. The Core Components
+
+To use Ansible, you need two main files:
+
+1.  **Inventory File (`hosts`):** A list of your servers' IP addresses.
+2.  **Playbook (`setup.yml`):** The list of tasks you want to perform.
+
+## 3. Your First Playbook
+
+Let's create a playbook that prepares a server for a CodeHarborHub project by installing Nginx.
+
+Create a file named `webserver_setup.yml`:
+
+```yaml title="webserver_setup.yml"
+---
+- name: Configure Web Servers
+  hosts: all
+  become: yes # Run as sudo/root
+  
+  tasks:
+    - name: Ensure Nginx is installed
+      apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+
+    - name: Ensure Nginx is started and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Copy custom index.html
+      copy:
+        content: "<h1>Welcome to CodeHarborHub!</h1>"
+        dest: /var/www/html/index.html
+
+```
+
+## 4. Running the Automation
+
+Once your files are ready, running the automation is simple:
+
+```bash
+# Check if you can connect to your servers
+ansible all -m ping -i hosts
+
+# Run the playbook
+ansible-playbook -i hosts webserver_setup.yml
+```
+
+Ansible will then show you a "Recap":
+
+* **Ok:** Nothing changed (it was already correct).
+* **Changed:** Ansible performed an action.
+* **Failed:** Something went wrong (e.g., wrong password or no internet).
+
+## 5. Ansible Roles: The Master Level
+
+As your project grows, your playbook will get huge. **Roles** allow you to break your configuration into reusable pieces.
+
+* `roles/common`: Basic security and updates.
+* `roles/nodejs`: Installing Node.js and PM2.
+* `roles/nginx`: Setting up the reverse proxy.
+
+This way, if you start a new project, you can just "import" the Node.js role and you're done in seconds!
+
+## 6. Ansible vs. Shell Scripting
+
+| Feature | Shell Script (`.sh`) | Ansible Playbook (`.yml`) |
+| --- | --- | --- |
+| **Simplicity** | Easy for 1-2 commands. | Better for complex setups. |
+| **Error Handling** | You must write it manually. | Built-in. |
+| **Repeatability** | Might fail if run twice. | Designed to be run many times. |
+| **Multi-Server** | Hard to manage. | Built for hundreds of servers. |
+
+## Practice: The Efficiency Challenge
+
+1. Create a local inventory file with your server's IP.
+2. Write a playbook to install `git` and `curl`.
+3. Run it. Then, run it again immediately.
+4. Notice how the second run says "Ok" but not "Changed." This is **Idempotency** in action!
+
+:::info Ansible Galaxy
+Don't reinvent the wheel! [Ansible Galaxy](https://galaxy.ansible.com/) is a marketplace of free, pre-written roles created by the community. Need to set up a complex Docker environment? There’s a role for that!
+:::

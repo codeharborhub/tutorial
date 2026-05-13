@@ -1,1 +1,76 @@
-<ComingSoon />
+---
+title: "Database Selection & Design"
+sidebar_label: "5. Databases (SQL vs NoSQL)"
+sidebar_position: 5
+description: "Learn how to choose between Relational and Non-Relational databases and how to design for scale."
+tags: ["databases", "sql", "nosql", "database replication", "database sharding", "indexes"]
+keywords: ["databases", "sql", "nosql", "database replication", "database sharding", "indexes", "cassandra", "mongodb", "postgresql", "mysql", "dynamodb", "redis", "memcached"]
+---
+
+In System Design, the database is often the "bottleneck." While code is easy to change, moving 10 terabytes of data to a new database is a nightmare. You must choose wisely.
+
+## 1. The Great Divide: SQL vs. NoSQL
+
+Most databases fall into one of two categories:
+
+### SQL (Relational)
+Think of this as a giant **Excel Spreadsheet** with strict rules. Tables are linked to each other using "Keys."
+*   **Examples:** PostgreSQL, MySQL, SQL Server.
+*   **Best for:** Financial systems, user profiles, or anything where data consistency is #1.
+*   **Structure:** Pre-defined "Schema" (you must define columns before adding data).
+
+### NoSQL (Non-Relational)
+Think of this as a folder full of **JSON documents**. Every document can look different.
+*   **Examples:** MongoDB, Cassandra, DynamoDB.
+*   **Best for:** Real-time feeds, big data, content management, or rapid prototyping.
+*   **Structure:** Dynamic "Schema" (you can add fields on the fly).
+
+## 2. The Comparison Table
+
+| Feature | SQL | NoSQL |
+| :--- | :--- | :--- |
+| **Data Model** | Rows and Columns. | Key-Value, Document, or Graph. |
+| **Scaling** | Vertical (Bigger Server). | Horizontal (More Servers). |
+| **ACID Compliance** | Very High (Reliable). | Varies (Speed over Safety). |
+| **Queries** | Powerful (JOINs). | Simple (Key-based). |
+
+## 3. How "A Master" Designs for Scale
+
+Even the best database will slow down if you just dump data into it. You need these two strategies:
+
+### Database Replication (The Backup)
+You create copies of your database.
+*   **Primary (Leader):** Handles all the "Writes" (New users, new posts).
+*   **Replica (Follower):** Handles all the "Reads." Since CodeHarborHub has thousands of people reading but only a few writing, we add 5 Replicas to handle the traffic!
+
+### Database Sharding (The Split)
+When your database gets too big for one server, you "Shred" it.
+*   Users from **India** go to Database A.
+*   Users from the **USA** go to Database B.
+*   This allows you to scale almost infinitely!
+
+## 4. Indexes: The "Book Index" Strategy
+
+Imagine a 1,000-page book on React. To find the "Hooks" chapter, you don't read every page; you look at the **Index** at the back.
+*   **In Databases:** An **Index** is a special file that helps the database find data without scanning every row.
+*   **Master Rule:** Index columns you search often (like `email` or `username`). But don't index everything—indexes make "Writing" data slower!
+
+## 5. Which one should CodeHarborHub use?
+
+If we are building a **Learning Management System**:
+1.  **User Progress & Enrollment:** Use **PostgreSQL (SQL)** because we need to be 100% sure a student's grade is never lost.
+2.  **Course Content & Feedback:** Use **MongoDB (NoSQL)** because course structures change often, and we want to store different types of lessons (video, text, quiz) in one place.
+
+## Practice: The Design Choice
+
+Scenario: You are building a **Real-time Chat App** (like WhatsApp).
+*   Millions of messages are sent every minute.
+*   Speed is more important than "perfect structure."
+*   The data grows very fast.
+
+**Which would you choose?**
+> *Hint: A Master would likely pick NoSQL (like Cassandra) because it is built for massive horizontal scaling and fast writes!*
+
+:::info The CAP Theorem
+Remember: You can't have perfect Consistency, Availability, and Partition Tolerance all at once. If you pick a SQL database, you are prioritizing **Consistency**. If you pick a NoSQL database like Cassandra, you are prioritizing **Availability**.
+:::

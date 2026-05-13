@@ -1,1 +1,107 @@
-4
+---
+title: "API Validation & Sanitization"
+sidebar_label: "6. API Validation"
+sidebar_position: 6
+description: "Learn how to protect your database and server by validating and sanitizing incoming API requests."
+tags: ["API validation", "data sanitization", "Joi", "Node.js", "Express", "full-stack development"]
+keywords: ["API validation", "data sanitization", "Joi", "Node.js", "Express", "validation schema", "input validation", "security best practices", "backend development"]
+---
+
+Validation is the process of ensuring that the data sent to your API meets your requirements. Sanitization is the process of cleaning that data to prevent security risks like Script Injection.
+
+## 1. Why Validate?
+
+Without validation, your application is vulnerable to:
+*   **Database Corruption:** Saving "None" or "Undefined" in required fields.
+*   **Crashes:** Your code trying to perform math on a string.
+*   **Security Flaws:** Hackers sending malicious code in a `username` field.
+
+## 2. Validation vs. Sanitization
+
+| Process | Goal | Example |
+| :--- | :--- | :--- |
+| **Validation** | Check if data is correct. | Is this a valid email address? |
+| **Sanitization** | Clean the data. | Remove `<script>` tags from a comment. |
+
+## 3. Using Joi for Node.js Validation
+
+At the Hub, we recommend **Joi**. It allows you to create a "Schema" (a blueprint) for your data.
+
+### Installation
+
+```bash
+npm install joi
+```
+
+### Creating a Schema
+
+```javascript title="Example Joi Schema for User Registration"
+const Joi = require('joi');
+
+const signupSchema = Joi.object({
+    username: Joi.string().alphanum().min(3).max(30).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+});
+
+```
+
+### Implementing in a Route
+
+```javascript title="Example Express Route with Joi Validation"
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.post('/api/register', async (req, res) => {
+    const { error, value } = signupSchema.validate(req.body);
+
+    if (error) {
+        return res.status(400).json({ 
+            message: "Validation Error", 
+            details: error.details[0].message 
+        });
+    }
+
+    // If no error, continue to save to Database
+    res.status(201).json({ message: "User validated and created!" });
+});
+
+```
+
+## 4. Common Validation Rules
+
+As a "Master" developer, always check for these common constraints:
+
+1. **Required Fields:** Don't let a user sign up without an email.
+2. **Data Types:** Ensure `age` is a `Number` and `isAdmin` is a `Boolean`.
+3. **String Lengths:** Set a minimum for passwords (security) and a maximum for bios (database space).
+4. **Enum Values:** If a course can only be "Beginner", "Intermediate", or "Advanced", don't allow "Expert".
+
+## 5. Sanitizing for Security
+
+Even if a string is the right length, it might be dangerous.
+
+* **Trim Whitespace:** Use `.trim()` to remove accidental spaces at the end of an email.
+* **Escape HTML:** Prevent XSS (Cross-Site Scripting) by turning `<` into `&lt;`.
+
+```javascript title="Example of Sanitization with Joi"
+const commentSchema = Joi.string().max(500).escapeHTML();
+const schema = Joi.string().trim().lowercase();
+```
+
+## Practice: The Validation Challenge
+
+Imagine you are building the **Course Creation** API for CodeHarborHub.
+
+1. Create a Joi schema for a course that requires:
+* `title`: String, between 10 and 100 characters.
+* `price`: Number, minimum value of 0.
+* `tags`: An array of strings.
+
+
+2. Test your schema with an invalid object (e.g., a title that is only 3 characters long).
+
+:::info Middleware
+Don't repeat your validation logic in every controller! Create a **Validation Middleware** that you can drop into any route to automatically check the `req.body` before your logic even runs.
+:::

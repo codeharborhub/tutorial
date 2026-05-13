@@ -1,0 +1,13 @@
+{
+  "label": "7. Infra",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "title": "Infrastructure as Code (IaC)",
+    "description": "Stop manual configuration. Learn how to define your entire server environment, networking, and security using code. This section covers the tools and philosophies behind automated infrastructure."
+  },
+  "customProps": {
+    "icon": "infra",
+    "description": "The peak of DevOps automation. If you can code it, you can build it. Master tools like Terraform and Ansible to scale CodeHarborHub globally."
+  }
+}

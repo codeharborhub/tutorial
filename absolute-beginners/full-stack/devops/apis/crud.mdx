@@ -1,1 +1,99 @@
-2
+---
+title: "CRUD Operations in REST"
+sidebar_label: "4. CRUD Operations"
+sidebar_position: 4
+description: "Master the mapping of CRUD actions to HTTP methods and learn how to handle data flow in a professional API."
+tags: ["CRUD", "HTTP methods", "API design", "full-stack development"]
+keywords: ["CRUD operations", "HTTP methods", "POST", "GET", "PUT", "PATCH", "DELETE", "API design", "Node.js", "Express"]
+---
+
+CRUD is the foundation of data management. As a developer, your job is to provide a bridge between the **User's Intent** (Frontend) and the **Database Action** (Backend). When a user clicks "Submit," they are trying to **Create** something. When they load a page, they want to **Read** data. When they edit their profile, they want to **Update** their information. And when they click "Delete," they want to remove something permanently.
+
+## 1. Mapping CRUD to HTTP
+
+Professional APIs use specific HTTP methods to indicate which CRUD operation is being performed. 
+
+| CRUD Action | HTTP Method | Example Endpoint | SQL/NoSQL Action |
+| :--- | :--- | :--- | :--- |
+| **Create** | `POST` | `POST /courses` | `INSERT` / `.save()` |
+| **Read** | `GET` | `GET /courses/1` | `SELECT` / `.find()` |
+| **Update** | `PUT` / `PATCH` | `PUT /courses/1` | `UPDATE` / `.update()` |
+| **Delete** | `DELETE` | `DELETE /courses/1` | `DELETE` / `.remove()` |
+
+## 2. Detailed Breakdown
+
+### CREATE (POST)
+Used to send data to the server to create a new resource.
+*   **Success Code:** `201 Created`.
+*   **Body:** Required (The data for the new resource).
+*   **Note:** If you send the same POST request twice, it will usually create two separate entries.
+
+### READ (GET)
+Used to retrieve data. This should be a "safe" operation—meaning it never changes the data on the server.
+*   **Success Code:** `200 OK`.
+*   **Types:** 
+    *   `GET /users` (List all users).
+    *   `GET /users/101` (Get one specific user).
+
+### UPDATE (PUT vs. PATCH)
+There are two ways to update data, and a "Master" knows the difference:
+*   **PUT:** Replaces the **entire** resource. You must send all fields.
+*   **PATCH:** Updates only the **specific fields** you send (e.g., just changing a user's profile picture).
+*   **Success Code:** `200 OK` or `204 No Content`.
+
+### DELETE (DELETE)
+Used to remove a resource from the database.
+*   **Success Code:** `200 OK` or `204 No Content`.
+*   **Important:** Once it's gone, it's gone! Always verify authentication before allowing a delete.
+
+## 3. Data Flow Example: CodeHarborHub
+
+Imagine a student wants to post a comment on a lesson. Here is the CRUD flow:
+
+1.  **Create:** User types a comment and hits "Submit" → `POST /comments`.
+2.  **Read:** The page refreshes and fetches all comments → `GET /comments`.
+3.  **Update:** User fixes a typo in their comment → `PATCH /comments/id_123`.
+4.  **Delete:** User decides to remove the comment → `DELETE /comments/id_123`.
+
+## 4. Handling Responses
+
+When performing CRUD, your API should talk back to the frontend clearly:
+
+```javascript title="Example Express Controller for Deleting a Course"
+exports.deleteCourse = async (req, res) => {
+    try {
+        const course = await Course.findByIdAndDelete(req.params.id);
+        
+        if (!course) {
+            return res.status(404).json({ message: "Course not found!" });
+        }
+
+        res.status(200).json({ message: "Course deleted successfully!" });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+```
+
+## Practice: The CRUD Logic Check
+
+Imagine you are building a "Library Management System." Write down the 5 endpoints you would need to:
+
+1. Add a new book.
+2. See all books.
+3. Search for one book by ID.
+4. Update the "status" of a book (Available/Borrowed).
+5. Remove a book from the system.
+
+**Answers:**
+
+1. `POST /books`
+2. `GET /books`
+3. `GET /books/:id`
+4. `PATCH /books/:id`
+5. `DELETE /books/:id`
+
+:::info Response Bodies
+When you `POST` a new item, it is a best practice to return the **newly created object** (including its new `_id`) in the response body. This allows the frontend to update the UI instantly without having to do another `GET` request!
+:::

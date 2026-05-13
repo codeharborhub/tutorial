@@ -1,1 +1,85 @@
-1
+---
+title: "REST Basics: Requests & Responses"
+sidebar_label: "3. REST Basics"
+sidebar_position: 3
+description: "Learn the structure of HTTP requests and responses, headers, and the importance of JSON in RESTful communication."
+tags: ["APIs", "REST", "HTTP requests", "HTTP responses", "JSON", "full-stack development"]
+keywords: ["REST basics", "HTTP requests", "HTTP responses", "JSON", "Content-Type", "Authorization header", "query parameters", "path parameters", "API communication", "Node.js", "Express"]
+---
+
+Every time your app communicates, it sends an **HTTP Request** and receives an **HTTP Response**. As a developer, you need to be able to "read" these messages to debug and build features effectively.
+
+## 1. The Anatomy of a Request
+
+When you call `fetch()` or `axios.get()` in React, you are constructing an HTTP Request. It consists of four main parts:
+
+1.  **URL (Endpoint):** Where is the request going? (e.g., `https://api.codeharborhub.com/v1/users`)
+2.  **Method:** What action are we taking? (GET, POST, etc.)
+3.  **Headers:** Meta-information about the request (e.g., "I am sending JSON," or "Here is my Secret Token").
+4.  **Body (Payload):** The actual data being sent (used in POST, PUT, and PATCH).
+
+## 2. The Anatomy of a Response
+
+Once the server processes your request, it sends back a response. It consists of:
+
+1.  **Status Code:** A numerical code telling you if the request succeeded or failed (e.g., `200`, `404`).
+2.  **Headers:** Information about the server and the data being sent back.
+3.  **Body:** The data you asked for, almost always in **JSON** format.
+
+## 3. Why JSON? (JavaScript Object Notation)
+
+In the past, APIs used XML, which was bulky and hard to read. Modern REST APIs use **JSON** because:
+*   It looks exactly like a JavaScript Object.
+*   It is lightweight and fast to send over the network.
+*   It is easy for both humans to read and machines to parse.
+
+**Example of a JSON Resource:**
+
+```json title="jsonExample.json"
+{
+  "id": "ch-101",
+  "title": "Mastering Node.js",
+  "author": "Ajay Dhangar",
+  "isPublished": true,
+  "tags": ["backend", "javascript", "devops"]
+}
+
+```
+
+## 4. Essential HTTP Headers
+
+Headers act like the "labels" on a shipping box. Here are the ones you will use most:
+
+* **Content-Type:** Tells the receiver what kind of data is in the body (e.g., `application/json`).
+* **Authorization:** Used to send your **JWT** (e.g., `Bearer <token>`).
+* **Accept:** Tells the server what format the client wants to receive (e.g., `application/json`).
+* **User-Agent:** Identifies the browser or tool making the request.
+
+## 5. Query Parameters vs. Path Parameters
+
+How do you tell the server *which* specific data you want?
+
+### Path Parameters (Identity)
+
+Used to identify a **specific resource**.
+
+* URL: `/api/users/123`
+* In Express: `app.get('/api/users/:id', ...)`
+
+### Query Parameters (Filtering/Sorting)
+
+Used to **modify** the results of a collection.
+
+* URL: `/api/courses?category=javascript&sort=popular`
+* In Express: Accessed via `req.query.category`.
+
+## Practice: The Postman Challenge
+
+1. Download and open **Postman** or **Insomnia**.
+2. Make a `GET` request to `https://jsonplaceholder.typicode.com/posts/1`.
+3. Look at the **Headers** tab in the response. Can you find the `Content-Type`?
+4. Now make a `POST` request to the same URL with a JSON body: `{"title": "My New Post"}`. Look at the status code—did you get a `201 Created`?
+
+:::info Idempotency
+A "Master" developer ensures that `GET`, `PUT`, and `DELETE` requests are **Idempotent**. This means that if you click "Delete" five times, the result is the same as clicking it once (the item is gone). `POST` is **not** idempotent because clicking "Create" five times creates five different items!
+:::

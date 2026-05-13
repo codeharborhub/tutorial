@@ -1,1 +1,67 @@
-<ComingSoon />
+---
+title: "Scalability: Handling the Growth"
+sidebar_label: "2. Scalability"
+sidebar_position: 2
+description: "Learn the principles of vertical and horizontal scaling and how to prepare your application for millions of users."
+tags: ["scalability", "vertical scaling", "horizontal scaling", "load balancers", "databases", "caching", "message queues"]
+keywords: ["scalability", "vertical scaling", "horizontal scaling", "load balancers", "databases", "caching", "message queues", "stateful vs stateless", "database sharding", "read replicas", "throughput", "latency", "availability"]
+---
+
+Scalability is not just about "being big." It is about **efficiency**. A scalable system is one where, if you double the number of users, you don't have to double the amount of manual work you do.
+
+## 1. The Two Ways to Scale
+
+When your CodeHarborHub API starts slowing down because too many students are practicing their queries, you have two main options:
+
+### Vertical Scaling (Scaling UP)
+This means adding more power to your **existing** server. You give it more RAM, a faster CPU, or a bigger SSD.
+*   **Pros:** Easy to do; no changes to your code required.
+*   **Cons:** You eventually hit a "ceiling" (the most powerful computer in the world still has limits). It also creates a **Single Point of Failure**—if that one big server dies, everything dies.
+
+### Horizontal Scaling (Scaling OUT)
+This means adding **more servers** to your pool. Instead of one giant computer, you have ten small ones working together.
+*   **Pros:** Virtually infinite growth. If one server fails, the other nine keep working.
+*   **Cons:** Requires a **Load Balancer** and your code must be "Stateless" (more on that below).
+
+## 2. Stateful vs. Stateless Architecture
+
+To scale horizontally, your application must be **Stateless**. This is a "Master" requirement.
+
+*   **Stateful (Hard to Scale):** The server remembers the user in its own local memory. If the user’s next request goes to a *different* server, that server won't know who they are.
+*   **Stateless (Easy to Scale):** The server treats every request as a brand-new interaction. Any "memory" (like user sessions) is stored in a shared database or a cache like **Redis**.
+
+## 3. Database Scaling
+
+Scaling the code is easy; scaling the **Data** is the real challenge.
+
+1.  **Read Replicas:** You have one "Primary" database for writing data and multiple "Replicas" just for reading. Since most apps (like CodeHarborHub) have more people reading tutorials than writing them, this helps a lot!
+2.  **Database Sharding:** You split your database into smaller pieces. 
+    *   *Example:* Users A-M go to Database 1. Users N-Z go to Database 2.
+
+## 4. Key Metrics to Watch
+
+A "Master" monitors these three numbers to know when it's time to scale:
+
+| Metric | What it means |
+| :--- | :--- |
+| **Throughput** | How many requests your system handles per second (RPS). |
+| **Latency** | How long it takes for a user to get a response (measured in milliseconds). |
+| **Availability** | The percentage of time your system is "Up" (e.g., "Four Nines" or 99.99%). |
+
+## 5. Common Scalability Bottlenecks
+
+Even with 100 servers, your app might be slow. Why?
+*   **The Database:** If all 100 servers are waiting on one slow SQL query.
+*   **External APIs:** If you are waiting for a third-party service (like a payment gateway) to respond.
+*   **Bandwidth:** If you are trying to send huge 4K videos over a slow connection.
+
+## Practice: The "Scale Check"
+
+Look at your current project and ask yourself:
+1.  "If I launch a second copy of my server right now, will users still be able to log in?"
+2.  "Is my database the 'bottleneck' holding everything back?"
+3.  "Can I handle 10x more traffic by just clicking a button in AWS?"
+
+:::info Auto-Scaling
+In the Cloud (AWS/Azure), you can set up **Auto-Scaling Groups**. This is the ultimate "Master" move. When CPU usage hits 70%, the cloud automatically launches a new server. When the traffic drops at night, it deletes the extra servers to save you money!
+:::

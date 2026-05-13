@@ -1,1 +1,65 @@
-<ComingSoon />
+---
+title: "AWS CloudFront: The Speed Demon"
+sidebar_label: "6. CloudFront (CDN)"
+sidebar_position: 6
+description: "Learn how to use a Content Delivery Network (CDN) to make your CodeHarborHub site fast globally."
+tags: ["aws", "cloudfront", "cdn", "content delivery network", "edge locations", "caching", "ssl"]
+keywords: ["aws", "cloudfront", "cdn", "content delivery network", "edge locations", "caching", "ssl", "https", "invalidation", "ttl", "performance optimization"]
+---
+
+**CloudFront** is what we call a **CDN** (Content Delivery Network).
+
+Think of it like a **Chain of Convenience Stores**. 
+*   **The Origin (S3/EC2):** This is the giant main warehouse (factory) where your website is built.
+*   **Edge Locations:** These are small local shops in every city. 
+Instead of every customer driving to the main warehouse to get milk, you send a truck to all the local shops once. Now, the customer just walks to the corner store!
+
+## 1. How it works (The Magic of Caching)
+
+When a user visits your site for the first time:
+1.  They ask CloudFront for `logo.png`.
+2.  CloudFront doesn't have it yet, so it goes to your **S3 bucket** to get it.
+3.  CloudFront gives the image to the user **AND keeps a copy** for itself in that city.
+4.  When the *next* user in that same city asks for the image, CloudFront gives it to them instantly without ever bothering your S3 bucket. This is called **Caching**.
+
+## 2. Why "A Master" uses CloudFront
+
+| Feature | Without CloudFront | With CloudFront |
+| :--- | :--- | :--- |
+| **Speed** | Slow for users far from the server. | Fast for everyone, everywhere. |
+| **Server Load** | Your server has to work for every hit. | Your server "rests" while the CDN works. |
+| **Security** | Your S3 bucket is exposed to the web. | You can hide S3 behind a "CloudFront Shield." |
+| **Cost** | You pay for "Outbound Data" from S3. | CDN data is often cheaper and more efficient. |
+
+## 3. Edge Locations vs. Regions
+
+AWS has about 30+ **Regions** (Large data centers), but they have **450+ Edge Locations**. 
+*   There are Edge Locations in almost every major city (Mumbai, Delhi, Bangalore, Chennai, etc.). 
+*   This means your CodeHarborHub tutorials will load in milliseconds, regardless of where your students are.
+
+## 4. Using CloudFront for HTTPS (SSL)
+
+In the modern web, "HTTP" is not enough. You need the green padlock (**HTTPS**).
+*   Setting up SSL certificates on a raw Linux server is a headache.
+*   **The Master Way:** You connect your domain to CloudFront. CloudFront gives you a free SSL certificate (via AWS Certificate Manager). 
+*   Now, your site is secure and fast with zero manual server configuration!
+
+## 5. What is "Invalidation"?
+
+The only downside to a CDN is that it's "stubborn." If you change your `styles.css` file, CloudFront might still show the *old* version because it has it saved in its memory.
+
+To fix this, you perform an **Invalidation**. It's like sending a message to all the local shops saying: *"The old milk is expired! Throw it away and come get the fresh batch from the warehouse."*
+
+## Practice: Speed up your S3 Site
+
+1.  Open the **CloudFront** console.
+2.  Click **Create Distribution**.
+3.  For "Origin Domain," select the **S3 Bucket** you created in the last lesson.
+4.  Under "Viewer Protocol Policy," select **Redirect HTTP to HTTPS**.
+5.  Click **Create**.
+6.  Wait about 5 minutes. You will get a `xxxx.cloudfront.net` URL. 
+7.  Open that URL—your image/site is now being served from a global network!
+
+:::info TTL (Time to Live)
+You can set a **TTL** on your files. A TTL of `86400` means CloudFront will keep your file in its memory for 24 hours before checking the warehouse for a new version. For a static logo, set a high TTL. For a news feed, set a low TTL!
+:::

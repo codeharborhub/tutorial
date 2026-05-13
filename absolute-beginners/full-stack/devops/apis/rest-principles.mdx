@@ -1,0 +1,95 @@
+---
+title: "RESTful Principles & Best Practices"
+sidebar_label: "2. REST Principles"
+sidebar_position: 2
+description: "Master the core constraints of REST architecture to build predictable and scalable APIs."
+tags: ["APIs", "REST", "RESTful principles", "HTTP methods", "status codes", "full-stack development"]
+keywords: ["REST principles", "client-server separation", "statelessness", "cacheability", "uniform interface", "layered system", "code on demand", "HTTP methods", "status codes", "API design", "Node.js", "Express"]
+---
+
+REST was designed to take advantage of the existing protocols of the internet (HTTP). As a "Master" developer, you don't need to reinvent the wheel—you just need to follow the standards.
+
+## 1. The 6 Constraints of REST
+
+To be truly RESTful, an API must follow these six guiding principles:
+
+### 1. Client-Server Separation
+The frontend (Client) and the backend (Server) are independent. You can change your React UI completely without touching your Node.js logic, as long as the API interface stays the same.
+
+### 2. Statelessness
+The server does not "remember" the user between requests. Every single request from the client must contain all the information needed to understand and process it (e.g., the **JWT** in the header).
+
+### 3. Cacheability
+Responses must define themselves as cacheable or not. This allows browsers or tools like **Redis** to store data and improve performance.
+
+### 4. Uniform Interface
+This is the most important part! It means:
+*   **Resources** are identified by URLs (e.g., `/users/101`).
+*   **Actions** are performed using standard HTTP methods.
+*   **Self-descriptive messages:** The response tells you how to process it (usually via `Content-Type: application/json`).
+
+### 5. Layered System
+A client cannot tell if it is connected directly to the end server or an intermediary like a Load Balancer or a Cache (like a "Master" setup using Nginx).
+
+### 6. Code on Demand (Optional)
+The server can occasionally send executable code (like JavaScript) to the client.
+
+## 2. Resource-Based Naming
+
+In REST, we focus on **Resources** (Nouns), not **Actions** (Verbs). 
+
+| The Wrong Way (Action-based) | The RESTful Way (Resource-based) |
+| :--- | :--- |
+| `GET /getAllUsers` | `GET /users` |
+| `POST /createUser` | `POST /users` |
+| `POST /updateUser/101` | `PUT /users/101` |
+| `GET /deleteUser?id=101` | `DELETE /users/101` |
+
+## 3. Using HTTP Methods Correctly
+
+As a professional, you must use the right tool for the job:
+
+*   **GET:** Retrieve data. (Should never change data on the server).
+*   **POST:** Create a new resource.
+*   **PUT:** Update an *entire* resource (Replace).
+*   **PATCH:** Update *part* of a resource (e.g., just changing a user's bio).
+*   **DELETE:** Remove a resource.
+
+## 4. HTTP Status Codes: The Server's Voice
+
+Don't just return `200 OK` for everything. Use specific codes so the frontend knows exactly what happened:
+
+*   **2xx (Success):**
+    *   `200 OK`: Standard success.
+    *   `201 Created`: Successfully created a new resource (e.g., after a POST).
+*   **4xx (Client Error):**
+    *   `400 Bad Request`: The frontend sent invalid data.
+    *   `401 Unauthorized`: User needs to log in.
+    *   `404 Not Found`: That URL or resource doesn't exist.
+*   **5xx (Server Error):**
+    *   `500 Internal Server Error`: Your code crashed.
+    *   `503 Service Unavailable`: The server is overloaded or down.
+
+## 5. Handling Relationships
+
+How do you get all lessons for a specific course at CodeHarborHub? Use sub-resources:
+
+`GET /courses/react-101/lessons`
+
+This structure makes the relationship between data clear and hierarchical.
+
+## Practice: The "REST" Redesign
+
+Look at these "Bad" API routes and rewrite them in your mind to be RESTful:
+1.  `GET /search_results?type=blog`
+2.  `POST /edit_comment_id_50`
+3.  `GET /api/v1/save_new_user_profile`
+
+**Answers:**
+1. `GET /blogs`
+2. `PATCH /comments/50`
+3. `POST /users`
+
+:::info Plural Nouns
+Always use plural nouns for your resources (`/users` instead of `/user`). it's more consistent and follows the industry standard for collections.
+:::
