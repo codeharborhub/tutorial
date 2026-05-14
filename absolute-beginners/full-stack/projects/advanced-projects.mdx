@@ -1,1 +1,56 @@
-<ComingSoon />
+---
+title: "Advanced Full-Stack Projects"
+sidebar_label: "3. Advanced Infrastructure"
+sidebar_position: 3
+description: "Build high-scale, production-grade systems involving microservices, global distribution, and automated infrastructure."
+tags: ["advanced projects", "full-stack projects", "microservices projects", "cloud projects", "devops projects"]
+keywords: ["advanced projects", "full-stack projects", "microservices projects", "cloud projects", "devops projects", "docker projects", "kubernetes projects", "terraform projects", "aws projects"]
+---
+
+To complete these projects, you must move beyond simple server-client relationships. You will be dealing with **Distributed Systems** where failure is expected, and "Mastery" is defined by how your system recovers.
+
+## Project 1: High-Frequency Trading (Mock) Engine
+Build a platform that handles thousands of "Buy/Sell" orders per second for digital assets.
+
+*   **The System:**
+    *   **Matching Engine:** A super-fast Node.js or Go service that matches buyers and sellers.
+    *   **Concurrency:** Use **Redis Locks** to ensure two people don't buy the same asset at the exact same millisecond.
+    *   **Data Integrity:** Use **SQL Transactions** to ensure that money is never "lost" during a transfer.
+    *   **The Master's Twist:** Implement an **Event-Sourcing** pattern. Instead of just saving the current balance, save every single transaction in an immutable log so you can "replay" the history to audit the account.
+
+## Project 2: Your Own "Platform as a Service" (Mini-Heroku)
+Build a system where a user can push code, and your system automatically builds and deploys it.
+
+*   **The System:**
+    *   **Orchestration:** Use the **Docker Engine API** to programmatically spin up containers.
+    *   **Networking:** Set up a dynamic **Reverse Proxy** (like Traefik or Nginx) that automatically routes domains to the correct container.
+    *   **Security:** Implement "Sandboxing" so one user's code cannot access another user's files.
+    *   **The Master's Twist:** Implement **Auto-Scaling**. If the CPU usage of a user's container stays above 80% for 2 minutes, your system should automatically spin up a second copy and load balance the traffic.
+
+## Project 3: Multi-Region Content Delivery Engine
+A system that detects a user's location and serves content from the nearest "Data Node."
+
+*   **The System:**
+    *   **Global Distribution:** Deploy small "Edge Servers" in three different AWS Regions (e.g., Mumbai, Virginia, Frankfurt).
+    *   **Database Synchronization:** Use **Global Database Replication** to keep user data in sync across the world.
+    *   **Geo-DNS:** Use **AWS Route 53** with "Latency-Based Routing" to send users to the fastest server.
+    *   **The Master's Twist:** Implement **Database Sharding by Geography**. Store Indian user data in Mumbai and US user data in Virginia to comply with data residency laws and reduce latency.
+
+## 4. The "Master" Engineering Standard
+
+An advanced project is not finished until it meets these "Enterprise" requirements:
+
+1.  **Infrastructure as Code (IaC):** The entire cloud setup must be defined in **Terraform** or **Pulumi**. You should be able to delete everything and rebuild it with one command.
+2.  **Zero-Downtime Deployment:** Implement **Blue-Green** or **Canary** deployments. The site must never go offline during an update.
+3.  **Observability:** Set up a "Full Stack" dashboard (Grafana/Prometheus) showing CPU, Memory, 404 rates, and Database query speeds.
+4.  **Security Hardening:** Implement Rate Limiting, DDoS protection, and a Web Application Firewall (WAF).
+
+## Practice: The "Failure" Drill
+
+Before launching an advanced project, a Master performs a "Chaos Test":
+*   **Action:** Manually "kill" your primary database server while the app is running.
+*   **Success Metric:** Does your "Replica" database take over automatically? Does the user see an error, or does the app just pause for 2 seconds and keep working?
+
+:::danger Complexity vs. Utility
+The most advanced engineers know when **not** to use advanced tools. Only use microservices if you have a massive team. Only use Global Sharding if you have a global audience. **"Mastery" is choosing the simplest solution that actually solves the problem.**
+:::

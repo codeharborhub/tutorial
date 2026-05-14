@@ -1,1 +1,87 @@
-<ComingSoon />
+---
+title: "System Monitoring with Monit"
+sidebar_label: "1. Monit"
+sidebar_position: 1
+description: "Learn how to set up Monit to automatically monitor, manage, and repair system services and resources."
+tags: ["monit", "system monitoring", "devops", "linux monitoring", "server health"]
+keywords: ["monit", "system monitoring", "devops", "linux monitoring", "server health"]
+---
+
+In a DevOps environment, you can't watch your server 24/7. **Monit** is an autonomous "watchdog" that ensures your infrastructure stays healthy even while you sleep.
+
+## 1. What is Monit?
+
+Monit is a small, open-source utility for managing and monitoring Unix systems. It can:
+*   **Automatic Restarts:** If Nginx or MongoDB crashes, Monit restarts them.
+*   **Resource Monitoring:** If CPU usage stays above 90% for too long, it can alert you.
+*   **File Integrity:** It can watch for changes in critical configuration files.
+*   **Network Checks:** It can verify if a website or API is actually responding.
+
+## 2. Installation
+
+Monit is available on most Linux distributions.
+
+```bash
+# On Ubuntu/Debian
+sudo apt update
+sudo apt install monit
+
+# Start and Enable Monit
+sudo systemctl start monit
+sudo systemctl enable monit
+```
+
+## 3. Configuring Monit
+
+Monit's power lies in its configuration file, usually located at `/etc/monit/monitrc`. The syntax is designed to be "human-readable."
+
+### Example: Monitoring Nginx
+
+Add this to your config to ensure your "Front Door" never stays closed:
+
+```bash title="monitrc"
+check process nginx with pidfile /var/run/nginx.pid
+    start program = "/usr/bin/systemctl start nginx"
+    stop program  = "/usr/bin/systemctl stop nginx"
+    if failed port 80 protocol http then restart
+    if 5 restarts within 5 cycles then timeout
+```
+
+### Example: Monitoring System Resources
+
+```bash title="monitrc"
+check system $HOST
+    if loadavg (5min) > 3 then alert
+    if memory usage > 80% then alert
+    if cpu usage (user) > 70% for 3 cycles then alert
+```
+
+## 4. The Monit Web Dashboard
+
+Monit comes with a built-in web interface that allows you to see the status of all your services in one place.
+
+1. Find the `set httpd port 2812` section in `monitrc`.
+2. Enable it by uncommenting the lines and setting your username/password.
+3. Access it at `http://your-server-ip:2812`.
+
+## 5. Monit vs. PM2: When to use which?
+
+| Feature | PM2 | Monit |
+| --- | --- | --- |
+| **Primary Focus** | Node.js Apps | System Services (Nginx, DBs, RAM) |
+| **Language** | JavaScript/Node | C (System Native) |
+| **Auto-Restart** | Yes (Apps) | Yes (Entire Services) |
+| **Ease of Use** | High for JS Devs | Medium (Requires Linux knowledge) |
+
+**Master Strategy:** Use **PM2** to manage your CodeHarborHub Node.js processes and use **Monit** to manage the underlying server, Nginx, and your Database.
+
+## Practice: The "Self-Healing" Test
+
+1. Install Monit and set up a check for your database (e.g., MongoDB).
+2. Manually stop your database: `sudo systemctl stop mongodb`.
+3. Wait 1-2 minutes and check the status: `sudo monit status`.
+4. You will see that Monit detected the failure and automatically executed the start command!
+
+:::info Alerting
+Monit can be configured to send emails via Gmail or other SMTP services. Setting this up is crucial so that you get a notification on your phone the moment a "Master" system needs your attention.
+:::

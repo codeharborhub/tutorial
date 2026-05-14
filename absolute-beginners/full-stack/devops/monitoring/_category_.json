@@ -1,0 +1,13 @@
+{
+  "label": "5. Monitoring & Logging",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "title": "Monitoring, Logging & Observability",
+    "description": "Learn how to keep a 'Master's eye' on your applications. This section covers tracking server health, managing logs, and setting up alerts to ensure 99.9% uptime."
+  },
+  "customProps": {
+    "icon": "monitoring",
+    "description": "The pulse of your infrastructure. Learn to visualize performance and debug production issues like a pro."
+  }
+}

@@ -1,1 +1,63 @@
-<ComingSoon />
+---
+title: "Caching: The Speed Layer"
+sidebar_label: "4. Caching"
+sidebar_position: 4
+description: "Learn how to use memory-based storage to reduce database load and improve application response times."
+---
+
+Caching is the process of storing copies of data in a **temporary storage location** (the cache) so that future requests for that data can be served much faster.
+
+## 1. Why do we need Caching?
+
+Fetching data from a **Database (SSD/Hard Drive)** is slow. It requires a lot of "I/O" operations and complex queries. 
+Fetching data from **RAM (Memory)** is incredibly fast. 
+
+As "A Master," you use Caching to:
+1.  **Reduce Latency:** Give the user their data in 10ms instead of 200ms.
+2.  **Save Money:** Reduce the "workload" on your expensive database.
+3.  **Handle Spikes:** If a CodeHarborHub tutorial goes viral, the cache handles the 10,000 hits, not your database.
+
+## 2. Where can we Cache?
+
+Caching happens at every level of the system:
+
+*   **Browser Cache:** Your browser saves images and CSS so it doesn't download them again.
+*   **CDN Cache (CloudFront):** Saves your whole website at "Edge Locations" near the user.
+*   **Application Cache:** Your Node.js code saves a variable in memory.
+*   **Distributed Cache (Redis/Memcached):** A separate high-speed memory database that all your servers can talk to.
+
+## 3. How it works: Cache Hit vs. Cache Miss
+
+When your CodeHarborHub API receives a request:
+1.  **Check Cache:** Does the cache have the data?
+2.  **Cache Hit:** Yes! Return the data immediately. (Speed: ⚡⚡⚡)
+3.  **Cache Miss:** No. Go to the Database, get the data, **save a copy in the cache**, and then return it to the user. (Speed: 🐢)
+
+## 4. Cache Invalidation (The Hard Part)
+
+There is a famous saying in Computer Science: *"There are only two hard things in Computer Science: cache invalidation and naming things."*
+
+If you cache a user's profile and then the user changes their name, the cache still has the **old** name. This is "Stale Data." A Master uses these strategies to fix this:
+
+*   **TTL (Time to Live):** You set an expiration date (e.g., "This data is valid for 60 seconds"). After 60 seconds, it is automatically deleted.
+*   **Write-Through:** Every time you update the database, you update the cache at the same time.
+*   **Cache Eviction:** When the cache is full, it deletes the "Least Recently Used" (LRU) data to make room for new stuff.
+
+## 5. Popular Tools
+
+1.  **Redis:** The most popular choice for "A Master." It supports complex data types (lists, sets) and is extremely fast.
+2.  **Memcached:** A simpler, high-performance "key-value" store.
+3.  **In-Memory (Node.js):** Using a simple Javascript object `{}`. (Warning: This only works if you have **one** server!).
+
+## Practice: The "Cacheable" Test
+
+Look at the features of CodeHarborHub. Which of these should be cached?
+
+*   **The total number of students on the platform?** (Yes! This doesn't change every second).
+*   **The list of top 10 tutorials?** (Yes! Everyone sees the same list).
+*   **A user's private password?** (No! Never cache sensitive security data in a shared cache).
+*   **Real-time stock market prices?** (Maybe not—the data expires too fast).
+
+:::info The "Thundering Herd"
+If your cache expires for a very popular page at the exact same time that 1,000 users are online, all 1,000 will hit your database at once. To prevent this, "Masters" use **jitter** (randomizing expiration times slightly) so they don't all expire at once!
+:::

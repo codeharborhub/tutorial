@@ -1,1 +1,111 @@
-<ComingSoon />
+---
+title: "Application Logging Best Practices"
+sidebar_label: "2. Logging"
+sidebar_position: 2
+description: "Learn how to implement professional logging in your full-stack applications to debug and monitor production code."
+tags: ["logging", "winston", "log levels", "structured logging", "log rotation", "devops"]
+keywords: ["logging", "winston", "log levels", "structured logging", "log rotation", "devops"]
+---
+
+Logging is the practice of recording events that happen while your application is running. As a "Master" developer, you must move beyond `console.log()` and use professional logging systems. Proper logging allows you to:
+
+*   Debug production issues without attaching a debugger.
+*   Monitor server health and performance.
+*   Set up alerts for critical errors.
+*   Analyze user behavior and application usage patterns.
+
+## 1. Why `console.log` is not enough
+
+While `console.log()` works in development, it is bad for production because:
+*   **No Severity Levels:** You can't distinguish between a simple "Info" message and a "Critical" crash.
+*   **No Persistence:** Logs disappear if the terminal closes (unless using a manager like PM2).
+*   **Performance:** Synchronous logging can slow down your Node.js event loop.
+*   **No Structure:** It's hard to search through thousands of lines of plain text.
+
+## 2. The 5 Standard Log Levels
+
+Using levels allows you to filter your logs. For example, in production, you might only want to see **Error** and **Warn** logs to keep the file size small.
+
+| Level | Purpose | Example |
+| :--- | :--- | :--- |
+| **Error** | Something broke! Requires immediate action. | Database connection failed. |
+| **Warn** | Something unusual happened, but the app is still running. | High memory usage or deprecated API call. |
+| **Info** | Standard operational messages. | "User 101 logged in" or "Server started on port 5000". |
+| **Debug** | Detailed info for developers during troubleshooting. | "Fetching data from cache..." |
+| **Verbose** | Extremely detailed info about every tiny step. | Full headers of an incoming request. |
+
+## 3. Implementing Winston in Node.js
+
+**Winston** is the most popular logging library for Node.js. It allows you to send logs to multiple "transports" (files, the console, or even external databases).
+
+### Installation
+
+```bash
+npm install winston
+```
+
+### Basic Configuration
+
+```javascript title="logger.js"
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json() // Structured logging!
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'logs/combined.log' }),
+  ],
+});
+
+// Use it instead of console.log
+logger.info('CodeHarborHub API is starting...');
+logger.error('Failed to process payment for User #404');
+
+```
+
+## 4. Structured Logging (JSON)
+
+In professional DevOps, we log in **JSON format**. Why? Because machines can't read sentences easily, but they can search JSON perfectly.
+
+**Bad Log:** `User Ajay logged in at 10:00 AM`
+
+**Master Log (JSON):**
+
+```json title="logs/combined.log"
+{
+  "timestamp": "2026-05-11T10:00:00Z",
+  "level": "info",
+  "message": "User login successful",
+  "userId": "ajay_master",
+  "ip": "122.161.x.x",
+  "environment": "production"
+}
+
+```
+
+## 5. Log Rotation: Don't Kill Your Disk
+
+If you log every request, your `combined.log` file will eventually grow to several gigabytes and crash your server by filling up the disk.
+
+**The Solution:** **Log Rotation**. This automatically archives old logs (e.g., `logs-2026-05-10.log`) and deletes logs older than 30 days.
+
+* In Linux, we use a tool called `logrotate`.
+* In Winston, we use `winston-daily-rotate-file`.
+
+## Practice: The Debugging Challenge
+
+1. Install Winston in your project.
+2. Set up two transports:
+* A console transport for development.
+* A file transport that only saves `error` level logs.
+
+
+3. Trigger an intentional error (like a failed DB connection) and verify that it appears in your `error.log` file.
+
+:::info Log Context
+Always include a `requestId` or `correlationId` in your logs. This allows you to track a single user's journey across multiple different log lines, making it much easier to see exactly where their request failed.
+:::

@@ -1,1 +1,102 @@
-3
+---
+title: "Professional API Design"
+sidebar_label: "5. API Design"
+sidebar_position: 5
+description: "Learn high-level design patterns for creating professional, intuitive, and robust APIs."
+tags: ["API design", "RESTful APIs", "best practices", "full-stack development"]
+keywords: ["API design principles", "RESTful API best practices", "resource hierarchy", "filtering and pagination", "error handling", "HATEOAS", "Node.js", "Express"]
+---
+
+Design is about making choices that help other developers understand your system without reading a 100-page manual.
+
+## 1. The Principle of Least Astonishment
+
+Your API should behave exactly how a developer expects it to. 
+*   If I `GET /users`, I expect a list of users, not a single user or a list of orders.
+*   If I send a `DELETE` request, I expect the resource to be gone.
+
+**Consistency is King:** If you use `camelCase` for your JSON keys in one endpoint, use it in all of them.
+
+## 2. Resource Hierarchy & Nesting
+
+In a complex app like CodeHarborHub, data is related. You should reflect these relationships in your URLs, but don't go too deep.
+
+**The "Rule of Two":** Try not to nest resources more than two levels deep.
+
+*  **Good:** `/courses/:courseId/lessons` (Clear relationship)
+*  **Good:** `/lessons/:lessonId/comments` (Clear relationship)
+*  **Bad:** `/categories/:catId/courses/:courseId/lessons/:lessonId/comments` (Too complex!)
+
+:::tip
+If you find yourself going deep, flatten the API. Use `/lessons/:lessonId/comments` instead of nesting it under courses.
+:::
+
+## 3. Filtering, Sorting, and Pagination
+
+When you have thousands of courses, you can't send them all at once. It would crash the browser!
+
+### Pagination
+
+Use `limit` and `page` (or `offset`) to send data in chunks.
+*   `GET /courses?page=2&limit=10`
+
+### Filtering
+
+Use query parameters to let users find exactly what they need.
+*   `GET /courses?category=javascript&level=beginner`
+
+### Sorting
+
+Allow users to define the order.
+*   `GET /courses?sort=newest` or `GET /courses?sort=-price` (The minus sign often indicates descending order).
+
+## 4. Meaningful Error Responses
+
+A "Master" developer never sends a generic "Error occurred." You should provide a clear, JSON-formatted error object so the frontend can show a helpful message to the user.
+
+**The Professional Error Format:**
+
+```json title="Professional Error Response"
+{
+  "status": "error",
+  "code": 404,
+  "message": "Course not found.",
+  "suggestion": "Check if the course ID is correct or if the course has been deleted.",
+  "docs": "https://codeharborhub.github.io/docs/errors/404"
+}
+```
+
+## 5. Using "Hateoas" (Optional but Pro)
+
+**HATEOAS** (Hypermedia as the Engine of Application State) is a fancy term for including "links" in your API response so the client knows what it can do next.
+
+**Example Response:**
+
+```json title="HATEOAS Example"
+{
+  "id": 101,
+  "title": "React for Beginners",
+  "links": [
+    { "rel": "self", "href": "/courses/101" },
+    { "rel": "lessons", "href": "/courses/101/lessons" },
+    { "rel": "enroll", "href": "/courses/101/enroll", "method": "POST" }
+  ]
+}
+
+```
+
+## Practice: The API Architect Challenge
+
+Imagine you are designing the API for **CodeHarborHub's Library**.
+
+1. How would you write the URL to get the 3rd page of "Open Source" books, with 5 books per page, sorted by title?
+2. How would you structure the error message if a user tries to borrow a book that is already checked out?
+
+**Answers:**
+
+1. `GET /books?category=open-source&page=3&limit=5&sort=title`
+2. Status `409 Conflict` with a body explaining "Book currently unavailable."
+
+:::info Input Validation
+Never trust the data sent by the client. Use libraries like **Joi** or **Zod** in your Node.js backend to validate that the "email" is actually an email and the "age" is a number before it ever touches your database.
+:::

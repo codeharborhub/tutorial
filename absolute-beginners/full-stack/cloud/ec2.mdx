@@ -1,1 +1,84 @@
-<ComingSoon />
+---
+title: "AWS EC2: Your Computer in the Sky"
+sidebar_label: "3. EC2 (Virtual Servers)"
+sidebar_position: 3
+description: "A human-friendly guide to launching and managing your first virtual server on AWS."
+tags: ["aws", "ec2", "virtual servers", "cloud hosting", "linux", "ssh"]
+keywords: ["aws", "ec2", "virtual servers", "cloud hosting", "linux", "ssh", "key pairs", "security groups", "instance types", "free tier"]
+---
+
+**EC2** stands for **Elastic Compute Cloud**. 
+*   **Elastic:** You can make it bigger or smaller (more RAM/CPU) whenever you want.
+*   **Compute:** It's a computer that does "math" and runs code.
+*   **Cloud:** It lives in an Amazon data center, not under your desk.
+
+Think of it like renting a "Virtual Laptop" that lives in a giant warehouse. You connect to it using your keyboard, but the "brain" is miles away.
+
+:::info EC2 in Simple Terms
+EC2 is like renting a computer in the sky. You can install anything on it (Node.js, databases, games) and it runs 24/7. You can log in from anywhere and control it like it's your own machine.
+:::
+
+## 1. Why not just use "Free Hosting" (like Vercel)?
+
+Services like Vercel or Netlify are amazing, but they are like **hotels**: everything is set up for you, but you can't change the wallpaper or rebuild the kitchen.
+
+**EC2 is like renting an empty apartment.** 
+*   You get the keys.
+*   You decide which OS to install (usually Linux).
+*   You decide where the database goes.
+*   **You have 100% control.** This is where "A Master" learns how servers *actually* work.
+
+## 2. Choosing your "Instance Type" (The Hardware)
+
+When you launch an EC2, AWS asks what "Instance Type" you want. This is just a fancy way of asking, *"How powerful do you want this computer to be?"*
+
+*   **t2.micro / t3.micro:** The "Free Tier" special. It’s not a beast, but it’s perfect for hosting your first CodeHarborHub portfolio or a small Node.js API.
+*   **c6g.large:** A high-power machine for heavy math. (Expensive!)
+*   **p4d.24xlarge:** A monster machine with 8 GPUs for training AI. (Costs thousands of dollars!)
+
+:::tip
+Always stick to **t2.micro** (or t3.micro) while learning so you don't get charged.
+:::
+
+## 3. The "Key Pair" (Your Digital Key)
+
+Since your EC2 instance is in a data center, you can't walk up to it and type a password. Instead, AWS gives you a **Key Pair** (a `.pem` or `.ppk` file).
+
+*   This file is your **ONLY** way into the server.
+*   If you lose it, you are locked out forever.
+*   If you share it, anyone can delete your work.
+*   **Treat this file like your house keys!**
+
+## 4. Security Groups (The Bouncer)
+
+Imagine your server is a club. A **Security Group** is the bouncer standing at the door with a list. By default, **everyone is blocked.**
+
+You have to tell the bouncer:
+*   "Allow **SSH** (Port 22) so I can log in."
+*   "Allow **HTTP** (Port 80) so the world can see my website."
+
+## 5. How to "Talk" to your EC2
+
+Once your server is running, you use a tool called **SSH** (Secure Shell) to talk to it. You type commands on your laptop, and they execute on the server in the cloud.
+
+```bash
+# How a Master logs in
+ssh -i "my-key-pair.pem" ubuntu@your-ec2-ip-address
+```
+
+Once you're in, the screen will change, and you'll be staring at a Linux terminal. From here, you can install Node.js, Git, and start your CodeHarborHub project!
+
+## Practice: The Launch Checklist
+
+If you're feeling brave and want to launch your first instance, follow these "Noob-friendly" steps in the AWS Console:
+
+1. **Name:** Give it a cool name like `CodeHarbor-Server-01`.
+2. **OS:** Choose **Ubuntu** (it has the most tutorials online).
+3. **Instance Type:** Select **t2.micro** (Look for the "Free tier eligible" label).
+4. **Key Pair:** Create a new one and download it immediately.
+5. **Network:** Tick the boxes for "Allow HTTP traffic from the internet."
+6. **Launch:** Click the big orange button!
+
+:::warning STOP your instances
+The Cloud is like a taxi—the meter is always running. Even if you aren't using the server, if it is "Running," it counts toward your free hours. If you are done for the day, **Stop** or **Terminate** the instance to keep your bill at $0.
+:::

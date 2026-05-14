@@ -1,1 +1,67 @@
-<ComingSoon />
+---
+title: "Infrastructure as Code (IaC)"
+sidebar_label: "3. IaC Overview"
+sidebar_position: 3
+description: "Learn the philosophy behind managing infrastructure using code and why it's the gold standard for modern DevOps."
+tags: ["infrastructure as code", "devops", "automation", "terraform", "ansible"]
+keywords: ["infrastructure as code", "devops", "automation", "terraform", "ansible", "declarative", "immutable infrastructure", "state file"]
+---
+
+Infrastructure as Code is the process of managing and provisioning computer data centers through machine-readable definition files, rather than physical hardware configuration or interactive configuration tools.
+
+## 1. The Core Philosophy
+
+Think of IaC like a **Recipe**. 
+*   **Manual Management:** You are a chef who cooks from memory. Every time you make the dish, it tastes a little different. If you leave, no one else knows the secret.
+*   **IaC:** You write a precise recipe. Anyone can follow it and get the exact same result every single time.
+
+## 2. Key Benefits for "A Master" Developer
+
+| Benefit | Description |
+| :--- | :--- |
+| **Consistency** | The Dev, Staging, and Production environments are identical because they use the same code. |
+| **Speed** | You can deploy a complex multi-server architecture in minutes instead of hours. |
+| **Traceability** | Since it's code, you can see who changed the infrastructure and why by looking at the `git commit` history. |
+| **Scalability** | Need 10 more servers for a CodeHarborHub event? Change `count = 1` to `count = 11` and run the script. |
+
+## 3. Declarative vs. Imperative
+
+There are two ways to write IaC:
+
+### Imperative (The "How")
+You define the specific steps to reach a state.
+*   *Analogy:* "Go to the kitchen, open the fridge, get the milk, and pour it into a glass."
+*   *Tool Example:* **Bash Scripts**, **AWS CLI**.
+
+### Declarative (The "What")
+You define the final state, and the tool figures out how to make it happen.
+*   *Analogy:* "I want a glass of milk."
+*   *Tool Example:* **Terraform**, **Ansible**, **CloudFormation**.
+*   **Master's Choice:** Declarative is generally preferred because it is "Idempotent"—it won't try to create a second glass of milk if you already have one.
+
+## 4. The IaC Toolchain
+
+To master infrastructure, you need to understand the two-step process:
+
+1.  **Provisioning (Building the House):** Creating the virtual machines, networks, and databases.
+    *   *Top Tool:* **Terraform**.
+2.  **Configuration Management (Furnishing the House):** Installing Node.js, setting up Nginx, and adding users to the servers.
+    *   *Top Tool:* **Ansible**.
+
+## 5. Immutable Infrastructure
+
+One of the most powerful concepts in IaC is **Immutable Infrastructure**. 
+*   Instead of SSHing into a server to fix a bug (Mutating it), you **destroy** the old server and **provision** a brand new one using your updated code.
+*   This ensures your servers never "drift" away from your documentation.
+
+## Practice: The "Mental" Script
+
+Before moving to the next lesson, think about your current CodeHarborHub project. If your server was deleted right now, how long would it take you to rebuild it from scratch? 
+*   **Manual:** 2 hours? 4 hours?
+*   **With IaC:** 5 minutes.
+
+**That is the power of a Master Architect.**
+
+:::info Version Control
+Remember, your infrastructure code is just like your application code. It should be stored in GitHub, have a clear commit history, and be reviewed by teammates before changes are made to production.
+:::

@@ -1,1 +1,92 @@
-<ComingSoon />
+---
+title: "Process Management & PM2"
+sidebar_label: "4. Process Management"
+sidebar_position: 4
+description: "Learn how to monitor, manage, and automate background processes in Linux and Node.js."
+tags: ["process management", "pm2", "linux processes", "node.js", "devops"]
+keywords: ["process management", "pm2", "linux processes", "node.js", "devops"]
+---
+
+A **Process** is simply a program in execution. Every time you run a script, Linux assigns it a **PID** (Process ID). As a "Master" developer, you need to know how to track, stop, and automate these processes.
+
+## 1. Basic Linux Process Commands
+
+Before using specialized tools, you should know the built-in Linux commands:
+
+*   **`top`**: Displays a real-time view of running processes, CPU usage, and RAM. (Press `q` to exit).
+*   **`ps aux`**: Shows a snapshot of every process running on the system.
+*   **`kill <PID>`**: Stops a specific process.
+*   **`killall node`**: Forcefully stops all running Node.js processes.
+*   **`&`**: Adding an ampersand after a command (e.g., `node server.js &`) runs it in the background.
+
+## 2. The Problem with "Background" Tasks
+
+Running a process in the background using `&` is a start, but it’s not enough for production. 
+1. If the app crashes, it stays dead.
+2. If the server reboots, the app doesn't start back up.
+3. You can't easily see the logs.
+
+## 3. Enter PM2 (Process Manager 2)
+
+**PM2** is the industry standard for Node.js process management. It ensures your CodeHarborHub projects stay online forever.
+
+### Installation
+```bash
+npm install -g pm2
+```
+
+### Essential PM2 Commands
+
+* **`pm2 start server.js --name "my-app"`**: Starts your app and gives it a name.
+* **`pm2 list`**: Shows the status (online/stopped), CPU, and memory of all apps.
+* **`pm2 logs`**: Displays real-time logs (crucial for debugging!).
+* **`pm2 stop <id>`**: Stops the app.
+* **`pm2 restart <id>`**: Restarts the app.
+* **`pm2 delete <id>`**: Removes the app from the list.
+
+## 4. Zero-Downtime & Self-Healing
+
+One of the "Master" features of PM2 is the ability to monitor your app. If your Node.js code hits an error and crashes, **PM2 will instantly restart it.**
+
+### Ecosystem File
+
+For professional setups, we use a configuration file (`ecosystem.config.js`) instead of long commands:
+
+```javascript title="ecosystem.config.js"
+module.exports = {
+  apps : [{
+    name: "CodeHarborHub-API",
+    script: "./server.js",
+    instances: "max", // Utilizes all CPU cores (Cluster Mode)
+    exec_mode: "cluster",
+    env: {
+      NODE_ENV: "development",
+    },
+    env_production: {
+      NODE_ENV: "production",
+    }
+  }]
+}
+
+```
+
+## 5. Startup Scripts: The Final Step
+
+If your server (AWS, DigitalOcean, etc.) reboots for maintenance, you want your apps to start automatically.
+
+1. Run **`pm2 startup`**.
+2. Copy and paste the command Linux gives you.
+3. Run **`pm2 save`**.
+
+This "freezes" your current process list and tells Linux to resurrect them on every boot.
+
+## Practice: The Persistence Test
+
+1. Start a simple Node.js script using `pm2 start app.js`.
+2. Find the PID of that process using `ps aux | grep node`.
+3. Manually kill that PID using `kill -9 <PID>`.
+4. Run `pm2 list`. You will see that PM2 noticed the "crash" and automatically restarted the app!
+
+:::tip Monitoring
+Run **`pm2 monit`** to open a beautiful dashboard inside your terminal that shows real-time performance metrics for all your running applications.
+:::

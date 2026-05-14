@@ -1,1 +1,127 @@
-<ComingSoon />
+---
+title: "Automation with Shell Scripting"
+sidebar_label: "3. Shell Scripting"
+sidebar_position: 3
+description: "Learn how to automate repetitive DevOps tasks using Bash scripting. From variables to loops, master the art of writing powerful scripts that can manage your servers and applications."
+tags: ["shell scripting", "bash", "automation", "devops", "linux"]
+keywords: ["shell scripting", "bash", "automation", "devops", "linux"]
+---
+
+In DevOps, our goal is to **Automate Everything**. Shell scripting is the simplest and most powerful way to glue different tools together.
+
+## 1. The Anatomy of a Script
+
+Every Bash script must start with a **Shebang** (`#!`). This tells the computer which interpreter to use to run the code.
+
+Create a file named `hello.sh`:
+
+```bash
+#!/bin/bash
+
+# This is a comment
+echo "Hello, A Master! Welcome to Shell Scripting."
+```
+
+### Making it Executable
+
+By default, new files aren't allowed to "run" as programs. You must grant permission:
+
+```bash
+chmod +x hello.sh
+./hello.sh
+```
+
+## 2. Variables and Inputs
+
+Just like in JavaScript, you can store data in variables. **Note:** In Bash, there must be NO spaces around the `=` sign.
+
+```bash
+#!/bin/bash
+
+NAME="CodeHarborHub"
+VERSION=1.0
+
+echo "Deploying $NAME version $VERSION..."
+
+# Taking User Input
+echo "Enter your environment (dev/prod):"
+read ENV
+echo "Deploying to $ENV environment..."
+```
+
+## 3. Conditionals (If/Else)
+
+Conditionals allow your script to make decisions. Pay close attention to the spaces inside the brackets `[ ]`.
+
+```bash
+#!/bin/bash
+
+FILE="config.json"
+
+if [ -f "$FILE" ]; then
+    echo "$FILE exists. Proceeding with setup..."
+else
+    echo "Error: $FILE not found! Creating default config..."
+    touch "$FILE"
+fi
+```
+
+## 4. Loops
+
+Loops are perfect for processing multiple files or repeating tasks.
+
+```bash
+#!/bin/bash
+
+# Creating 5 backup folders
+for i in {1..5}
+do
+   mkdir "backup_folder_$i"
+   echo "Created backup_$i"
+done
+```
+
+---
+
+## 🏗️ 5. A Real-World DevOps Example: Auto-Backup
+
+Here is a script that a "Master" might use to back up a project folder and add a timestamp.
+
+```bash
+#!/bin/bash
+
+# Define variables
+SOURCE="/home/ajay/my-project"
+DEST="/home/ajay/backups"
+DATE=$(date +%Y-%m-%d_%H-%M-%S)
+
+# Create destination if it doesn't exist
+mkdir -p $DEST
+
+# Create a compressed archive (tarball)
+tar -czf $DEST/project_backup_$DATE.tar.gz $SOURCE
+
+echo "Backup completed successfully on $DATE!"
+```
+
+## 6. Why Bash for DevOps?
+
+1. **Native:** It runs on almost every Linux/Unix server without installing anything.
+2. **Fast:** It interacts directly with the OS kernel.
+3. **Integration:** It easily combines tools like Git, Docker, and Nginx.
+
+## Practice: The Automation Challenge
+
+1. Create a script named `setup-project.sh`.
+2. The script should:
+* Create a folder named `my-app`.
+* Inside that folder, create `index.html` and `styles.css`.
+* Write `<h1>Hello World</h1>` into the HTML file using `echo`.
+* Print a success message in the terminal.
+
+
+3. Run the script and verify the files were created!
+
+:::info Exit Codes
+Every command in Linux returns an "Exit Code." `0` means success, and anything else means an error. You can check the exit code of the last command using `echo $?`. A true "Master" script always checks if a command succeeded before moving to the next step!
+:::

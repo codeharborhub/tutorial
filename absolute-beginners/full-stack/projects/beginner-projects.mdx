@@ -1,1 +1,64 @@
-<ComingSoon />
+---
+title: "Beginner Full-Stack Projects"
+sidebar_label: "1. Project Ideas"
+sidebar_position: 1
+description: "A curated list of projects to practice your Full-Stack, DevOps, and Cloud skills."
+tags: ["projects", "full-stack projects", "devops projects", "cloud projects", "beginner projects"]
+keywords: ["projects", "full-stack projects", "devops projects", "cloud projects", "beginner projects", "react projects", "node.js projects", "aws projects", "docker projects"]
+---
+
+The "Tutorial Hell" ends here. To become "A Master," you must build projects that solve real problems. Each project below includes a **"Master's Twist"** to push you toward professional-level engineering.
+
+## Project 1: The "Smart" Task Manager
+Don't just build a Todo list. Build a system that manages time.
+
+*   **Frontend:** React/Next.js with a clean dashboard.
+*   **Backend:** Node.js API with JWT Authentication.
+*   **Database:** PostgreSQL (SQL) to track tasks and user relations.
+*   **The Master's Twist:** Add a **Caching layer (Redis)** to store the "Tasks due today" so they load instantly every time the user refreshes.
+
+## Project 2: Weather & Wardrobe App
+An app that fetches weather data and suggests what to wear.
+
+*   **Frontend:** Tailwind CSS for a beautiful, responsive UI.
+*   **Backend:** Integration with a 3rd-party Weather API.
+*   **Cloud:** Host the frontend on **Vercel** and the backend on an **AWS EC2** instance.
+*   **The Master's Twist:** Use **S3** to store different clothing icons and serve them via **CloudFront** to ensure the images load fast globally.
+
+## Project 3: Micro-E-Commerce System
+A simplified store where users can browse products and "buy" them.
+
+*   **Frontend:** Product grid with a functional shopping cart.
+*   **Backend:** Express.js with routes for `/products` and `/orders`.
+*   **Database:** MongoDB (NoSQL) to handle flexible product descriptions (some items have sizes, others have colors).
+*   **The Master's Twist:** Implement **Horizontal Scaling**. Try running two instances of your server behind an **Nginx Load Balancer**.
+
+## Project 4: Personal Link Tree (Clone)
+A single page that houses all your social media links.
+
+*   **Frontend:** Simple, elegant HTML/CSS or React.
+*   **DevOps:** Set up a **CI/CD Pipeline** using GitHub Actions.
+*   **Automation:** Every time you push code to GitHub, it should automatically deploy to your server.
+*   **The Master's Twist:** Add **Infrastructure as Code (IaC)**. Use a script to provision the server instead of setting it up manually in the AWS console.
+
+## 5. The "Master" Project Checklist
+
+Before you say a project is "Done," check it against this professional standard:
+
+1.  **Environment Variables:** Are your API keys hidden in a `.env` file?
+2.  **Error Handling:** What happens if the database goes down? Does the app show a friendly error?
+3.  **Security:** Is your database port blocked by a **Security Group**?
+4.  **Documentation:** Does your `README.md` explain how to install and run the project in 3 steps?
+
+## Practice: Pick One and Start
+
+Don't try to build all four at once. 
+1.  Pick the project that excites you most.
+2.  Open your terminal.
+3.  Run `git init`.
+
+**Which project are you starting with today, A Master?**
+
+:::tip The Portfolio
+When you finish, don't just keep it on your laptop. Write a short blog post on **CodeHarborHub** explaining *why* you chose the specific database or cloud service. Employers love to see your "System Design" thinking!
+:::

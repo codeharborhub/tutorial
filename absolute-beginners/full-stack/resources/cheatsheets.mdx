@@ -1,1 +1,86 @@
-<ComingSoon />
+---
+title: "Developer Cheatsheets: Your Quick Reference Guide"
+sidebar_label: "4. Cheatsheets"
+sidebar_position: 4
+description: "Rapid-fire reference guides for Git, Linux, SQL, and Frontend frameworks."
+tags: ["cheatsheets", "git", "linux", "sql", "react", "frontend"]
+keywords: ["git commands", "linux terminal", "sql queries", "react hooks", "frontend layout"]
+---
+
+When you are in the middle of a "deep work" session for CodeHarborHub, don't let a forgotten CSS property or Git command break your flow. Use these quick references to stay in the zone.
+
+## 1. Git & GitHub (The Version Control Shield)
+
+You'll use these commands every single day. 
+
+| Command | Action |
+| :--- | :--- |
+| `git init` | Initialize a new local repository. |
+| `git clone <url>` | Copy a remote repository to your machine. |
+| `git add .` | Stage all changes for the next commit. |
+| `git commit -m "msg"` | Save your changes with a descriptive message. |
+| `git push origin <branch>` | Send your code to GitHub. |
+| `git pull` | Fetch and merge changes from the remote server. |
+| `git checkout -b <name>` | Create and switch to a new feature branch. |
+
+## 2. CSS Flexbox & Grid (The Layout Masters)
+
+Stop guessing `justify-content` values. 
+
+### **Flexbox Quick-Pick:**
+*   **`flex-direction`:** `row` (default), `column`, `row-reverse`.
+*   **`justify-content`:** Aligns items along the **Main Axis** (Horizontal).
+*   **`align-items`:** Aligns items along the **Cross Axis** (Vertical).
+
+### **Grid Quick-Pick:**
+*   **`display: grid;`**
+*   **`grid-template-columns: repeat(3, 1fr);`** (3 equal columns).
+*   **`gap: 20px;`** (Space between rows/columns).
+
+## 3. Linux & Terminal (The Power User's Shortcuts)
+
+Essential for managing your AWS EC2 instances or local development.
+
+*   `ls` : List files in the current folder.
+*   `cd <folder>` : Change directory.
+*   `mkdir <name>` : Create a new folder.
+*   `touch <file>` : Create a new empty file.
+*   `rm -rf <name>` : **DANGER!** Forcefully delete a file or folder.
+*   `sudo` : Run command with "Super User" (Master) permissions.
+*   `grep` : Search for text within files.
+
+## 4. SQL Basics (The Data Language)
+
+Use these when querying your PostgreSQL or MySQL databases.
+
+```sql
+-- Create a new student in CodeHarborHub
+INSERT INTO students (name, course) VALUES ('Ajay', 'Full-Stack');
+
+-- Find all students in a specific course
+SELECT * FROM students WHERE course = 'Full-Stack';
+
+-- Update a record
+UPDATE students SET status = 'Master' WHERE name = 'Ajay';
+
+-- Delete a record (Use carefully!)
+DELETE FROM students WHERE id = 101;
+
+```
+
+## 5. React Hooks (The Modern Frontend)
+
+* **`useState`:** Manages local data/state.
+* **`useEffect`:** Handles "Side Effects" (API calls, timers).
+* **`useContext`:** Shares data across many components without "Prop Drilling."
+* **`useRef`:** Accesses a DOM element directly.
+
+## Practice: The "Physical" Cheatsheet
+
+1. **Desktop Wallpaper:** Set a "Git Cheatsheet" as your computer wallpaper for one week.
+2. **Sticky Notes:** Put a sticky note on your monitor with the 3 SQL commands you always forget.
+3. **Browser Tabs:** Keep **[OverAPI](https://overapi.com/)** bookmarked—it's a collection of cheatsheets for almost every language.
+
+:::tip Search Efficiency
+In VS Code, use `Ctrl + Shift + F` to search your entire project for a keyword, and `Ctrl + /` to instantly comment out a block of code. Every second saved is a second spent building!
+:::

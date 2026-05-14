@@ -1,1 +1,91 @@
-<ComingSoon />
+---
+title: "AWS RDS: Databases without the Headache"
+sidebar_label: "5. RDS (Managed Databases)"
+sidebar_position: 5
+description: "Learn how to set up and manage professional relational databases using Amazon RDS."
+tags: ["aws", "rds", "managed databases", "mysql", "postgresql", "multi-az", "database security"]
+keywords: ["aws", "rds", "managed databases", "mysql", "postgresql", "multi-az", "database security", "database engines", "scaling", "backups", "snapshots"]
+---
+
+**RDS** stands for **Relational Database Service**.
+
+In the "Old Days," you had to install MySQL or PostgreSQL on your own server, set up backups, manage security patches, and pray that the hard drive didn't fill up. With RDS, you just tell Amazon: *"I want a MySQL database,"* and they give you a link to connect to. Done.
+
+## 1. Why use RDS instead of installing it on EC2?
+
+As "A Master," you want to focus on building features for CodeHarborHub, not fixing servers at 3 AM.
+
+| Feature | Database on EC2 (Manual) | AWS RDS (Managed) |
+| :--- | :--- | :--- |
+| **Setup** | You install and configure everything. | One-click setup. |
+| **Backups** | You have to write scripts to do it. | Automated daily backups. |
+| **Security** | You have to update the OS yourself. | Amazon handles security patches. |
+| **Scaling** | Very hard to add more RAM/CPU. | Click a button to scale up. |
+| **Price** | Slightly cheaper. | Slightly more expensive (but worth it). |
+
+## 2. Choosing your "Engine"
+
+RDS supports all the popular database "languages" (engines) you already know:
+*   **PostgreSQL:** Great for complex data and "A Master's" favorite.
+*   **MySQL:** The most popular choice for beginners.
+*   **MariaDB:** A community-developed branch of MySQL.
+*   **Microsoft SQL Server / Oracle:** Usually used by big corporate companies.
+
+## 3. The "Multi-AZ" Magic (High Availability)
+
+Imagine the data center where your database lives gets hit by a power outage. 
+*   **Without RDS:** Your website is dead until the power comes back.
+*   **With RDS Multi-AZ:** Amazon keeps a "standby" copy of your database in a completely different building. If the first building fails, RDS automatically switches to the second one in seconds. Your users won't even notice.
+
+## 4. Connecting your App to RDS
+
+When you create an RDS instance, you don't get a computer you can log into. Instead, you get an **Endpoint** (a URL).
+
+In your Node.js `.env` file, it would look like this:
+
+```env title="Example .env file for RDS connection"
+DB_HOST=codeharbor-db.xyz123.ap-south-1.rds.amazonaws.com
+DB_USER=master_ajay
+DB_PASS=never_use_password123
+DB_NAME=codeharbor_main
+```
+
+Then in your code, you use these environment variables to connect to the database. For example, using the `mysql` package in Node.js:
+
+```javascript title="Example Node.js code to connect to RDS"
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
+});
+
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to RDS:', err);
+    return;
+  }
+  console.log('Connected to RDS!');
+});
+```
+
+## 5. Security: Don't open the gates!
+
+By default, RDS is locked down.
+
+* **Private Subnets:** A "Master" puts the database in a private area where the public internet can't touch it.
+* **Security Groups:** You should configure the "Bouncer" to **only** allow connections from your **EC2 instance**. This means even if someone has your password, they can't connect unless they are inside your network.
+
+## Practice: The "Free Tier" Database
+
+1. Search for **RDS** in the AWS Console.
+2. Click **Create Database**.
+3. Choose **MySQL**.
+4. Under "Templates," select **Free Tier** (This is crucial to avoid charges!).
+5. Set your "Master Username" and "Password."
+6. Launch it and wait about 5-10 minutes for it to be "Available."
+
+:::info Snapshots
+Before you do something risky (like running a big data migration), take a **Manual Snapshot** of your RDS. It’s like a "Save Point" in a video game. If you break the data, you can restore the entire database back to that exact second.
+:::

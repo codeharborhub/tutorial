@@ -1,0 +1,71 @@
+---
+title: "Introduction to CI/CD"
+sidebar_label: "1. CI/CD Basics"
+sidebar_position: 1
+description: "Learn the fundamentals of Continuous Integration and Continuous Deployment to automate your development workflow."
+tags: ["ci/cd", "devops", "automation", "github actions", "pipeline"]
+keywords: ["ci/cd", "devops", "automation", "github actions", "pipeline"]
+---
+
+CI/CD is a method to frequently deliver apps to customers by introducing automation into the stages of app development. It bridges the gap between development and operations teams.
+
+## 1. Breaking Down the Acronym
+
+### Continuous Integration (CI)
+CI is the practice of **merging** all developer working copies to a shared mainline several times a day. 
+*   **The Goal:** Find and fix bugs quicker, improve software quality, and reduce the time it takes to validate and release new software updates.
+*   **The Process:** Every time you `git push`, a server automatically builds your code and runs your **Tests** (Unit tests, Integration tests).
+
+### Continuous Deployment (CD)
+CD takes the CI process a step further. 
+*   **The Goal:** Every change that passes all stages of your production pipeline is released to your customers. 
+*   **The Process:** If the tests pass, the server automatically "ships" the code to your production environment (like AWS, DigitalOcean, or Vercel).
+
+## 2. The Traditional vs. Modern Way
+
+| Feature | The Old Way (Manual) | The "Master" Way (CI/CD) |
+| :--- | :--- | :--- |
+| **Testing** | Done on the developer's laptop. | Done automatically in the cloud. |
+| **Deployment** | Drag-and-drop via FTP or SSH. | Automatic upon `git push`. |
+| **Errors** | Found by users after launch. | Found by the pipeline before launch. |
+| **Downtime** | Site goes down during updates. | Zero-downtime rolling updates. |
+
+## 3. The 4 Stages of a Pipeline
+
+A typical CodeHarborHub pipeline consists of these four stages:
+
+1.  **Source Stage:** Triggered when code is pushed to GitHub.
+2.  **Build Stage:** The application is compiled (for languages like TypeScript) or dependencies are installed (`npm install`).
+3.  **Test Stage:** Automated tests are run to ensure the new code didn't break existing features.
+4.  **Deploy Stage:** The code is moved to the live server if all previous stages passed.
+
+## 4. Why CI/CD is Essential for DevOps
+
+*   **Speed:** You can push small updates daily instead of one huge, risky update every month.
+*   **Confidence:** You know that if the "Build" turns green, your code is safe to deploy.
+*   **Documentation:** The pipeline script acts as a record of exactly how your app should be built and deployed.
+
+## 5. Popular CI/CD Tools
+
+While there are many tools, we will focus on **GitHub Actions** because it is built directly into your repository.
+
+*   **GitHub Actions:** Best for projects already on GitHub (Our choice!).
+*   **Jenkins:** An open-source classic for highly custom setups.
+*   **GitLab CI:** Built-in tool for GitLab users.
+*   **CircleCI / TravisCI:** Popular cloud-based automation platforms.
+
+## Practice: The Pipeline Mental Model
+
+Before we write code, imagine you are building a feature for CodeHarborHub. 
+1.  You push your code to a branch named `feature-login`.
+2.  The CI pipeline starts.
+3.  **Step 1:** It installs Node.js.
+4.  **Step 2:** It runs `npm test`.
+5.  **Step 3:** The test fails because of a typo in your logic.
+6.  **Result:** The pipeline "breaks," and the code is **blocked** from being merged into the main site.
+
+**This is the pipeline saving you from a production disaster!**
+
+:::info Fail Fast
+A "Master" DevOps engineer follows the **Fail Fast** principle. You want your tests to run as quickly as possible so that if there is a bug, you know within seconds, not minutes.
+:::
