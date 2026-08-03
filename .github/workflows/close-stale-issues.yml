@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Close Inactive Issues and Pull Requests
-        uses: actions/stale@v10
+        uses: actions/stale@v11
         with:
           # Token is required for the action to interact with issues
           repo-token: ${{ secrets.GITHUB_TOKEN }}
